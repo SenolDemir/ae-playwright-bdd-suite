@@ -7,30 +7,10 @@ import type { SignupUser } from "../test-data/UserFactory";
 
 
 export class LoginPage extends BasePage {
-  // private readonly _emailInput: Locator;
-  // private readonly _passwordInput: Locator;
-  // private readonly _loginButton: Locator;
-
-  // public constructor(page: Page) {
-  //   super(page);
-  //   this._emailInput = this._page.locator('[data-qa="login-email"]');
-  //   this._passwordInput = this._page.locator('[data-qa="login-password"]');
-  //   this._loginButton = this._page.locator('[data-qa="login-button"]');
-  // }
-
-  // public async login(email: string, password: string): Promise<void> {
-  //   await this._emailInput.fill(email);
-  //   await this._passwordInput.fill(password);
-  //   await this._loginButton.click();
-  // }
-
-  // ----------------------------------------------------------------
-
   public generatedSignupUser: SignupUser = UserFactory.createValidSignupUser();
 
+  // signup form elements
   private readonly signupSection: Locator = this.page.locator(".signup-form");
-  private readonly accountInfoSection: Locator =
-    this.page.locator(".login-form");
   public readonly newUserNameInput: Locator =
     this.signupSection.getByPlaceholder("Name");
   public readonly signupEmailInput: Locator =
@@ -40,6 +20,9 @@ export class LoginPage extends BasePage {
     { name: "Signup" },
   );
 
+  // account information form elements
+  private readonly accountInfoSection: Locator =
+    this.page.locator(".login-form");
   public readonly enterAccountInformationHeading: Locator = this.page.getByRole(
     "heading",
     { name: "Enter Account Information" },
@@ -102,13 +85,6 @@ export class LoginPage extends BasePage {
   });
 
   // ---------------------- Functions ---------------------------------------------------
-
-  // async expectHomePageVisible(): Promise<void> {
-  //   await expect(this.page).toHaveURL(
-  //     process.env.BASE_URL || "https://automationexercise.com/",
-  //   );
-  //   await expect(this.page).toHaveTitle("Automation Exercise");
-  // }
 
   async expectSignupFormVisible(): Promise<void> {
     await expect(this.newUserNameInput).toBeVisible();
