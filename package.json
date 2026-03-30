@@ -1,0 +1,29 @@
+{
+  "name": "ae-playwright-bdd-suite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "bdd": "npx bddgen",
+    "tests": "npx bddgen && npx playwright test",
+    "test:specific": "npx playwright test codegen-intro.spec.js",
+    "test:tag": "npx bddgen test --tags '@smoke' && npx playwright test",
+    "test:report": "npx playwright test built-in-reporters.spec.js --reporter=json",
+    "report": "npx playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@faker-js/faker": "^10.4.0",
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.5.0",
+    "playwright-bdd": "^8.5.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2"
+  }
+}

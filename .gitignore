@@ -1,0 +1,29 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+/reports/
+
+.DS_Store
+
+.vscode/*
+!.vscode/settings.json
+
+#playwrigh bdd
+features-gen/
+
+# Environment
+.env.dev
+.env.prod
+.env.local
+
+# Playwright MCP
+.playwright-mcp/
+
+# Allure
+allure-results/
+allure-report/
