@@ -17,6 +17,7 @@ node_modules/
 features-gen/
 
 # Environment
+.env
 .env.dev
 .env.prod
 .env.local
