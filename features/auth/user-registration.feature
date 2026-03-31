@@ -15,10 +15,10 @@ So that I can access personalised features on Automation Exercise
             Scenario: Successful registration with valid credentials
                   And I navigate to the registration page
                   Then I should see the signup form
-                  # When I submit valid signup credentials
-                  # Then I should be on the account information setup page
-                  # When I complete the account information form
-                  # And I submit the registration
-                  # Then my account should be created successfully
-                  # When I click continue
-                  # Then I should be logged in as a registered user on the home page
+                  When I submit valid signup credentials
+                  Then I should be on the account information setup page
+                  When I complete the account information form
+                  And I submit the registration
+                  Then my account should be created successfully
+                  When I click continue
+                  Then I should be logged in as a registered user on the home page

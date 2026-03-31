@@ -1,10 +1,9 @@
 import { BasePage } from "./BasePage.js";
-import type { Locator, Page } from "@playwright/test";
+import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-import  { UserFactory} from "../test-data/UserFactory";
+import { UserFactory } from "../test-data/UserFactory";
 import type { SignupUser } from "../test-data/UserFactory";
-
 
 export class LoginPage extends BasePage {
   public generatedSignupUser: SignupUser = UserFactory.createValidSignupUser();
@@ -28,52 +27,60 @@ export class LoginPage extends BasePage {
     { name: "Enter Account Information" },
   );
 
-  public readonly titleMrRadioInput: Locator = this.page.locator("#id_gender1");
-  public readonly titleMrsRadioInput: Locator =
-    this.page.locator("#id_gender2");
+  // Container
+  public readonly accountInformationForm: Locator = this.page.locator(
+    'form[action="/signup"]',
+  );
+
+  // title radio buttons
+  public readonly titleMrRadioButton: Locator =
+    this.accountInformationForm.getByLabel("Mr.");
+  public readonly titleMrsRadioButton: Locator =
+    this.accountInformationForm.getByLabel("Mrs.");
+
   public readonly passwordInput: Locator = this.page.getByLabel("Password");
 
-  public readonly newsletterCheckbox: Locator = this.page.getByRole(
-    "checkbox",
-    { name: /Sign up for our newsletter!/i },
-  );
-  public readonly offersFromPartnersCheckbox: Locator = this.page.getByRole(
-    "checkbox",
-    {
+  // Date of Birth Dropdowns
+  public readonly daysDropdown: Locator =
+    this.accountInformationForm.locator('[data-qa="days"]');
+  public readonly monthsDropdown: Locator =
+    this.accountInformationForm.locator('[data-qa="months"]');
+  public readonly yearsDropdown: Locator =
+    this.accountInformationForm.locator('[data-qa="years"]');
+
+  // Checkboxes
+  public readonly newsletterCheckbox: Locator =
+    this.accountInformationForm.getByRole("checkbox", {
+      name: /Sign up for our newsletter!/i,
+    });
+  public readonly offersCheckbox: Locator =
+    this.accountInformationForm.getByRole("checkbox", {
       name: /Receive special offers from our partners!/i,
-    },
-  );
+    });
 
-  // --------------- Personal Information Inputs ---------------------------------------
-
-  public readonly firstNameInput: Locator = this.page.getByLabel("First name");
-  public readonly lastNameInput: Locator = this.page.getByLabel("Last name");
+  //  Personal Information Inputs
+  public readonly firstNameInput: Locator =
+    this.accountInformationForm.getByLabel("First name");
+  public readonly lastNameInput: Locator =
+    this.accountInformationForm.getByLabel("Last name");
   public readonly companyInput: Locator = this.page.getByLabel("Company", {
     exact: true,
   });
-  public readonly address1Input: Locator = this.page.locator(
-    '[data-qa="address"]',
-  );
-  public readonly address2Input: Locator = this.page.locator(
-    '[data-qa="address2"]',
-  );
-
-  public readonly stateInput: Locator = this.page.getByRole("textbox", {
-    name: /state/i,
-  });
-  public readonly cityInput: Locator = this.page.getByRole("textbox", {
-    name: /city/i,
-  });
+  public readonly address1Input: Locator = 
+  this.accountInformationForm.locator('[data-qa="address"]',);
+  public readonly address2Input: Locator =
+    this.accountInformationForm.getByLabel("Address 2");
+  public readonly stateInput: Locator =
+    this.accountInformationForm.getByLabel("State");
+  public readonly cityInput: Locator =
+    this.accountInformationForm.getByLabel("City");
   public readonly zipcodeInput: Locator = this.page.locator(
     '[data-qa="zipcode"]',
   );
-  public readonly mobileNumberInput: Locator = this.page.locator(
-    '[data-qa="mobile_number"]',
-  );
-
-  public readonly createAccountButton: Locator = this.page.getByRole("button", {
-    name: "Create Account",
-  });
+  public readonly mobileNumberInput: Locator =
+    this.accountInformationForm.getByLabel("Mobile Number");
+  public readonly createAccountButton: Locator =
+    this.accountInformationForm.getByRole("button", { name: "Create Account" });
 
   public readonly accountCreatedHeading: Locator = this.page.getByRole(
     "heading",
@@ -83,7 +90,6 @@ export class LoginPage extends BasePage {
   public readonly continueButton: Locator = this.page.getByRole("link", {
     name: "Continue",
   });
-
   // ---------------------- Functions ---------------------------------------------------
 
   async expectSignupFormVisible(): Promise<void> {
@@ -91,6 +97,17 @@ export class LoginPage extends BasePage {
     await expect(this.signupEmailInput).toBeVisible();
     await expect(this.signupButton).toBeVisible();
   }
+
+  // ------------- Step 1: Signup form (name + email) -------------------
+
+  async submitSignupCredentials(): Promise<void> {
+    this.generatedSignupUser = UserFactory.createValidSignupUser();
+    await this.newUserNameInput.fill(this.generatedSignupUser.fullName);
+    await this.signupEmailInput.fill(this.generatedSignupUser.email);
+    await this.signupButton.click();
+  }
+
+  // ------------- Step 2: Account information form -------------------
 
   async expectFormHeadingVisible(): Promise<void> {
     await expect(
@@ -102,22 +119,23 @@ export class LoginPage extends BasePage {
     // select title randomly for testing both options
     const titles = ["Mr.", "Mrs."];
     const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-    const normalizedTitle = randomTitle.replace(/\./g, "").toLowerCase();
+
+    if (randomTitle === "Mr.") {
+      await this.titleMrRadioButton.check();
+      return;
+    }
+
+    await this.titleMrsRadioButton.check();
   }
 
   async selectRandomDateOfBirth(): Promise<void> {
-    const dayDropdown: Locator = this.page.locator('[data-qa="d"]');
-    const monthDropdown: Locator = this.page.locator('[data-qa="months"]');
-    const yearDropdown: Locator = this.page.locator('[data-qa="years"]');
-
-    await dayDropdown.click();
-    dayDropdown.selectOption({ label: this.generatedSignupUser.dayOfBirth });
-    await monthDropdown.click();
-    await monthDropdown.selectOption({
+    await this.daysDropdown.selectOption({
+      label: this.generatedSignupUser.dayOfBirth,
+    });
+    await this.monthsDropdown.selectOption({
       label: this.generatedSignupUser.monthOfBirth,
     });
-    await yearDropdown.click();
-    await yearDropdown.selectOption({
+    await this.yearsDropdown.selectOption({
       label: this.generatedSignupUser.yearOfBirth,
     });
   }
@@ -133,23 +151,14 @@ export class LoginPage extends BasePage {
     return randomCountry;
   }
 
-  // ------------- Step 1: Signup form (name + email) -------------------
-
-  async submitSignupCredentials(): Promise<void> {
-    this.generatedSignupUser = UserFactory.createValidSignupUser();
-    await this.newUserNameInput.fill(this.generatedSignupUser.fullName);
-    await this.signupEmailInput.fill(this.generatedSignupUser.email);
-    await this.signupButton.click();
-  }
-
-  // ----------- Step 2: Full account info form --------------
+  // ----------- Step 3: Full account info form --------------
 
   async completeAccountInformationForm(): Promise<void> {
     await this.selectTitle();
     await this.passwordInput.fill(this.generatedSignupUser.password);
     await this.selectRandomDateOfBirth();
     await this.newsletterCheckbox.check();
-    await this.offersFromPartnersCheckbox.check();
+    await this.offersCheckbox.check();
     await this.firstNameInput.fill(this.generatedSignupUser.firstName);
     await this.lastNameInput.fill(this.generatedSignupUser.lastName);
     await this.companyInput.fill(this.generatedSignupUser.company);
@@ -162,7 +171,7 @@ export class LoginPage extends BasePage {
     await this.mobileNumberInput.fill(this.generatedSignupUser.mobileNumber);
   }
 
-  // ----------- Step 3: Account created confirmation --------------
+  // ----------- Step 4: Account created confirmation --------------
 
   async expectAccountCreated(): Promise<void> {
     await expect(this.page).toHaveURL(

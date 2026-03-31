@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { defineConfig } from "@playwright/test";
+import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig } from "playwright-bdd";
 
 /**
@@ -18,7 +18,8 @@ const parseBoolean = (
 };
 
 /**
- * BrowserType = chrome, ... / all
+ * BrowserType = chromium | firefox | webkit | chrome | msedge | 
+ * mobile-chrome | mobile-safari | all
  */
 
 const browserType = (process.env.BROWSER_TYPE ?? "chromium").toLowerCase();
@@ -50,6 +51,27 @@ const allProjects = [
     use: {
       browserName: "chromium" as const,
       channel: "chrome" as const,
+    },
+  },
+
+  {
+    name: "msedge",
+    use: {
+      browserName: "chromium" as const,
+      channel: "msedge" as const,
+    },
+  },
+
+  {
+    name: "mobile-chrome",
+    use: {
+      ...devices["Pixel 5"],
+    },
+  },
+  {
+    name: "mobile-safari",
+    use: {
+      ...devices["iPhone 12"],
     },
   },
 ];
