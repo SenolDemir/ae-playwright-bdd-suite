@@ -1,6 +1,8 @@
 import "dotenv/config";
 import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig } from "playwright-bdd";
+import { de } from "@faker-js/faker";
+import { suite } from "node:test";
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -100,7 +102,18 @@ export default defineConfig({
   ...(process.env.CI ? { workers: 1 } : {}),
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   // reporter: "html",
-  reporter: [["html"], ["line"], ["allure-playwright"]],
+  reporter: [
+    ["line"],
+    ["html", { outputFolder: "reports/playwright-html" }],
+    [
+      "allure-playwright",
+      {
+        detail: true,
+        resultsDir: "reports/allure-results",
+        suiteTitle: true,
+      },
+    ],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
