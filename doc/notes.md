@@ -48,3 +48,23 @@ When(
 ### feature-gen folder
 playwright-bdd works by acting as a bridge between Cucumber's .feature files and Playwright's native test runner. Playwright's runner (@playwright/test) does not understand Gherkin syntax natively — it only knows how to run .spec.ts files. So playwright-bdd auto-generates those .spec.ts files from your .feature files into the features-gen folder (or whatever you configure it as), and Playwright then runs those generated files.
 
+
+
+### Allure Report
+allure-result
+Keeps raw test results. It is not cleaned before each session.
+
+Allure-report
+It is for html report. It is cleaned before each test run.
+
+to generate and open the report immediately
+```json
+"allure:serve": "npx allure serve reports/allure-results"
+```
+
+to generate the report separately for later use:
+```json
+"allure:generate": "npx allure generate reports/allure-results --clean -o reports/allure-report",
+"allure:open": "npx allure open reports/allure-report",
+```
+
