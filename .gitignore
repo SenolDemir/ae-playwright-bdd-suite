@@ -14,7 +14,7 @@ node_modules/
 !.vscode/settings.json
 
 #playwrigh bdd
-features-gen/
+.features-gen/
 
 # Environment
 .env
