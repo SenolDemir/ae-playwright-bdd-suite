@@ -7,12 +7,12 @@
     "bdd": "npx bddgen",
     "tests": "npx bddgen && npx playwright test",
     "test:specific": "npx playwright test codegen-intro.spec.js",
-    "test:tag": "npx bddgen test --tags '@ae01' && npx playwright test",
+    "test:tag": "npx bddgen test --tags '@auth' && npx playwright test",
     "test:report": "npx bddgen && npx playwright test --reporter=json > reports/playwright-results.json",
     "report": "npx playwright show-report reports/playwright-html",
     "allure:generate": "allure generate reports/allure-results --output reports/allure-report --clean",
     "allure:open": "allure open reports/allure-report",
-    "allure:serve": "npx allure serve allure-results"
+    "allure:serve": "npx allure serve reports/allure-results"
   },
   "keywords": [],
   "author": "",
