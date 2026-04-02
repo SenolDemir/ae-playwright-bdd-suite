@@ -45,6 +45,10 @@ export class HomePage extends BasePage {
     await expect(this.loggedInAsText).toContainText(`Logged in as ${fullName}`);
   }
 
+  async expectLoggedInUserVisible(): Promise<void> {
+    await expect(this.loggedInAsText).toBeVisible();
+  }
+
   async submitDeleteAccount(): Promise<void> {
     await this.deleteAccountLink.click();
   }

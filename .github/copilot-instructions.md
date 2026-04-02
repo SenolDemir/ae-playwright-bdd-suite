@@ -61,23 +61,20 @@ This project is an AI-augmented test suite using Playwright for end-to-end testi
 
 ### Locator Strategy
 
-> For detailed locator generation rules, see `.github/prompts/locator.prompt.md`
+**Priority Order (Accessibility-First):**
+1. `getByRole(role, { name })`
+2. `getByLabel('...')`
+3. `getByPlaceholder('...')`
+4. `getByTestId('...')` for data-testid attributes only
+5. `locator('[data-qa="..."]')` for stable data-qa attributes
+6–8. `getByText('...')`, `getByAltText('...')`, `getByTitle('...')`
+9–11. `locator('[name="..."]')`, `locator('#id')`, CSS selectors (last resort)
 
-- Use semantic-first locators in this priority order:
-  1. `getByRole` with accessible name
-  2. `getByLabel` for associated form fields
-  3. `getByPlaceholder` when label is unavailable
-  4. Data-QA attributes (`[data-qa="..."]`)
-  5. HTML attributes (`[name="..."]`, `[type="..."]`)
-  6. Stable `id` (only if not auto-generated)
-- Do NOT chain fallback functions (e.g., no `.or()` fallback chains)
-- Each locator should be a single, clean semantic expression
-- Example:
+Never use: XPath, hashed class names, `.nth()`, `.first()`, `.last()`, `.or()` chains
 
-```typescript
-  public readonly signupButton: Locator =
-      this.page.getByRole("button", { name: "Signup" });
-```
+**Container Scoping:** Use `private readonly` for container locators, `public readonly` for child elements.
+
+> **Full rules, code examples, and scoping patterns: [.github/prompts/locator.prompt.md](.github/prompts/locator.prompt.md)**
 
 ## Test Data Generation
 
