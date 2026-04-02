@@ -1,8 +1,8 @@
 @ae01 @auth @registration
 Feature: User Registration
-As a new visitor
-I want to create an account
-So that I can access personalised features on Automation Exercise
+      As a new visitor
+      I want to create an account
+      So that I can access personalised features on Automation Exercise
 
       Background:
             Given I am on the Automation Exercise home page
@@ -22,3 +22,14 @@ So that I can access personalised features on Automation Exercise
                   Then my account should be created successfully
                   When I click continue
                   Then I should be logged in as a registered user on the home page
+
+      Rule: An authenticated user can delete their account
+            # Covers AC6
+
+            @ae01-2 @smoke
+            Scenario: Successfully delete an existing account
+                  Given I have a registered and logged in account
+                  When I submit to delete the account
+                  Then I should see the account deleted confirmation
+                  When I click continue
+                  And I should be not logged in on the home page

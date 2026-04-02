@@ -1,8 +1,7 @@
 import "dotenv/config";
 import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig } from "playwright-bdd";
-import { de } from "@faker-js/faker";
-import { suite } from "node:test";
+
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -63,7 +62,8 @@ const allProjects = [
       channel: "msedge" as const,
     },
   },
-
+  
+  /* Test against mobile viewports. */
   {
     name: "mobile-chrome",
     use: {
@@ -99,7 +99,8 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  ...(process.env.CI ? { workers: 1 } : {}),
+  // ...(process.env.CI ? { workers: 1 } : {}),
+  workers: process.env.CI ? 1 : parseInt(process.env.WORKERS ?? "4"),
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   // reporter: "html",
   reporter: [
@@ -110,16 +111,17 @@ export default defineConfig({
       {
         detail: true,
         resultsDir: "reports/allure-results",
-        suiteTitle: true,
+        suiteTitle: false,
       },
     ],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+    screenshot: "only-on-failure",
+    // video: "retain-on-failure",
+    headless: headlessMode,
     /* Base URL to use in actions like `await page.goto('')`. */
     ...(baseUrl ? { baseURL: baseUrl } : {}),
-
-    headless: headlessMode,
 
     ...(maximizedWindow
       ? {
