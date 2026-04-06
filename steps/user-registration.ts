@@ -8,33 +8,33 @@ Given("I navigate to the registration page", async ({ homePage }) => {
   await homePage.navigateToLoginPage();
 });
 
-Then("I should see the signup form", async ({ loginPage }) => {
-  await loginPage.expectSignupFormVisible();
+Then("I should see the signup form", async ({ signupPage }) => {
+  await signupPage.expectSignupFormVisible();
 });
 
-When("I submit valid signup credentials", async ({loginPage}) => {
-  await loginPage.submitSignupCredentials();
+When("I submit valid signup credentials", async ({signupPage}) => {
+  await signupPage.submitSignupCredentials();
 });
 
-Then("I should be on the account information setup page", async ({loginPage}) => {
-  await loginPage.expectFormHeadingVisible();
+Then("I should be on the account information setup page", async ({signupPage}) => {
+  await signupPage.expectFormHeadingVisible();
   
 });
 
-When("I complete the account information form", async ({loginPage}) => {
-  await loginPage.completeAccountInformationForm();
+When("I complete the account information form", async ({signupPage}) => {
+  await signupPage.completeAccountInformationForm();
 });
 
-When("I submit the registration", async ({loginPage}) => {
-  await loginPage.createAccountButton.click();
+When("I submit the registration", async ({signupPage}) => {
+  await signupPage.createAccountButton.click();
 });
 
-Then("my account should be created successfully", async ({loginPage}) => {
-  await loginPage.expectAccountCreated();
+Then("my account should be created successfully", async ({signupPage}) => {
+  await signupPage.expectAccountCreated();
 });
 
-When("I click continue", async ({loginPage}) => {
-  await loginPage.continueButton.click();
+When("I click continue", async ({signupPage}) => {
+  await signupPage.continueButton.click();
 });
 
 Then(

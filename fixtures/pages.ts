@@ -1,19 +1,19 @@
 import { expect } from "@playwright/test";
 import { test as base, createBdd } from "playwright-bdd";
-import { LoginPage } from "../pages/LoginPage";
+import { SignupPage } from "../pages/SignupPage";
 import { HomePage } from "../pages/HomePage";
 
 type Fixtures = {
   // ...set types of your custom fixtures
-  loginPage: LoginPage;
+  signupPage: SignupPage;
   homePage: HomePage;
 };
 
 export const test = base.extend<Fixtures>({
   // implement your custom fixtures
-  loginPage: async ({ page }, use) => {
-    const loginPage = new LoginPage(page);
-    await use(loginPage);
+  signupPage: async ({ page }, use) => {
+    const signupPage = new SignupPage(page);
+    await use(signupPage);
   },
   homePage: async ({ page }, use) => {
     const homePage = new HomePage(page);

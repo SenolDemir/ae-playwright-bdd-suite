@@ -2,10 +2,12 @@ import { BasePage } from "./BasePage.js";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-import { UserFactory } from "../test-data/UserFactory";
-import type { SignupUser } from "../test-data/UserFactory";
+import { UserFactory } from "../test-data/UserFactory.js";
+import type { SignupUser } from "../test-data/UserFactory.js";
+import { buildInvalidEmail } from "../test-data/email-test-data.js";
 
-export class LoginPage extends BasePage {
+export class SignupPage extends BasePage {
+ 
   public generatedSignupUser: SignupUser = UserFactory.createValidSignupUser();
 
   // signup form elements
@@ -66,8 +68,9 @@ export class LoginPage extends BasePage {
   public readonly companyInput: Locator = this.page.getByLabel("Company", {
     exact: true,
   });
-  public readonly address1Input: Locator = 
-  this.accountInformationForm.locator('[data-qa="address"]',);
+  public readonly address1Input: Locator = this.accountInformationForm.locator(
+    '[data-qa="address"]',
+  );
   public readonly address2Input: Locator =
     this.accountInformationForm.getByLabel("Address 2");
   public readonly stateInput: Locator =
@@ -181,3 +184,4 @@ export class LoginPage extends BasePage {
     await expect(this.accountCreatedHeading).toHaveText("Account Created!");
   }
 }
+

@@ -3,5 +3,8 @@
     "steps/**/*.ts"
   ],
   "cucumberautocomplete.syncfeatures": "features/**/*.feature",
-  "cucumberautocomplete.strictGherkinCompletion": false
+  "cucumberautocomplete.strictGherkinCompletion": false,
+  "github.copilot.enable": {
+    "filesystem": true
+  }
 }

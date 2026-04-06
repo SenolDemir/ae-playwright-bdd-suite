@@ -2,14 +2,14 @@ import { Given, When, Then, expect } from "../fixtures/pages.ts";
 
 Given(
   "I have a registered and logged in account",
-  async ({ loginPage, homePage }) => {
+  async ({ signupPage, homePage }) => {
     await homePage.navigateToLoginPage();
-    await loginPage.submitSignupCredentials();
-    await loginPage.completeAccountInformationForm();
-    await loginPage.createAccountButton.click();
-    await loginPage.expectAccountCreated();
-    await loginPage.continueButton.click();
-    await homePage.expectLoggedInAs(loginPage.generatedSignupUser.fullName);
+    await signupPage.submitSignupCredentials();
+    await signupPage.completeAccountInformationForm();
+    await signupPage.createAccountButton.click();
+    await signupPage.expectAccountCreated();
+    await signupPage.continueButton.click();
+    await homePage.expectLoggedInAs(signupPage.generatedSignupUser.fullName);
   },
 );
 
