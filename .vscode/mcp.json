@@ -1,6 +1,12 @@
 {
   "servers": {
-
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-filesystem@latest",
+        "/Users/nuvanda/SDET/VSCProjects/ae-playwright-bdd-suite"
+      ]
+    },
     "playwright": {
 			"command": "npx",
 			"args": [

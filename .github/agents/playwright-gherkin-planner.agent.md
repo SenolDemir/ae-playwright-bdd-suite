@@ -22,6 +22,11 @@ tools:
   - playwright-test/browser_type
   - playwright-test/browser_wait_for
   - playwright-test/planner_setup_page
+  - filesystem/write_file
+  - filesystem/read_file
+  - filesystem/list_directory
+  - filesystem/create_directory
+
 model: Claude Sonnet 4
 mcp-servers:
   playwright-test:
@@ -58,57 +63,77 @@ You will:
    - Do NOT explore anything outside the defined scope
 
 2. **Navigate and Explore**
-   - Invoke the `planner_setup_page` tool once to set up page before using other tools
-   - Use `browser_snapshot` to inspect the page structure first
-   - Navigate to the specific feature using `browser_navigate` or clicks
-   - Use `browser_*` tools to interact with the scoped feature only
+   - Invoke the `planner_setup_page` tool once to set up page before using any other tools
+   - Navigate to the feature's entry point
+   - Use `browser_snapshot` to inspect the page before any interaction
+   - Thoroughly explore the interface, identifying all interactive elements,
+     forms, navigation paths, and functionality
+   - Use `browser_*` tools to walk through the complete feature workflow
+     from entry to completion, exactly as a real user would
+   - For multi-step flows: complete the full flow before designing any scenarios.
+     Do not stop exploration at the first step
    - For POSITIVE: interact with valid inputs and observe successful flows
    - For NEGATIVE: fill fields with invalid data and observe exact error responses
    - For BOTH: cover valid and invalid interactions
-   - Test each case independently
 
-3. **Observe and Record**
-   - Record the exact error message or behavior the application returns for each case
-   - Never assume what a message says — always verify by interacting with the page
-   - Note which fields are required by attempting to submit without them
-   - For NEGATIVE and BOTH: test boundary values, special characters,
-     SQL injection patterns in input fields
+3. **Analyze the Feature**
+   - Map out the primary user journey through this feature and 
+     identify the critical path to completion
+   - Consider different user types and their typical behaviors 
+     within this feature's context
+   - Then reason through these questions before writing any scenario:
+     - What is the user trying to accomplish in this feature?
+     - What are all the steps required to complete that goal?
+     - On each step, what inputs, selections, or decisions does the user make?
+     - For each input or decision:
+       - What does a successful interaction look like?
+       - What does a failed interaction look like?
+       - Where are the boundaries of acceptable input?
+     - Which fields or steps depend on or affect each other?
+     - What happens after the flow completes? What is the expected end state?
 
-4. **Design Scenarios Based on Chat Scope**
+   This reasoning drives your scenario design. Every scenario must be
+   traceable to an answer from these questions — not to a generic checklist.
 
-   For POSITIVE scenarios cover:
-   - Happy path and normal user flows
-   - Successful form submissions with valid data
-   - Valid input variations
-   - Expected successful outcomes
+4. **Design Scenarios**
 
-   For NEGATIVE scenarios cover:
-   - Invalid input formats specific to the feature
-   - Missing required fields (test each field independently)
-   - Boundary values relevant to the feature
-   - Special characters in input fields
-   - Duplicate or conflicting data submissions where applicable
-   - SQL injection attempts in input fields
+   Functional coverage is the primary goal. Security and boundary scenarios 
+   support functional coverage — they do not replace it.
 
-   For BOTH cover all of the above combined with this order and balance:
-   - Start with critical positive flows first — ensure happy path
-     is fully covered before moving to negative cases
-   - Then cover negative cases systematically — work through
-     invalid inputs, edge cases, and error handling
-   - Ensure balanced coverage — do not give superficial treatment
-     to either type. Both positive and negative must be as
-     thorough as if they were run independently
-   - Do not skip edge cases in positive just because negative
-     cases are more numerous
+   For POSITIVE:
+   - Focus on completing the feature flow successfully
+   - Cover valid inputs, successful submissions, and expected outcomes
+   - Cover valid edge values and optional vs required field behavior
+ 
+   For NEGATIVE:
+   - Focus on how the feature fails and how the system responds
+   - Cover missing required fields, invalid inputs, incomplete flows,
+     and wrong sequences of steps
+   - Cover boundary values and invalid format variations
+   - Security patterns are secondary — include them only where
+     meaningful for the field type
+
+   For BOTH:
+   - Start with critical positive flows — ensure the happy path is
+     fully covered before moving to negative cases
+   - Apply the same depth to negative as you would if running it alone
+   - Do not let either type dominate the output
 
 5. **Generate Gherkin Output**
+
+   Before writing any step, use the filesystem `list_directory` tool
+   to scan the `features/` directory, then use `read_file` to open
+   existing feature files and identify reusable steps. If an existing
+   step expresses the same action or assertion, use its exact wording —
+   do not paraphrase or create a variant. Only create new step wording
+   when no existing step covers the needed action.
 
    Each scenario must follow these conventions:
    - Use project tagging pattern:
      - Positive: `@{feature-id} @{domain} @positive`
      - Negative: `@{feature-id} @{domain} @negative`
      - Both: apply appropriate tag per scenario
-   - Follow Background/Rule/Scenario structure from existing features
+   - Follow Background/Rule/Scenario structure
    - Use Scenario Outline + Examples table for data-driven cases
    - Scenario titles must reflect the exact case being tested
    - Then steps must use exact messages observed during exploration
@@ -116,32 +141,24 @@ You will:
    - Include Background section if shared setup is needed
 
 6. **Save Feature File**
-   - Save the generated `.feature` file to `features/_review/` 
-     directory for approval
+   - Use the filesystem `write_file` tool to save the generated file
+   - Save to `features/_review/` directory in the project
+   - Use `list_directory` to check if `features/_review/` exists first.
+     If it does not, create it with `create_directory` before saving
    - Use the exact file name provided by the user in chat
    - If no filename is provided, use this convention:
      `{domain}-{feature-name}-{scenario-type}.feature`
-     Examples:
-     - auth-registration-negative.feature
-     - auth-registration-positive.feature
-     - auth-registration-both.feature
    - No subdirectories needed — flat structure for easier review
 
 **Quality Standards**:
-
-- Every scenario must be based on observed browser behavior during exploration
+- Every scenario must be traceable to observed browser behavior
 - Scenarios must be independent and runnable in any order
 - Always assume a blank/fresh browser state for each scenario
 - Use exact messages seen on screen in Then steps
 - Follow project's existing Gherkin format and tagging conventions
 
 **Output Format**:
-
-- A single Gherkin `.feature` file saved to `features/_review/` for review and approval
-- Brief summary of what was observed and tested
+- A single Gherkin `.feature` file saved to `features/_review/` for review
+- Brief summary of what was observed and what reasoning drove the scenario design
 - No step definitions, page objects, or implementation details
 
-**Example Usage**:
-- "Explore the user registration form and generate POSITIVE scenarios for successful registration flows"
-- "Explore the user registration form and generate NEGATIVE scenarios for email validation and required field handling"
-- "Explore the product search feature and generate BOTH positive and negative scenarios"

@@ -1,4 +1,4 @@
-@ae02 @auth @registration @negative
+ @auth @registration @negative
 Feature: User Registration - Negative Scenarios
       As a system
       I want to validate user input during registration
@@ -13,7 +13,7 @@ Feature: User Registration - Negative Scenarios
 
       Rule: Email and name fields must be validated before account form is shown
 
-            @ae02-1 @critical
+           @critical
             Scenario: Reject registration with empty name field
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -21,7 +21,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error "Name is required" or validation message
                   And I should remain on the signup form
 
-            @ae02-2 @critical
+           @critical
             Scenario: Reject registration with empty email field
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -29,7 +29,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error "Email is required" or validation message
                   And I should remain on the signup form
 
-            @ae02-3 @critical
+          @critical
             Scenario: Reject registration with invalid email format
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -37,7 +37,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error about invalid email format
                   And I should remain on the signup form
 
-            @ae02-4 @critical
+           @critical
             Scenario: Reject registration with spaces-only name
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -45,7 +45,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error or validation message
                   And I should remain on the signup form
 
-            @ae02-5 @high
+        @high
             Scenario: Reject registration with duplicate email
                   Given I have already registered with email "existing.user@automation.com"
                   And I am on the Automation Exercise home page
@@ -61,7 +61,7 @@ Feature: User Registration - Negative Scenarios
 
       Rule: Title and password must be selected/filled before proceeding
 
-            @ae02-6 @critical
+         @critical
             Scenario: Reject account info when no title is selected
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -72,7 +72,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error about title selection
                   And I should remain on the account information form
 
-            @ae02-7 @critical
+         @critical
             Scenario: Reject account creation with empty password field
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -89,7 +89,7 @@ Feature: User Registration - Negative Scenarios
 
       Rule: Personal information text fields validation
 
-            @ae02-8 @critical
+            @critical
             Scenario: Reject account creation with empty first name
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -100,7 +100,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error "First name is required" or validation message
                   And I should remain on the account information form
 
-            @ae02-9 @critical
+           @critical
             Scenario: Reject account creation with empty last name
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -111,7 +111,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error "Last name is required" or validation message
                   And I should remain on the account information form
 
-            @ae02-10 @critical
+            @critical
             Scenario: Reject account creation with spaces-only first name
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -122,7 +122,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error or validation message about first name
                   And I should remain on the account information form
 
-            @ae02-11 @critical
+          @critical
             Scenario: Reject account creation with empty address
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -139,7 +139,7 @@ Feature: User Registration - Negative Scenarios
 
       Rule: Address information required fields validation
 
-            @ae02-12 @critical
+          @critical
             Scenario: Reject account creation with empty city
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -150,7 +150,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error "City is required" or validation message
                   And I should remain on the account information form
 
-            @ae02-13 @critical
+          @critical
             Scenario: Reject account creation with empty state
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -161,7 +161,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error "State is required" or validation message
                   And I should remain on the account information form
 
-            @ae02-14 @critical
+           @critical
             Scenario: Reject account creation with empty zipcode
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -178,7 +178,7 @@ Feature: User Registration - Negative Scenarios
 
       Rule: Country dropdown must have a selection
 
-            @ae02-15 @critical
+           @critical
             Scenario: Reject account creation when no country is selected
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -195,7 +195,7 @@ Feature: User Registration - Negative Scenarios
 
       Rule: Mobile number must be provided
 
-            @ae02-16 @critical
+      @critical
             Scenario: Reject account creation with empty mobile number
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -212,7 +212,7 @@ Feature: User Registration - Negative Scenarios
 
       Rule: Mobile number and zipcode must have valid format
 
-            @ae02-17 @high
+            @high
             Scenario: Reject account creation with invalid mobile number format
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -223,7 +223,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error about invalid mobile number format
                   And I should remain on the account information form
 
-            @ae02-18 @high
+            @high
             Scenario: Reject account creation with mobile number too short
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -240,7 +240,7 @@ Feature: User Registration - Negative Scenarios
 
       Rule: Password must meet minimum requirements
 
-            @ae02-19 @high
+            @high
             Scenario: Reject account creation with password too short
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -251,7 +251,7 @@ Feature: User Registration - Negative Scenarios
                   Then I should see error about password being too short
                   And I should remain on the account information form
 
-            @ae02-20 @medium
+            @medium
             Scenario: Reject account creation with weak password
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -266,9 +266,9 @@ Feature: User Registration - Negative Scenarios
             # Rule: Boundary value testing
             # =================================================================================
 
-      Rule: Long input values should be handled properlyError
+      Rule: Long input values should be handled properly
 
-            @ae02-21 @medium
+            @medium
             Scenario: Reject or truncate extremely long name
                   And I navigate to the registration page
                   Then I should see the signup form
@@ -276,7 +276,7 @@ Feature: User Registration - Negative Scenarios
                   Then system should either reject the input or truncate properly
                   And if rejected, I should see appropriate error message
 
-            @ae02-22 @medium
+            @medium
             Scenario: Reject or handle extremely long address
                   And I navigate to the registration page
                   Then I should see the signup form
