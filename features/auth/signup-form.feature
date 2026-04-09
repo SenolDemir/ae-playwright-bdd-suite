@@ -18,12 +18,11 @@ Feature: User Registration Form Validation
       Rule: Both name and email fields are required for registration
 
             @ae02-1 @critical @positive
-            Scenario: Reject registration with empty name field
+            Scenario: Accept registration with valid name and email
                   When I enter name "Test User"
-                  When I enter email "validuser@example.com"
+                  When I enter email "valid_email"
                   And I click the "Signup" button on the Login/Signup page
                   Then I should be on the account information setup page
-
 
             # =================================================================================
             # Rule: Required Field Validation
@@ -32,25 +31,25 @@ Feature: User Registration Form Validation
 
       Rule: Both name and email fields are required for registration
 
-            @ae02-1 @critical @negative
+            @ae02-2 @critical @negative
             Scenario: Reject registration with empty name field
                   And I leave the name field empty
-                  When I enter email "validuser@example.com"
+                  When I enter email "valid_email"
                   And I click the "Signup" button on the Login/Signup page
-                  Then I should see the error message "Please fill in this field."
-                  Then I should remain on the Login/Signup page
-
-
-            @ae02-2 @critical @negative
-            Scenario: Reject registration with empty email field
-                  When I enter name "Test User"
-                  And I leave the email field empty
-                  And I click the "Signup" button on the Login/Signup page
-                  Then I should see the error message "Please fill in this field."
+                  Then I should see the name field error message "Please fill in this field."
                   Then I should remain on the Login/Signup page
 
 
             @ae02-3 @critical @negative
+            Scenario: Reject registration with empty email field
+                  When I enter name "Test User"
+                  And I leave the email field empty
+                  And I click the "Signup" button on the Login/Signup page
+                  Then I should see the email field error message "Please fill in this field."
+                  Then I should remain on the Login/Signup page
+
+
+            @ae02-4 @critical @negative
             Scenario: Reject registration with both fields empty
                   When I leave both name and email fields empty
                   And I click the "Signup" button on the Login/Signup page
@@ -81,11 +80,11 @@ Feature: User Registration Form Validation
 
       Rule: Name and email address must follow valid email format
 
-            @ae03-5 @high @negative
+            @ae02-5 @high @negative
             Scenario Outline: Reject registration with invalid name formats
                   When I enter name "<invalid_name>"
                   And I enter email "testuser@example.com"
-                  And I click the "Signup" button
+                  And I click the "Signup" button on the Login/Signup page
                   Then I should see the error message "Please enter a valid name"
                   Then I should remain on the Login/Signup page
 
@@ -98,11 +97,11 @@ Feature: User Registration Form Validation
                         | a            | too short    |
 
 
-            @ae03-6 @high @negative
+            @ae02-6 @high @negative
             Scenario Outline: Reject registration with invalid email formats
                   When I enter name "Test User"
                   And I enter email "<invalid_email>"
-                  And I click the "Signup" button
+                  And I click the "Signup" button on the Login/Signup page
                   Then I should see the error message "Please enter a valid email"
                   And I should remain on the Login/Signup page
 
@@ -121,11 +120,11 @@ Feature: User Registration Form Validation
 
       Rule: Email field must reject potentially harmful input
 
-            @ae03-7 @security @negative
+            @ae02-7 @security @negative
             Scenario Outline: Reject email with harmful input attempts
                   When I enter name "Normal User"
                   And I enter email "<harmful_input>"
-                  And I click the "Signup" button
+                  And I click the "Signup" button on the Login/Signup page
                   Then I should remain on the Login/Signup page
 
 

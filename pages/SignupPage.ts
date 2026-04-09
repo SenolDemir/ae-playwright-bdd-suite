@@ -1,35 +1,31 @@
 import { BasePage } from "./BasePage.js";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
-import { faker } from "@faker-js/faker";
+import { fa, faker } from "@faker-js/faker";
 import { UserFactory } from "../test-data/UserFactory.js";
 import type { SignupUser } from "../test-data/UserFactory.js";
-import { buildInvalidEmail } from "../test-data/email-test-data.js";
 
 export class SignupPage extends BasePage {
- 
   public generatedSignupUser: SignupUser = UserFactory.createValidSignupUser();
 
   // signup form elements
   private readonly signupSection: Locator = this.page.locator(".signup-form");
   public readonly newUserNameInput: Locator =
     this.signupSection.getByPlaceholder("Name");
-  public readonly signupEmailInput: Locator =
+  public readonly newUserEmailInput: Locator =
     this.signupSection.getByPlaceholder("Email Address");
   public readonly signupButton: Locator = this.signupSection.getByRole(
     "button",
     { name: "Signup" },
   );
 
-  // account information form elements
-  private readonly accountInfoSection: Locator =
-    this.page.locator(".login-form");
+  // account information form 
   public readonly enterAccountInformationHeading: Locator = this.page.getByRole(
     "heading",
     { name: "Enter Account Information" },
   );
 
-  // Container
+  //  account information Container
   public readonly accountInformationForm: Locator = this.page.locator(
     'form[action="/signup"]',
   );
@@ -95,19 +91,53 @@ export class SignupPage extends BasePage {
   });
   // ---------------------- Functions ---------------------------------------------------
 
+  // ------------- Step 1: Signup form (name + email) -------------------
+
   async expectSignupFormVisible(): Promise<void> {
     await expect(this.newUserNameInput).toBeVisible();
-    await expect(this.signupEmailInput).toBeVisible();
+    await expect(this.newUserEmailInput).toBeVisible();
     await expect(this.signupButton).toBeVisible();
   }
-
-  // ------------- Step 1: Signup form (name + email) -------------------
 
   async submitSignupCredentials(): Promise<void> {
     this.generatedSignupUser = UserFactory.createValidSignupUser();
     await this.newUserNameInput.fill(this.generatedSignupUser.fullName);
-    await this.signupEmailInput.fill(this.generatedSignupUser.email);
+    await this.newUserEmailInput.fill(this.generatedSignupUser.email);
     await this.signupButton.click();
+  }
+
+  async enterNewUserName(name: string): Promise<void> {
+    await this.newUserNameInput.fill(name);
+  }
+
+  async enterNewUserEmail(email: string): Promise<void> {
+    if (email == "valid_email") {
+      email = faker.internet.email(); // generate a random valid email for testing
+    }
+    await this.newUserEmailInput.fill(email);
+  }
+
+  async clickSignupButton(): Promise<void> {
+    await this.signupButton.click();
+  }
+  // Get the browser's native validation message for name field
+  async expectEmptyNameMessage(message: string): Promise<void> {
+    const validationMessage = await this.newUserNameInput.evaluate(
+      (input: HTMLInputElement) => {
+        return input.validationMessage;
+      },
+    );
+    expect(validationMessage).toBe(message);
+  }
+
+  // Get the browser's native validation message for email field
+  async expectEmptyEmailMessage(message: string): Promise<void> {
+    const validationMessage = await this.newUserEmailInput.evaluate(
+      (input: HTMLInputElement) => {
+        return input.validationMessage;
+      },
+    );
+    expect(validationMessage).toBe(message);
   }
 
   // ------------- Step 2: Account information form -------------------
@@ -183,5 +213,6 @@ export class SignupPage extends BasePage {
     await expect(this.accountCreatedHeading).toBeVisible();
     await expect(this.accountCreatedHeading).toHaveText("Account Created!");
   }
-}
 
+  
+}

@@ -1,4 +1,4 @@
-import { Given, When, Then, expect } from "../fixtures/pages.ts";
+import { Given, When, Then, expect } from "../../fixtures/pages.ts";
 
 Given(
   "I have a registered and logged in account",
@@ -9,7 +9,7 @@ Given(
     await signupPage.createAccountButton.click();
     await signupPage.expectAccountCreated();
     await signupPage.continueButton.click();
-    await homePage.expectLoggedInAs(signupPage.generatedSignupUser.fullName);
+    await homePage.expectLoggedIn(signupPage.generatedSignupUser.fullName);
   },
 );
 

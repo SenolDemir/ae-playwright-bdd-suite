@@ -36,17 +36,17 @@ export class HomePage extends BasePage {
 
   async expectHomePageVisible(): Promise<void> {
     await expect(this.page).toHaveURL(
-      process.env.BASE_URL || "https://automationexercise.com/",
+      process.env.BASE_URL || "https://www.automationexercise.com/",
     );
     await expect(this.page).toHaveTitle("Automation Exercise");
   }
 
-  async expectLoggedInAs(fullName: string): Promise<void> {
-    await expect(this.loggedInAsText).toContainText(`Logged in as ${fullName}`);
-  }
-
-  async expectLoggedInUserVisible(): Promise<void> {
+  async expectLoggedIn(fullName: string): Promise<void> {
+    await expect(this.page).toHaveURL(
+      process.env.BASE_URL || "https://www.automationexercise.com/",
+    );
     await expect(this.loggedInAsText).toBeVisible();
+    await expect(this.loggedInAsText).toContainText(`Logged in as ${fullName}`);
   }
 
   async submitDeleteAccount(): Promise<void> {
