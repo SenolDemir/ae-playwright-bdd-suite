@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
 import type { Locator, Page } from "@playwright/test";
-import type { TestContext } from "../fixtures/pages";
+import type { TestContext } from "../fixtures/testbase";
 import type { SignupUser } from "../test-data/UserFactory.js";
 
 /**
@@ -56,6 +56,6 @@ export class BasePage {
 
   // Shared helper - available to all page objects
   protected get newUser(): SignupUser {
-    return this.testContext.userData;
+    return this.testContext.newUser;
   }
 }

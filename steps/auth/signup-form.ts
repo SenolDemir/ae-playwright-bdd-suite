@@ -1,6 +1,4 @@
-
-import { Given, When, Then, expect } from "../../fixtures/pages.ts";
-
+import { Given, When, Then, expect } from "../../fixtures/testbase.ts";
 
 When("I enter name {string}", async ({ signupPage }, name: string) => {
   await signupPage.enterNewUserName(name);
@@ -36,7 +34,7 @@ Then("I leave the name field empty", async ({ signupPage }) => {
 });
 
 Then("I should remain on the Login\\/Signup page", async ({ signupPage }) => {
- await signupPage.expectSignupFormVisible();
+  await signupPage.expectSignupFormVisible();
 });
 
 Then(

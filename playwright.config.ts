@@ -2,7 +2,6 @@ import "dotenv/config";
 import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig } from "playwright-bdd";
 
-
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -62,7 +61,7 @@ const allProjects = [
       channel: "msedge" as const,
     },
   },
-  
+
   /* Test against mobile viewports. */
   {
     name: "mobile-chrome",
@@ -85,7 +84,7 @@ const projects =
 
 const testDir = defineBddConfig({
   features: "features/**/*.feature",
-  steps: ["steps/**/*.ts", "hooks/**/*.ts", "fixtures/pages.ts"],
+  steps: ["steps/**/*.ts", "hooks/**/*.ts", "fixtures/testbase.ts"],
   // ...other playwright-bdd options
 });
 
@@ -105,15 +104,15 @@ export default defineConfig({
   // reporter: "html",
   reporter: [
     ["line"],
-    ["html", { outputFolder: "reports/playwright-html" }],
-    [
-      "allure-playwright",
-      {
-        detail: true,
-        resultsDir: "reports/allure-results",
-        suiteTitle: false,
-      },
-    ],
+    // ["html", { outputFolder: "reports/playwright-html", open: "never" }],
+    // [
+    //   "allure-playwright",
+    //   {
+    //     detail: true,
+    //     resultsDir: "reports/allure-results",
+    //     suiteTitle: false,
+    //   },
+    // ],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {

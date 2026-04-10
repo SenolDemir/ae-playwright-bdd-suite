@@ -1,12 +1,11 @@
-import { After, Before } from "../fixtures/pages.js";
+import { After, Before } from "../fixtures/testbase.js";
 import { BasePage } from "../pages/BasePage.js";
 
-Before(async ({ page }) => {
-  const basePage = new BasePage(page);
+Before(async ({ page, testContext }) => {
+  const basePage = new BasePage(page, testContext);
 
   await page.goto("/");
   await basePage.dismissCookieConsent();
-  
 });
 
 After(async () => {

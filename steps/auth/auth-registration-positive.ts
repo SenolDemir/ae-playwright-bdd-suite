@@ -1,4 +1,4 @@
-import { Given, When, Then, expect } from "../../fixtures/pages.ts";
+import { Given, When, Then, expect } from "../../fixtures/testbase.ts";
 
 Given("I am on the Automation Exercise home page", async ({ homePage }) => {
   await homePage.expectHomePageVisible();
@@ -17,33 +17,38 @@ When("I submit valid signup credentials", async ({ signupPage, page }) => {
   await expect(page).toHaveURL(/\/signup/);
 });
 
-Then(
-  "I should be on the account information setup page",
-  async ({ page, signupPage }) => {
-    await expect(page).toHaveURL(/\/signup/);
-    await signupPage.expectFormHeadingVisible();
+Then("I should be on the account information setup page", async ({ page }) => {
+  await expect(page).toHaveURL(/\/signup/);
+  await expect(
+    page.getByRole("heading", { name: "Enter Account Information" }),
+  ).toBeVisible();
+});
+
+When(
+  "I complete the account information form",
+  async ({ accountSetupPage }) => {
+    await accountSetupPage.completeAccountInformationForm();
   },
 );
 
-When("I complete the account information form", async ({ signupPage }) => {
-  await signupPage.completeAccountInformationForm();
+When("I submit the registration", async ({ accountSetupPage }) => {
+  await accountSetupPage.createAccountButton.click();
 });
 
-When("I submit the registration", async ({ signupPage }) => {
-  await signupPage.createAccountButton.click();
-});
+Then(
+  "my account should be created successfully",
+  async ({ accountSetupPage }) => {
+    await accountSetupPage.expectAccountCreated();
+  },
+);
 
-Then("my account should be created successfully", async ({ signupPage }) => {
-  await signupPage.expectAccountCreated();
-});
-
-When("I click continue", async ({ page, signupPage }) => {
-  await signupPage.continueButton.click();
+When("I click continue", async ({ page, accountSetupPage }) => {
+  await accountSetupPage.continueButton.click();
 });
 
 Then(
   "I should be logged in as a registered user on the home page",
-  async ({ homePage, signupPage }) => {
-    await homePage.expectLoggedIn(signupPage.generatedSignupUser.fullName);
+  async ({ homePage, testContext }) => {
+    await homePage.expectLoggedIn(testContext.newUser.fullName);
   },
 );
