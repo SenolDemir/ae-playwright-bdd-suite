@@ -31,7 +31,7 @@ Feature: User Registration Form Validation
 
       Rule: Both name and email fields are required for registration
 
-            @ae02-2 @critical @negative
+            @ae02-1 @critical @negative
             Scenario: Reject registration with empty name field
                   And I leave the name field empty
                   When I enter email "valid_email"

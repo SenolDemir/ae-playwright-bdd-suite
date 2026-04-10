@@ -5,8 +5,10 @@ import { fa, faker } from "@faker-js/faker";
 import { UserFactory } from "../test-data/UserFactory.js";
 import type { SignupUser } from "../test-data/UserFactory.js";
 
+
 export class SignupPage extends BasePage {
   public generatedSignupUser: SignupUser = UserFactory.createValidSignupUser();
+
 
   // signup form elements
   private readonly signupSection: Locator = this.page.locator(".signup-form");
@@ -19,7 +21,7 @@ export class SignupPage extends BasePage {
     { name: "Signup" },
   );
 
-  // account information form 
+  // account information form
   public readonly enterAccountInformationHeading: Locator = this.page.getByRole(
     "heading",
     { name: "Enter Account Information" },
@@ -213,6 +215,4 @@ export class SignupPage extends BasePage {
     await expect(this.accountCreatedHeading).toBeVisible();
     await expect(this.accountCreatedHeading).toHaveText("Account Created!");
   }
-
-  
 }
