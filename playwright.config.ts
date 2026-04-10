@@ -91,6 +91,7 @@ const testDir = defineBddConfig({
 export default defineConfig({
   testDir,
   //testDir: './tests',
+  globalTeardown: './playwright.teardown.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -119,6 +120,8 @@ export default defineConfig({
     screenshot: "only-on-failure",
     // video: "retain-on-failure",
     headless: headlessMode,
+    actionTimeout: 15_000,
+    navigationTimeout: 30_000,
     /* Base URL to use in actions like `await page.goto('')`. */
     ...(baseUrl ? { baseURL: baseUrl } : {}),
 

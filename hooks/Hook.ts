@@ -8,6 +8,7 @@ Before(async ({ page, testContext }) => {
   await basePage.dismissCookieConsent();
 });
 
-After(async () => {
+After(async ({}) => {
   // Common scenario cleanup goes here.
+  
 });
