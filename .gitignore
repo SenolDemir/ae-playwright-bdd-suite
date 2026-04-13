@@ -12,9 +12,10 @@ node_modules/
 
 .vscode/*
 !.vscode/settings.json
+!.vscode/mcp.json
 
 #playwrigh bdd
-features-gen/
+.features-gen/
 
 # Environment
 .env

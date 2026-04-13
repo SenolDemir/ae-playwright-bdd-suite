@@ -3,8 +3,6 @@ import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
 export class HomePage extends BasePage {
-  
-
   public readonly signupOrLoginLink: Locator = this.page.getByRole("link", {
     name: "Signup / Login",
   });
@@ -30,23 +28,39 @@ export class HomePage extends BasePage {
 
   // ---------------------- methods --------------------------
 
-  async navigateToLoginPage(): Promise<void> {
-    await this.signupOrLoginLink.click();
+  async navigateTo(pageName: string): Promise<void> {
+    pageName = pageName.trim();
+    switch (pageName) {
+      case "Signup / Login":
+        await this.signupOrLoginLink.click();
+        break;
+      case "Products":
+        // Add navigation logic for the "Products" page here
+        break;
+      case "Cart":
+        // Add navigation logic for the "Cart" page here
+        break;
+      case "Contact Us":
+        // Add navigation logic for the "Contact Us" page here
+        break;
+      default:
+        throw new Error(`Unknown page: ${pageName}`);
+    }
   }
 
   async expectHomePageVisible(): Promise<void> {
     await expect(this.page).toHaveURL(
-      process.env.BASE_URL || "https://automationexercise.com/",
+      process.env.BASE_URL || "https://www.automationexercise.com/",
     );
     await expect(this.page).toHaveTitle("Automation Exercise");
   }
 
-  async expectLoggedInAs(fullName: string): Promise<void> {
-    await expect(this.loggedInAsText).toContainText(`Logged in as ${fullName}`);
-  }
-
-  async expectLoggedInUserVisible(): Promise<void> {
+  async expectLoggedIn(fullName: string): Promise<void> {
+    await expect(this.page).toHaveURL(
+      process.env.BASE_URL || "https://www.automationexercise.com/",
+    );
     await expect(this.loggedInAsText).toBeVisible();
+    await expect(this.loggedInAsText).toContainText(`Logged in as ${fullName}`);
   }
 
   async submitDeleteAccount(): Promise<void> {

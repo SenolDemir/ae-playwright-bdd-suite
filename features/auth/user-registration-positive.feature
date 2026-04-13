@@ -9,11 +9,10 @@ Feature: User Registration
 
 
       Rule: A new user can register with valid details
-            # Covers AC1, AC2, AC5
 
             @ae01-1 @smoke
             Scenario: Successful registration with valid credentials
-                  And I navigate to the registration page
+                  And I navigate to "Signup / Login" page  
                   Then I should see the signup form
                   When I submit valid signup credentials
                   Then I should be on the account information setup page
@@ -24,7 +23,6 @@ Feature: User Registration
                   Then I should be logged in as a registered user on the home page
 
       Rule: An authenticated user can delete their account
-            # Covers AC6
 
             @ae01-2 @smoke
             Scenario: Successfully delete an existing account

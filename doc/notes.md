@@ -33,7 +33,7 @@ utils
 
 
 ## Page Object Injection Set Up in playwrigh-bdd
-it is set up by fixtures/pages.ts file
+it is set up by fixtures/testbase.ts file
 Page Objects should be added into this file in three block
 and injection via step function callback as an argument
 ```typescript

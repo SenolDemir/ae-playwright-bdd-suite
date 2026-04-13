@@ -2,32 +2,15 @@ import { BasePage } from "./BasePage.js";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-import { UserFactory } from "../test-data/UserFactory";
-import type { SignupUser } from "../test-data/UserFactory";
 
-export class LoginPage extends BasePage {
-  public generatedSignupUser: SignupUser = UserFactory.createValidSignupUser();
-
-  // signup form elements
-  private readonly signupSection: Locator = this.page.locator(".signup-form");
-  public readonly newUserNameInput: Locator =
-    this.signupSection.getByPlaceholder("Name");
-  public readonly signupEmailInput: Locator =
-    this.signupSection.getByPlaceholder("Email Address");
-  public readonly signupButton: Locator = this.signupSection.getByRole(
-    "button",
-    { name: "Signup" },
-  );
-
-  // account information form elements
-  private readonly accountInfoSection: Locator =
-    this.page.locator(".login-form");
+export class AccountSetupPage extends BasePage {
+  
+  // account information form heading
   public readonly enterAccountInformationHeading: Locator = this.page.getByRole(
-    "heading",
-    { name: "Enter Account Information" },
+    "heading",{ name: "Enter Account Information" },
   );
 
-  // Container
+  // account information Container
   public readonly accountInformationForm: Locator = this.page.locator(
     'form[action="/signup"]',
   );
@@ -58,7 +41,7 @@ export class LoginPage extends BasePage {
       name: /Receive special offers from our partners!/i,
     });
 
-  //  Personal Information Inputs
+  // Personal Information Inputs
   public readonly firstNameInput: Locator =
     this.accountInformationForm.getByLabel("First name");
   public readonly lastNameInput: Locator =
@@ -66,8 +49,9 @@ export class LoginPage extends BasePage {
   public readonly companyInput: Locator = this.page.getByLabel("Company", {
     exact: true,
   });
-  public readonly address1Input: Locator = 
-  this.accountInformationForm.locator('[data-qa="address"]',);
+  public readonly address1Input: Locator = this.accountInformationForm.locator(
+    '[data-qa="address"]',
+  );
   public readonly address2Input: Locator =
     this.accountInformationForm.getByLabel("Address 2");
   public readonly stateInput: Locator =
@@ -82,6 +66,7 @@ export class LoginPage extends BasePage {
   public readonly createAccountButton: Locator =
     this.accountInformationForm.getByRole("button", { name: "Create Account" });
 
+  // Account created confirmation elements
   public readonly accountCreatedHeading: Locator = this.page.getByRole(
     "heading",
     { name: "Account Created!", level: 2 },
@@ -90,24 +75,8 @@ export class LoginPage extends BasePage {
   public readonly continueButton: Locator = this.page.getByRole("link", {
     name: "Continue",
   });
+
   // ---------------------- Functions ---------------------------------------------------
-
-  async expectSignupFormVisible(): Promise<void> {
-    await expect(this.newUserNameInput).toBeVisible();
-    await expect(this.signupEmailInput).toBeVisible();
-    await expect(this.signupButton).toBeVisible();
-  }
-
-  // ------------- Step 1: Signup form (name + email) -------------------
-
-  async submitSignupCredentials(): Promise<void> {
-    this.generatedSignupUser = UserFactory.createValidSignupUser();
-    await this.newUserNameInput.fill(this.generatedSignupUser.fullName);
-    await this.signupEmailInput.fill(this.generatedSignupUser.email);
-    await this.signupButton.click();
-  }
-
-  // ------------- Step 2: Account information form -------------------
 
   async expectFormHeadingVisible(): Promise<void> {
     await expect(
@@ -130,13 +99,13 @@ export class LoginPage extends BasePage {
 
   async selectRandomDateOfBirth(): Promise<void> {
     await this.daysDropdown.selectOption({
-      label: this.generatedSignupUser.dayOfBirth,
+      label: this.newUser.dayOfBirth,
     });
     await this.monthsDropdown.selectOption({
-      label: this.generatedSignupUser.monthOfBirth,
+      label: this.newUser.monthOfBirth,
     });
     await this.yearsDropdown.selectOption({
-      label: this.generatedSignupUser.yearOfBirth,
+      label: this.newUser.yearOfBirth,
     });
   }
 
@@ -151,27 +120,27 @@ export class LoginPage extends BasePage {
     return randomCountry;
   }
 
-  // ----------- Step 3: Full account info form --------------
-
   async completeAccountInformationForm(): Promise<void> {
     await this.selectTitle();
-    await this.passwordInput.fill(this.generatedSignupUser.password);
+    await this.passwordInput.fill(this.newUser.password);
     await this.selectRandomDateOfBirth();
     await this.newsletterCheckbox.check();
     await this.offersCheckbox.check();
-    await this.firstNameInput.fill(this.generatedSignupUser.firstName);
-    await this.lastNameInput.fill(this.generatedSignupUser.lastName);
-    await this.companyInput.fill(this.generatedSignupUser.company);
-    await this.address1Input.fill(this.generatedSignupUser.address1);
-    await this.address2Input.fill(this.generatedSignupUser.address2);
+    await this.firstNameInput.fill(this.newUser.firstName);
+    await this.lastNameInput.fill(this.newUser.lastName);
+    await this.companyInput.fill(this.newUser.company);
+    await this.address1Input.fill(this.newUser.address1);
+    await this.address2Input.fill(this.newUser.address2);
     await this.selectRandomCountry();
-    await this.stateInput.fill(this.generatedSignupUser.state);
-    await this.cityInput.fill(this.generatedSignupUser.city);
-    await this.zipcodeInput.fill(this.generatedSignupUser.zipcode);
-    await this.mobileNumberInput.fill(this.generatedSignupUser.mobileNumber);
+    await this.stateInput.fill(this.newUser.state);
+    await this.cityInput.fill(this.newUser.city);
+    await this.zipcodeInput.fill(this.newUser.zipcode);
+    await this.mobileNumberInput.fill(this.newUser.mobileNumber);
   }
 
-  // ----------- Step 4: Account created confirmation --------------
+  async submitAccountCreation(): Promise<void> {
+    await this.createAccountButton.click();
+  }
 
   async expectAccountCreated(): Promise<void> {
     await expect(this.page).toHaveURL(
@@ -179,5 +148,9 @@ export class LoginPage extends BasePage {
     );
     await expect(this.accountCreatedHeading).toBeVisible();
     await expect(this.accountCreatedHeading).toHaveText("Account Created!");
+  }
+
+  async clickContinue(): Promise<void> {
+    await this.continueButton.click();
   }
 }
