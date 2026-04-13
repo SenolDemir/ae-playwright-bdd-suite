@@ -1,4 +1,4 @@
-@ae02 @auth @registration
+@ae02 @auth @registration 
 Feature: User Registration Form Validation
       As a system administrator
       I want the registration form to reject invalid input data
@@ -6,7 +6,7 @@ Feature: User Registration Form Validation
 
       Background:
             Given I am on the Automation Exercise home page
-            And I navigate to the registration page
+            And I navigate to "Signup / Login" page
             Then I should see the signup form
 
 
@@ -17,7 +17,7 @@ Feature: User Registration Form Validation
 
       Rule: Both name and email fields are required for registration
 
-            @ae02-1 @critical @positive
+            @ae02-1 @critical @positive @smoke
             Scenario: Accept registration with valid name and email
                   When I enter name "Test User"
                   When I enter email "valid_email"
@@ -31,7 +31,7 @@ Feature: User Registration Form Validation
 
       Rule: Both name and email fields are required for registration
 
-            @ae02-1 @critical @negative
+            @ae02-1 @critical @negative @smoke
             Scenario: Reject registration with empty name field
                   And I leave the name field empty
                   When I enter email "valid_email"

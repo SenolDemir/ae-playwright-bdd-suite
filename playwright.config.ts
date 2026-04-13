@@ -91,7 +91,7 @@ const testDir = defineBddConfig({
 export default defineConfig({
   testDir,
   //testDir: './tests',
-  globalTeardown: './playwright.teardown.ts',
+  // globalTeardown: './playwright.teardown.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -105,7 +105,7 @@ export default defineConfig({
   // reporter: "html",
   reporter: [
     ["line"],
-    // ["html", { outputFolder: "reports/playwright-html", open: "never" }],
+    ["html", { outputFolder: "reports/playwright-html", open: "never" }],
     // [
     //   "allure-playwright",
     //   {

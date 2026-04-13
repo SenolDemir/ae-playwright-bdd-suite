@@ -3,7 +3,7 @@ import { Given, When, Then, expect } from "../../fixtures/testbase.ts";
 Given(
   "I have a registered and logged in account",
   async ({ signupPage, homePage, accountSetupPage, testContext }) => {
-    await homePage.navigateToLoginPage();
+    await homePage.navigateTo("Signup / Login");
     await signupPage.submitSignupCredentials();
     await accountSetupPage.completeAccountInformationForm();
     await accountSetupPage.createAccountButton.click();

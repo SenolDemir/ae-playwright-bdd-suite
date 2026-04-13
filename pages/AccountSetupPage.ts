@@ -4,6 +4,7 @@ import { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 
 export class AccountSetupPage extends BasePage {
+  
   // account information form heading
   public readonly enterAccountInformationHeading: Locator = this.page.getByRole(
     "heading",{ name: "Enter Account Information" },
