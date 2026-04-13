@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { defineConfig } from "@playwright/test";
+import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig } from "playwright-bdd";
 
 /**
@@ -18,7 +18,8 @@ const parseBoolean = (
 };
 
 /**
- * BrowserType = chrome, ... / all
+ * BrowserType = chromium | firefox | webkit | chrome | msedge |
+ * mobile-chrome | mobile-safari | all
  */
 
 const browserType = (process.env.BROWSER_TYPE ?? "chromium").toLowerCase();
@@ -52,6 +53,28 @@ const allProjects = [
       channel: "chrome" as const,
     },
   },
+
+  {
+    name: "msedge",
+    use: {
+      browserName: "chromium" as const,
+      channel: "msedge" as const,
+    },
+  },
+
+  /* Test against mobile viewports. */
+  {
+    name: "mobile-chrome",
+    use: {
+      ...devices["Pixel 5"],
+    },
+  },
+  {
+    name: "mobile-safari",
+    use: {
+      ...devices["iPhone 12"],
+    },
+  },
 ];
 
 const projects =
@@ -61,16 +84,14 @@ const projects =
 
 const testDir = defineBddConfig({
   features: "features/**/*.feature",
-  steps: [
-    "steps/**/*.ts", 
-    "hooks/**/*.ts", 
-    "fixtures/pages.ts"],
+  steps: ["steps/**/*.ts", "hooks/**/*.ts", "fixtures/testbase.ts"],
   // ...other playwright-bdd options
 });
 
 export default defineConfig({
   testDir,
   //testDir: './tests',
+  // globalTeardown: './playwright.teardown.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -78,15 +99,31 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  ...(process.env.CI ? { workers: 1 } : {}),
+  // ...(process.env.CI ? { workers: 1 } : {}),
+  workers: process.env.CI ? 1 : parseInt(process.env.WORKERS ?? "4"),
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: "html",
+  // reporter: "html",
+  reporter: [
+    ["line"],
+    ["html", { outputFolder: "reports/playwright-html", open: "never" }],
+    // [
+    //   "allure-playwright",
+    //   {
+    //     detail: true,
+    //     resultsDir: "reports/allure-results",
+    //     suiteTitle: false,
+    //   },
+    // ],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+    screenshot: "only-on-failure",
+    // video: "retain-on-failure",
+    headless: headlessMode,
+    actionTimeout: 15_000,
+    navigationTimeout: 30_000,
     /* Base URL to use in actions like `await page.goto('')`. */
     ...(baseUrl ? { baseURL: baseUrl } : {}),
-
-    headless: headlessMode,
 
     ...(maximizedWindow
       ? {
