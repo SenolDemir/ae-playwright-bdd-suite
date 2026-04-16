@@ -5,6 +5,7 @@ import { faker } from "@faker-js/faker";
 
 
 export class SignupPage extends BasePage {
+
   // signup form elements
   private readonly signupSection: Locator = this.page.locator(".signup-form");
   public readonly newUserNameInput: Locator =
@@ -15,6 +16,24 @@ export class SignupPage extends BasePage {
     "button",
     { name: "Signup" },
   );
+
+  // ── Login form (container + children) ───────────────────
+  private readonly loginForm: Locator = this.page.locator(
+    'form[action="/login"]',
+  );
+
+  public readonly loginEmailInput: Locator = this.loginForm.locator(
+    '[data-qa="login-email"]',
+  );
+
+  public readonly loginPasswordInput: Locator = this.loginForm.locator(
+    '[data-qa="login-password"]',
+  );
+
+  public readonly loginButton: Locator = this.loginForm.locator(
+    '[data-qa="login-button"]',
+  );
+
   // ---------------------- Functions ---------------------------------------------------
 
   async expectSignupFormVisible(): Promise<void> {
@@ -43,7 +62,7 @@ export class SignupPage extends BasePage {
   async clickSignupButton(): Promise<void> {
     await this.signupButton.click();
   }
-  
+
   // Get the browser's native validation message for name field
   async expectEmptyNameMessage(message: string): Promise<void> {
     const validationMessage = await this.newUserNameInput.evaluate(
@@ -63,4 +82,14 @@ export class SignupPage extends BasePage {
     );
     expect(validationMessage).toBe(message);
   }
+
+  async loginAsTester(email: string, password: string): Promise<void> {
+    email = process.env.TEST_USER_EMAIL || email;
+    password = process.env.TEST_USER_PASSWORD || password;
+    await this.loginEmailInput.fill(email);
+    await this.loginPasswordInput.fill(password);
+    await this.loginButton.click();
+  }
+
+  
 }
