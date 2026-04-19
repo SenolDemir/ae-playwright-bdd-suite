@@ -1,5 +1,41 @@
 import { Given, When, Then, expect } from "../../fixtures/testbase.ts";
 
+Given("I am on the Automation Exercise home page", async ({ homePage }) => {
+  await homePage.expectHomePageVisible();
+});
+
+Given("I navigate to {string} page", async ({ homePage }, pageName: string) => {
+  await homePage.navigateTo(pageName);
+});
+
+Then("I should see the signup form", async ({ signupPage }) => {
+  await signupPage.expectSignupFormVisible();
+});
+
+When("I submit valid signup credentials", async ({ signupPage, page }) => {
+  await signupPage.submitSignupCredentials();
+  await expect(page).toHaveURL(/\/signup/);
+});
+
+Then(
+  "my account should be created successfully",
+  async ({ accountSetupPage }) => {
+    await accountSetupPage.expectAccountCreated();
+  },
+);
+
+When("I click continue", async ({ page, accountSetupPage }) => {
+  await accountSetupPage.continueButton.click();
+});
+
+Then(
+  "I should be logged in as a registered user on the home page",
+  async ({ homePage, testContext }) => {
+    await homePage.expectLoggedIn(testContext.newUser.fullName);
+  },
+);
+// ------------------------------------------------------------------
+
 When("I enter name {string}", async ({ signupPage }, name: string) => {
   await signupPage.enterNewUserName(name);
 });
@@ -48,14 +84,4 @@ Then(
 When("I leave the email field empty", async ({}) => {
   // Step: And I leave the email field empty
   // From: features/auth/signup-form.feature:47:19
-});
-
-When("I leave both name and email fields empty", async ({}) => {
-  // Step: When I leave both name and email fields empty
-  // From: features/auth/signup-form.feature:55:19
-});
-
-When('I enter email "<iframe src={string}>"', async ({}, arg: string) => {
-  // Step: And I enter email "<iframe src="malicious.com">"
-  // From: features/auth/signup-form.feature:127:19
 });

@@ -1,8 +1,8 @@
-@ae02 @auth @registration 
-Feature: User Registration Form Validation
-      As a system administrator
-      I want the registration form to reject invalid input data
-      So that only valid user accounts are created and security is maintained
+@ae01 @auth @registration
+Feature: Signup with valid credentials
+      As a new user
+      I want to register for an account with valid information
+      So that I can access personalized features on the website
 
       Background:
             Given I am on the Automation Exercise home page
@@ -11,18 +11,35 @@ Feature: User Registration Form Validation
 
 
       # =================================================================================
-      # Rule: Required Field Validation
-      # Valid fields should allow form submission
+      # Rule: Successful Registration and Account Deletion
+      # Valid credentials should allow registration
+      # Account deletion should work for authenticated users
       # =================================================================================
 
-      Rule: Both name and email fields are required for registration
 
-            @ae02-1 @critical @positive @smoke
-            Scenario: Accept registration with valid name and email
-                  When I enter name "Test User"
-                  When I enter email "valid_email"
-                  And I click the "Signup" button on the Login/Signup page
+      Rule: A new user can register with valid details
+
+            @ae01-1 @critical @positive @smoke @wip
+            Scenario: Successful registration with valid credentials
+                  When I submit valid signup credentials
                   Then I should be on the account information setup page
+                  When I complete the account information form
+                  And I submit the registration
+                  Then my account should be created successfully
+                  When I click continue
+                  Then I should be logged in as a registered user on the home page
+
+
+      Rule: An authenticated user can delete their account
+
+            @ae01-2 @critical @smoke @wip
+            Scenario: Successfully delete an existing account
+                  Given I have a registered and logged in account
+                  When I submit to delete the account
+                  Then I should see the account deleted confirmation
+                  When I click continue
+                  And I should be not logged in on the home page
+
 
             # =================================================================================
             # Rule: Required Field Validation
@@ -31,16 +48,16 @@ Feature: User Registration Form Validation
 
       Rule: Both name and email fields are required for registration
 
-            @ae02-1 @critical @negative @smoke
+            @ae01-2 @critical @negative @smoke @wip
             Scenario: Reject registration with empty name field
-                  And I leave the name field empty
-                  When I enter email "valid_email"
+                  When I leave the name field empty
+                  And I enter email "valid_email"
                   And I click the "Signup" button on the Login/Signup page
                   Then I should see the name field error message "Please fill in this field."
                   Then I should remain on the Login/Signup page
 
 
-            @ae02-3 @critical @negative
+            @ae01-3 @critical @negative @wip
             Scenario: Reject registration with empty email field
                   When I enter name "Test User"
                   And I leave the email field empty
@@ -49,9 +66,10 @@ Feature: User Registration Form Validation
                   Then I should remain on the Login/Signup page
 
 
-            @ae02-4 @critical @negative
+            @ae01-4 @critical @negative
             Scenario: Reject registration with both fields empty
-                  When I leave both name and email fields empty
+                  When I leave the name field empty
+                  And I leave the email field empty
                   And I click the "Signup" button on the Login/Signup page
                   Then I should see the error message "Please fill in this field."
                   Then I should remain on the Login/Signup page
@@ -64,7 +82,7 @@ Feature: User Registration Form Validation
 
       Rule: Email address must be unique in the system
 
-            @ae02-4 @critical
+            @ae01-5 @critical
             Scenario: Reject registration with existing email address
                   When I enter name "New User"
                   And I enter email "testuser@example.com"
@@ -80,7 +98,7 @@ Feature: User Registration Form Validation
 
       Rule: Name and email address must follow valid email format
 
-            @ae02-5 @high @negative
+            @ae01-6 @high @negative
             Scenario Outline: Reject registration with invalid name formats
                   When I enter name "<invalid_name>"
                   And I enter email "testuser@example.com"
@@ -97,7 +115,7 @@ Feature: User Registration Form Validation
                         | a            | too short    |
 
 
-            @ae02-6 @high @negative
+            @ae01-7 @high @negative
             Scenario Outline: Reject registration with invalid email formats
                   When I enter name "Test User"
                   And I enter email "<invalid_email>"
@@ -120,7 +138,7 @@ Feature: User Registration Form Validation
 
       Rule: Email field must reject potentially harmful input
 
-            @ae02-7 @security @negative
+            @ae01-8 @security @negative
             Scenario Outline: Reject email with harmful input attempts
                   When I enter name "Normal User"
                   And I enter email "<harmful_input>"
