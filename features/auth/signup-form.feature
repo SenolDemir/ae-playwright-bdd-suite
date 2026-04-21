@@ -9,18 +9,16 @@ Feature: Signup with valid credentials
             And I navigate to "Signup / Login" page
             Then I should see the signup form
 
-
       # =================================================================================
       # Rule: Successful Registration and Account Deletion
       # Valid credentials should allow registration
       # Account deletion should work for authenticated users
       # =================================================================================
 
-
-      Rule: A new user can register with valid details
+      Rule: A new user can register with valid details and delete their account
 
             @ae01-1 @critical @positive @smoke @wip
-            Scenario: Successful registration with valid credentials
+            Scenario: Successful registration with valid credentials and subsequent account deletion
                   When I submit valid signup credentials
                   Then I should be on the account information setup page
                   When I complete the account information form
@@ -28,18 +26,10 @@ Feature: Signup with valid credentials
                   Then my account should be created successfully
                   When I click continue
                   Then I should be logged in as a registered user on the home page
-
-
-      Rule: An authenticated user can delete their account
-
-            @ae01-2 @critical @smoke @wip
-            Scenario: Successfully delete an existing account
-                  Given I have a registered and logged in account
                   When I submit to delete the account
                   Then I should see the account deleted confirmation
                   When I click continue
                   And I should be not logged in on the home page
-
 
             # =================================================================================
             # Rule: Required Field Validation

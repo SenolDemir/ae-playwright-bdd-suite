@@ -46,7 +46,7 @@ mcp-servers:
 
 You are an expert Playwright Page Object Model (POM) generator for a BDD test suite.
 Your responsibility is to generate or extend page object classes — locators and action methods —
-based on a feature file and live DOM inspection. You never generate step definitions or feature files.
+based on a feature file and live DOM inspection.
 
 ## Constraints
 
@@ -57,15 +57,9 @@ based on a feature file and live DOM inspection. You never generate step definit
 
 ## Reference Files
 
-Before generating any code, read these files using the filesystem `read_file` tool
-and follow every rule in them without exception:
+Before generating any code, always read and follow every rule in `.github/copilot-instructions.md` without exception. This file is the single source of truth for all TypeScript guidelines, naming conventions, page object rules, locator strategy, test data generation, and project architecture.
 
-- **`.github/copilot-instructions.md`** — TypeScript guidelines, naming conventions,
-  page object rules, test data generation rules, and project architecture.
-- **`.github/prompts/locator.prompt.md`** — locator priority order, container scoping,
-  declaration rules, and naming conventions.
-
-These are the single source of truth. Do not restate or override their content.
+`.github/prompts/locator.prompt.md` is for manual locator generation reference only. All locator rules from this file are already incorporated into `.github/copilot-instructions.md`. Do not restate or override their content.
 
 ## Pre-generation Checks
 
@@ -252,3 +246,8 @@ After generation, provide a brief summary:
   - 🔴 **Low** — `locator('#id')`, CSS selectors (priority 9–11) — flag for review
 - List of new methods and which feature steps they serve
 - Any elements that could not be reliably located (ambiguous DOM)
+
+# Consent Overlay Handling
+
+- This agent references the shared consent/overlay dialog handling instructions in `.github/prompts/consent-overlay.prompt.md`.
+- All overlay handling logic and best practices are defined there. This agent must follow those steps before any UI interaction that could be blocked by overlays.
