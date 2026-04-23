@@ -17,7 +17,7 @@ Feature: Signup with valid credentials
 
       Rule: A new user can register with valid details and delete their account
 
-            @ae01-1 @critical @positive @smoke @wip
+            @ae01-1 @critical @positive @smoke 
             Scenario: Successful registration with valid credentials and subsequent account deletion
                   When I submit valid signup credentials
                   Then I should be on the account information setup page
@@ -38,7 +38,7 @@ Feature: Signup with valid credentials
 
       Rule: Both name and email fields are required for registration
 
-            @ae01-2 @critical @negative @smoke @wip
+            @ae01-2 @critical @negative @smoke 
             Scenario: Reject registration with empty name field
                   When I leave the name field empty
                   And I enter email "valid_email"
@@ -47,7 +47,7 @@ Feature: Signup with valid credentials
                   Then I should remain on the Login/Signup page
 
 
-            @ae01-3 @critical @negative @wip
+            @ae01-3 @critical @negative 
             Scenario: Reject registration with empty email field
                   When I enter name "Test User"
                   And I leave the email field empty

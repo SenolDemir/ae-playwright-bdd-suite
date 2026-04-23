@@ -1,32 +1,37 @@
 @ae04 @product @positive
-Feature: Product Catalog and Product Detail Page
-      The product catalog allows users to browse all products and view detailed information for each product.
+Feature: Product Catalog - Display and Navigation
+      The product page displays all products and allows users to view product details.
 
-      #AC1: Verify all products and product details are displayed correctly
-      #AC2: Verify that navigating to a non-existent product detail page returns an error or redirects appropriately
-      #AC3: Verify that Product Search functionality works correctly
 
       Background:
             Given I am on the Automation Exercise home page
 
       Rule: All products and product details are displayed correctly
 
-      @positive
-      Scenario: View all products and product details successfully
-            When the user clicks on the 'Products' button
-            Then the ALL PRODUCTS page is displayed
-            And the products list is visible
-            When the user clicks on 'View Product' for the first product
-            Then the user is navigated to the product detail page
-            And the product detail is visible with:
-                  | field        | value        |
-                  | Name         | Blue Top     |
-                  | Category     | Women > Tops |
-                  | Price        | Rs. 500      |
-                  | Availability | In Stock     |
-                  | Condition    | New          |
-                  | Brand        | Polo         |
-            And the product image is visible
-            And 'Add to Cart' button is visible and enabled
+            @ae04-1 @positive @wip
+            Scenario: View all products and product details successfully
+                  When I clicks on the 'Products' button
+                  Then the ALL PRODUCTS page is displayed
+                  And the products list is visible
+                  When I clicks on 'View Product' for the first product
+                  Then I am navigated to the product detail page
+                  And the product detail is visible with:
+                        | field        | value        |
+                        | Name         | Blue Top     |
+                        | Category     | Women > Tops |
+                        | Price        | Rs. 500      |
+                        | Availability | In Stock     |
+                        | Condition    | New          |
+                        | Brand        | Polo         |
+                  And the product image is visible
+                  And the write review section is visible and enable
+                  And 'Add to Cart' button is visible and enabled
+                  When I navigate back to the products page
+                  Then the products list is displayed
+
+            @ae04-2 @negative @wip
+            Scenario: Navigating to a non-existent product detail page
+                  When I navigate to a product detail page with an invalid product id
+                  Then an error message or 'Product not found' page is displayed
 
 

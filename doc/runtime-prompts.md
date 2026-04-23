@@ -1,25 +1,38 @@
 
 # bdd-planner-agent prompt template
-According to the test case below, explore product page of https://www.automationexercise.com
-Create all relevant Gherkin test scenarios according to the given scenario type below and save them in the feature file named product-catalog.feature under `features/_review/`.
-Scenario type: BOTH (positive and negative)
 
-Test Case: Verify All Products and product detail page
+## Feature
+Product Catalog
 
-Navigate to url 'http://automationexercise.com'
-Verify that home page is visible successfully
-Click on 'Products' button
-Verify user is navigated to ALL PRODUCTS page successfully
-The products list is visible
-Click on 'View Product' of first product
-User is landed to product detail page
-Verify that detail is visible: product name, category, price, availability, condition, brand
+## Entry Point
+<!-- Navigation path relative to the base URL -->
+/product
 
-Instructions:
+## Scenario Type
+BOTH
 
-Use exact messages and observed browser behavior for Then steps.
-Follow project Gherkin and tagging conventions.
-Do not generate step definitions or implementation code—only the feature file.
+## Charter
+In scope:
+- All products are displayed on the products page
+- When a product is chosen, product details can be displayed
+
+Out of scope:
+- Adding a product to the cart
+- Wishlist functionality
+- Search and filter behavior
+- Any flow that requires authentication
+
+## Specific Cases to Cover
+- Verify that each product card shows name, price, and image
+- Verify that clicking a product navigates to its detail page
+- Verify that the detail page displays the correct product name, price, category, and availability
+- Check behavior when navigating back to the product listing from a detail page
+
+## Output Filename
+products-catalog-raw.feature
+
+
+<!----------- end ---------------->
 
 
 # bdd-generator-agent runtime prompt template
