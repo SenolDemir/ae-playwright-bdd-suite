@@ -3,8 +3,9 @@ import { test as base, createBdd } from "playwright-bdd";
 import { SignupPage } from "../pages/SignupPage";
 import { AccountSetupPage } from "../pages/AccountSetupPage";
 import { HomePage } from "../pages/HomePage";
+import { ProductPage } from "../pages/ProductPage";
+import { ProductDetailPage } from "../pages/ProductDetailPage";
 import { UserFactory, type SignupUser } from "../test-data/UserFactory";
-
 
 export interface TestContext {
   newUser: SignupUser; // registration, login, checkout
@@ -14,10 +15,12 @@ export interface TestContext {
 
 type Fixtures = {
   // ...set types of your custom fixtures
+  testContext: TestContext;
   signupPage: SignupPage;
   accountSetupPage: AccountSetupPage;
   homePage: HomePage;
-  testContext: TestContext;
+  productPage: ProductPage;
+  productDetailPage: ProductDetailPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -39,6 +42,14 @@ export const test = base.extend<Fixtures>({
   homePage: async ({ page, testContext }, use) => {
     const homePage = new HomePage(page, testContext);
     await use(homePage);
+  },
+  productPage: async ({ page, testContext }, use) => {
+    const productPage = new ProductPage(page, testContext);
+    await use(productPage);
+  },
+  productDetailPage: async ({ page, testContext }, use) => {
+    const productDetailPage = new ProductDetailPage(page, testContext);
+    await use(productDetailPage);
   },
 });
 

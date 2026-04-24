@@ -16,7 +16,6 @@ Feature: Product Catalog - Display and Navigation
                   When I clicks on 'View Product' for the first product
                   Then I am navigated to the product detail page
                   And the product detail is visible with:
-                        | field        | value        |
                         | Name         | Blue Top     |
                         | Category     | Women > Tops |
                         | Price        | Rs. 500      |
@@ -29,9 +28,9 @@ Feature: Product Catalog - Display and Navigation
                   When I navigate back to the products page
                   Then the products list is displayed
 
-            @ae04-2 @negative @wip
-            Scenario: Navigating to a non-existent product detail page
-                  When I navigate to a product detail page with an invalid product id
-                  Then an error message or 'Product not found' page is displayed
+            # @ae04-2 @negative @wip
+            # Scenario: Navigating to a non-existent product detail page
+            #       When I navigate to a product detail page with an invalid product id
+            #       Then an error message or 'Product not found' page is displayed
 
 

@@ -1,25 +1,3 @@
-# Exploration Map
-
-**Interactive Elements:**
-- Product cards: each displays product name, price, image, and "Add to cart" button
-- "View Product" link on each product card (navigates to detail page)
-- Navigation bar: Home, Products, Cart, Signup/Login, Test Cases, API Testing, Video Tutorials, Contact Us
-- Category and Brand filters (not in scope)
-
-**States Observed:**
-- Product listing: all products visible with name, price, image
-- Product detail: accessible via "View Product" (fields: name, price, category, availability, etc.)
-
-**Navigation Paths:**
-- /products (catalog)
-- /product_details/{id} (detail page for each product)
-- Navigation back via browser or site controls
-
-**Data Sources:**
-- Product data appears static for catalog and detail (no evidence of dynamic/user-generated content)
-
----
-
 @products-catalog @product @both
 Feature: Product Catalog - Display and Navigation
   The product catalog displays all products and allows users to view product details.
@@ -65,10 +43,3 @@ Feature: Product Catalog - Display and Navigation
     When I navigate to a product detail page with an invalid product id
     Then an error message or 'Product not found' page is displayed
 
----
-
-## Observations & Anomalies
-
-- Product cards are duplicated in markup (each product appears to have two similar blocks per card)
-- No error message observed for missing/incorrect product data (negative scenarios are theoretical)
-- None noted beyond above
