@@ -10,11 +10,11 @@ Then("I should be on the account information setup page", async ({ page }) => {
 
 When(
   "I complete the account information form",
-  async ({ accountSetupPage }) => {
-    await accountSetupPage.completeAccountInformationForm();
+  async ({ signupPage }) => {
+    await signupPage.completeAccountInformationForm();
   },
 );
 
-When("I submit the registration", async ({ accountSetupPage }) => {
-  await accountSetupPage.createAccountButton.click();
+When("I submit the registration", async ({ signupPage }) => {
+  await signupPage.createAccountButton.click();
 });

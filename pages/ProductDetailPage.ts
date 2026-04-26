@@ -2,6 +2,12 @@ import { BasePage } from "./BasePage.js";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
+
+/**
+ * Product list and detail containers use CSS selectors 
+ * due to lack of ARIA roles/labels.
+ */
+
 export class ProductDetailPage extends BasePage {
   // ── Container locators ──────────────────────────────
   private readonly productDetailSection: Locator = this.page.locator(
@@ -61,18 +67,6 @@ export class ProductDetailPage extends BasePage {
 
   // ── Methods ─────────────────────────────────────────
 
-  async expectProductDetailVisible(): Promise<void> {
-    await expect(this.productDetailSection).toBeVisible();
-    await expect(this.productName).toBeVisible();
-    await expect(this.productCategory).toBeVisible();
-    await expect(this.productPrice).toBeVisible();
-    await expect(this.productAvailability).toBeVisible();
-    await expect(this.productCondition).toBeVisible();
-    await expect(this.productBrand).toBeVisible();
-    await expect(this.productImage).toBeVisible();
-    await expect(this.writeReviewSection).toBeVisible();
-    await expect(this.addToCartButton).toBeVisible();
-  }
 
   async expectProductNotFoundVisible(): Promise<void> {
     await expect(this.notFoundHeading).toBeVisible();

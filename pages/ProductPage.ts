@@ -3,7 +3,8 @@ import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
 export class ProductPage extends BasePage {
-  // ── Container locators ──────────────────────────────
+  
+  // Container locator
   private readonly allProductsSection: Locator = this.page.getByRole("region", { name: /All Products/i });
 
   // ── Element locators ────────────────────────────────
@@ -12,7 +13,7 @@ export class ProductPage extends BasePage {
   public readonly firstProduct: Locator = this.productList.locator(".col-sm-4").first();
   public readonly firstProductViewButton: Locator = this.firstProduct.getByRole("link", { name: /View Product/i });
 
-  // ── Methods ─────────────────────────────────────────
+  // ── Functions ─────────────────────────────────────────
 
   async expectAllProductsPageVisible(): Promise<void> {
     await expect(this.allProductsHeading).toBeVisible();

@@ -1,12 +1,7 @@
 import { Given, When, Then, expect } from "../../fixtures/testbase.ts";
 import { ProductPage } from "../../pages/ProductPage.ts";
 
-When(
-  "I clicks on the {string} button",
-  async ({ homePage }, pageName: string) => {
-    await homePage.navigateTo(pageName);
-  },
-);
+
 
 Then("the ALL PRODUCTS page is displayed", async ({ productPage }) => {
   await productPage.expectAllProductsPageVisible();
@@ -63,3 +58,19 @@ When("I navigate back to the products page", async ({ page }) => {
 Then("the products list is displayed", async ({ productPage }) => {
   await productPage.expectProductsListVisible();
 });
+
+When(
+  "I navigate to a product detail page with an invalid product id",
+  async ({ page }) => {
+    await page.goto("/product_details/999");
+  },
+);
+
+Then("an error message or {string} page is displayed",
+  async ({ productDetailPage }, arg: string) => {
+
+    await productDetailPage.expectProductNotFoundVisible();
+    
+    
+  },
+);

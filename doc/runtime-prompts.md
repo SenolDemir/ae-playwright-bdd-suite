@@ -32,7 +32,7 @@ Out of scope:
 products-catalog-raw.feature
 
 
-<!----------- end ---------------->
+<!------------------------ end -------------------------->
 
 
 # bdd-generator-agent runtime prompt template
@@ -43,3 +43,33 @@ Follow all rules in copilot-instructions.md and .github/prompts/auth-login.promp
 Inventory existing page objects, fixtures, and test data factories before generating code. Extend existing files if possible, do not duplicate.
 Only update files in pages/, fixtures/testbase.ts, and test-data/ as needed. Do not generate step definitions or feature files.
 Provide a summary report of changes and locator confidence.
+
+
+# playwright-test-healer.agent runtime prompt
+Debug and fix the scenario tagged with @ae04-1 in product-catalog.feature
+
+
+<!------------------------ end -------------------------->
+
+
+# debugger prompt template (with tags < >)
+
+<error_context>
+[chrome] › .features-gen/features/product/product-catalog.feature.spec.js:12:5 
+Test: View all products and product details successfully
+Tags: @product @positive @wip
+</error_context>
+
+<failure_message>
+Error: expect(received).toBe(expected)
+Expected: "Women > Tops"
+Received: "Category: Women > Tops"
+</failure_message>
+
+<source_code>
+at ../pages/ProductDetailPage.ts:84
+82 |  for (const [field, value] of Object.entries(expected)) {
+83 |    const actual = await this.getProductDetailFieldValue(field);
+84 >    expect(actual).toBe(value);
+85 |  }
+</source_code>
