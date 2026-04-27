@@ -19,13 +19,13 @@ When("I submit valid signup credentials", async ({ signupPage, page }) => {
 
 Then(
   "my account should be created successfully",
-  async ({ accountSetupPage }) => {
-    await accountSetupPage.expectAccountCreated();
+  async ({ signupPage }) => {
+    await signupPage.expectAccountCreated();
   },
 );
 
-When("I click continue", async ({ page, accountSetupPage }) => {
-  await accountSetupPage.continueButton.click();
+When("I click continue", async ({ page, signupPage }) => {
+  await signupPage.continueButton.click();
 });
 
 Then(

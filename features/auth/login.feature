@@ -8,16 +8,15 @@ Feature: Login Functionality
 
       Rule: A registered user should be able to login successfully
 
-      Background:
-            Given I am on the Automation Exercise home page
-            And I navigate to "Signup / Login" page
-            Then I should see the signup form
+            Background:
+                  Given I am on the Automation Exercise home page
+                  And I navigate to "Signup / Login" page
+                  Then I should see the signup form
 
-      @ae03-1 @positive
-      Scenario: Successful login with valid credentials
-            When I enter my email as "testuser_2026@example.com"
-            And I enter my password as "test123456"
-            And I click the login button
-            Then I should be logged in successfully
+            @ae03-1 @positive @wip
+            Scenario: Successful login with valid credentials
+                  When I enter my email as "testuser_2026@example.com"
+                  And I enter my password as "test123456"
+                  And I click the login button
+                  Then I should be logged in successfully
 
-    

@@ -1,6 +1,4 @@
 import { Given, When, Then, expect } from "../../fixtures/testbase.ts";
-import { ProductPage } from "../../pages/ProductPage.ts";
-
 
 
 Then("the ALL PRODUCTS page is displayed", async ({ productPage }) => {
@@ -66,11 +64,9 @@ When(
   },
 );
 
-Then("an error message or {string} page is displayed",
+Then(
+  "an error message or {string} page is displayed",
   async ({ productDetailPage }, arg: string) => {
-
     await productDetailPage.expectProductNotFoundVisible();
-    
-    
   },
 );
