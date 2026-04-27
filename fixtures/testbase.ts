@@ -1,7 +1,6 @@
 import { expect } from "@playwright/test";
 import { test as base, createBdd } from "playwright-bdd";
 import { SignupPage } from "../pages/SignupPage";
-import { AccountSetupPage } from "../pages/AccountSetupPage";
 import { HomePage } from "../pages/HomePage";
 import { ProductPage } from "../pages/ProductPage";
 import { ProductDetailPage } from "../pages/ProductDetailPage";
@@ -19,7 +18,6 @@ type Fixtures = {
   testContext: TestContext;
   signupPage: SignupPage;
   loginPage: LoginPage;
-  accountSetupPage: AccountSetupPage;
   homePage: HomePage;
   productPage: ProductPage;
   productDetailPage: ProductDetailPage;
@@ -41,10 +39,6 @@ export const test = base.extend<Fixtures>({
   loginPage: async ({ page, testContext }, use) => {
     const loginPage = new LoginPage(page, testContext);
     await use(loginPage);
-  },
-  accountSetupPage: async ({ page, testContext }, use) => {
-    const accountSetupPage = new AccountSetupPage(page, testContext);
-    await use(accountSetupPage);
   },
   homePage: async ({ page, testContext }, use) => {
     const homePage = new HomePage(page, testContext);

@@ -6,6 +6,8 @@ Feature: Login Functionality
 
       # When I login with valid email and password
 
+      Rule: A registered user should be able to login successfully
+
       Background:
             Given I am on the Automation Exercise home page
             And I navigate to "Signup / Login" page
@@ -17,3 +19,5 @@ Feature: Login Functionality
             And I enter my password as "test123456"
             And I click the login button
             Then I should be logged in successfully
+
+    
