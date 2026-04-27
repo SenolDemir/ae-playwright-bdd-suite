@@ -1,10 +1,11 @@
 import { expect } from "@playwright/test";
 import { test as base, createBdd } from "playwright-bdd";
 import { SignupPage } from "../pages/SignupPage";
-import { AccountSetupPage } from "../pages/AccountSetupPage";
 import { HomePage } from "../pages/HomePage";
+import { ProductPage } from "../pages/ProductPage";
+import { ProductDetailPage } from "../pages/ProductDetailPage";
 import { UserFactory, type SignupUser } from "../test-data/UserFactory";
-
+import { LoginPage } from "../pages/LoginPage";
 
 export interface TestContext {
   newUser: SignupUser; // registration, login, checkout
@@ -14,10 +15,12 @@ export interface TestContext {
 
 type Fixtures = {
   // ...set types of your custom fixtures
-  signupPage: SignupPage;
-  accountSetupPage: AccountSetupPage;
-  homePage: HomePage;
   testContext: TestContext;
+  signupPage: SignupPage;
+  loginPage: LoginPage;
+  homePage: HomePage;
+  productPage: ProductPage;
+  productDetailPage: ProductDetailPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -25,6 +28,7 @@ export const test = base.extend<Fixtures>({
   testContext: async ({}, use) => {
     const testContext: TestContext = {
       newUser: UserFactory.createValidSignupUser(),
+      // product: ProductFactory.createProduct(), // add when you build cart/order tests
     };
     await use(testContext);
   },
@@ -32,13 +36,21 @@ export const test = base.extend<Fixtures>({
     const signupPage = new SignupPage(page, testContext);
     await use(signupPage);
   },
-  accountSetupPage: async ({ page, testContext }, use) => {
-    const accountSetupPage = new AccountSetupPage(page, testContext);
-    await use(accountSetupPage);
+  loginPage: async ({ page, testContext }, use) => {
+    const loginPage = new LoginPage(page, testContext);
+    await use(loginPage);
   },
   homePage: async ({ page, testContext }, use) => {
     const homePage = new HomePage(page, testContext);
     await use(homePage);
+  },
+  productPage: async ({ page, testContext }, use) => {
+    const productPage = new ProductPage(page, testContext);
+    await use(productPage);
+  },
+  productDetailPage: async ({ page, testContext }, use) => {
+    const productDetailPage = new ProductDetailPage(page, testContext);
+    await use(productDetailPage);
   },
 });
 

@@ -3,6 +3,9 @@ import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
 export class HomePage extends BasePage {
+  public readonly productPageLink: Locator = this.page.getByRole("link", {
+    name: "Products",
+  });
   public readonly signupOrLoginLink: Locator = this.page.getByRole("link", {
     name: "Signup / Login",
   });
@@ -35,7 +38,7 @@ export class HomePage extends BasePage {
         await this.signupOrLoginLink.click();
         break;
       case "Products":
-        // Add navigation logic for the "Products" page here
+        await this.productPageLink.click();
         break;
       case "Cart":
         // Add navigation logic for the "Cart" page here
