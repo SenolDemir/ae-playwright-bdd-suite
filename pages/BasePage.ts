@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
 import type { Locator, Page } from "@playwright/test";
-import type { TestContext } from "../fixtures/testbase";
+import type { TestData } from "../fixtures/ui-fixtures";
 import type { SignupUser } from "../test-data/UserFactory.js";
 
 /**
@@ -8,7 +8,7 @@ import type { SignupUser } from "../test-data/UserFactory.js";
  */
 export class BasePage {
   protected readonly page: Page;
-  protected readonly testContext: TestContext;
+  protected readonly testData: TestData;
 
   private get cookieConsentDialog(): Locator {
     return this.page.getByRole("dialog", {
@@ -33,11 +33,11 @@ export class BasePage {
   /**
    * Constructs a BasePage instance
    * @param page - The Playwright Page object
-   * @param testContext - The shared test context
+   * @param testData - The shared test data
    */
-  constructor(page: Page, testContext: TestContext) {
+  constructor(page: Page, testData: TestData) {
     this.page = page;
-    this.testContext = testContext;
+    this.testData = testData;
   }
 
   async dismissCookieConsent(): Promise<void> {
@@ -56,6 +56,6 @@ export class BasePage {
 
   // Shared helper - available to all page objects
   protected get newUser(): SignupUser {
-    return this.testContext.newUser;
+    return this.testData.newUser;
   }
 }

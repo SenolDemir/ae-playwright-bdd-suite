@@ -1,5 +1,5 @@
 import { sign } from "node:crypto";
-import { Given, When, Then, expect } from "../../fixtures/testbase.ts";
+import { Given, When, Then, expect } from "../../fixtures/ui-fixtures.ts";
 
 When("I login with valid email and password", async ({ loginPage }) => {
   await loginPage.loginWithValidCredentials();

@@ -1,20 +1,30 @@
 import { test as base, expect } from "@playwright/test";
 import { UserFactory, type SignupUser } from "../test-data/UserFactory";
+import { UserService } from "../services/UserService";
+import { ProductService } from "../services/ProductService";
 
-export interface ApiTestContext {
+export interface ApiTestData {
   newUser: SignupUser;
 }
 
 type ApiFixtures = {
-  testContext: ApiTestContext;
+  testData: ApiTestData;
+  userService: UserService;
+  productService: ProductService;
 };
 
 export const test = base.extend<ApiFixtures>({
-  testContext: async ({}, use) => {
+  testData: async ({}, use) => {
     await use({ newUser: UserFactory.createValidSignupUser() });
   },
-  // 'request' is built-in — pre-configured from playwright.config.ts
-  // no custom apiContext needed
+
+  userService: async ({ request }, use) => {
+    await use(new UserService(request));
+  },
+
+  productService: async ({ request }, use) => {
+    await use(new ProductService(request));
+  },
 });
 
 export { expect };

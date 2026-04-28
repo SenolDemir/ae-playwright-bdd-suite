@@ -1,4 +1,4 @@
-import { Given, When, Then, expect } from "../../fixtures/testbase.ts";
+import { Given, When, Then, expect } from "../../fixtures/ui-fixtures.ts";
 
 Given("I am on the Automation Exercise home page", async ({ homePage }) => {
   await homePage.expectHomePageVisible();
@@ -17,12 +17,9 @@ When("I submit valid signup credentials", async ({ signupPage, page }) => {
   await expect(page).toHaveURL(/\/signup/);
 });
 
-Then(
-  "my account should be created successfully",
-  async ({ signupPage }) => {
-    await signupPage.expectAccountCreated();
-  },
-);
+Then("my account should be created successfully", async ({ signupPage }) => {
+  await signupPage.expectAccountCreated();
+});
 
 When("I click continue", async ({ page, signupPage }) => {
   await signupPage.continueButton.click();
@@ -30,8 +27,8 @@ When("I click continue", async ({ page, signupPage }) => {
 
 Then(
   "I should be logged in as a registered user on the home page",
-  async ({ homePage, testContext }) => {
-    await homePage.expectLoggedIn(testContext.newUser.fullName);
+  async ({ homePage, testData }) => {
+    await homePage.expectLoggedIn(testData.newUser.fullName);
   },
 );
 

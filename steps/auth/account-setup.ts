@@ -1,4 +1,4 @@
-import { Given, When, Then, expect } from "../../fixtures/testbase.ts";
+import { Given, When, Then, expect } from "../../fixtures/ui-fixtures.ts";
 
 Then("I should be on the account information setup page", async ({ page }) => {
   await expect(page).toHaveURL(/\/signup/);

@@ -7,15 +7,15 @@ import { ProductDetailPage } from "../pages/ProductDetailPage";
 import { UserFactory, type SignupUser } from "../test-data/UserFactory";
 import { LoginPage } from "../pages/LoginPage";
 
-export interface TestContext {
+export interface TestData {
   newUser: SignupUser; // registration, login, checkout
-  // product?: ProductData; // add when you build cart/order tests
-  // order?: OrderData;     // add when you build order history tests
+  // product?: ProductData; // add when build cart/order tests
+  // order?: OrderData;     // add when build order history tests
 }
 
 type Fixtures = {
   // ...set types of your custom fixtures
-  testContext: TestContext;
+  testData: TestData;
   signupPage: SignupPage;
   loginPage: LoginPage;
   homePage: HomePage;
@@ -24,32 +24,32 @@ type Fixtures = {
 };
 
 export const test = base.extend<Fixtures>({
-  // implement your custom fixtures
-  testContext: async ({}, use) => {
-    const testContext: TestContext = {
+  // implementing custom fixtures
+  testData: async ({}, use) => {
+    const testData: TestData = {
       newUser: UserFactory.createValidSignupUser(),
-      // product: ProductFactory.createProduct(), // add when you build cart/order tests
+      // product: ProductFactory.createProduct(),
     };
-    await use(testContext);
+    await use(testData);
   },
-  signupPage: async ({ page, testContext }, use) => {
-    const signupPage = new SignupPage(page, testContext);
+  signupPage: async ({ page, testData }, use) => {
+    const signupPage = new SignupPage(page, testData);
     await use(signupPage);
   },
-  loginPage: async ({ page, testContext }, use) => {
-    const loginPage = new LoginPage(page, testContext);
+  loginPage: async ({ page, testData }, use) => {
+    const loginPage = new LoginPage(page, testData);
     await use(loginPage);
   },
-  homePage: async ({ page, testContext }, use) => {
-    const homePage = new HomePage(page, testContext);
+  homePage: async ({ page, testData }, use) => {
+    const homePage = new HomePage(page, testData);
     await use(homePage);
   },
-  productPage: async ({ page, testContext }, use) => {
-    const productPage = new ProductPage(page, testContext);
+  productPage: async ({ page, testData }, use) => {
+    const productPage = new ProductPage(page, testData);
     await use(productPage);
   },
-  productDetailPage: async ({ page, testContext }, use) => {
-    const productDetailPage = new ProductDetailPage(page, testContext);
+  productDetailPage: async ({ page, testData }, use) => {
+    const productDetailPage = new ProductDetailPage(page, testData);
     await use(productDetailPage);
   },
 });
