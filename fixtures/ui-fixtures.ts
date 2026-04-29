@@ -27,7 +27,7 @@ export const test = base.extend<Fixtures>({
   // implementing custom fixtures
   testData: async ({}, use) => {
     const testData: TestData = {
-      newUser: UserFactory.createValidSignupUser(),
+      newUser: UserFactory.generateSignupUser(),
       // product: ProductFactory.createProduct(),
     };
     await use(testData);

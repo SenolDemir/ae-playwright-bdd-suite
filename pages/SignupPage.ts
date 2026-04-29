@@ -145,17 +145,24 @@ export class SignupPage extends BasePage {
     ).toBeVisible();
   }
 
-  async selectTitle(): Promise<void> {
-    // select title randomly for testing both options
-    const titles = ["Mr.", "Mrs."];
-    const randomTitle = titles[Math.floor(Math.random() * titles.length)];
+  // async selectTitle1(): Promise<void> {
+  //   // select title randomly for testing both options
+  //   const titles = ["Mr.", "Mrs."];
+  //   const randomTitle = titles[Math.floor(Math.random() * titles.length)];
 
-    if (randomTitle === "Mr.") {
+  //   if (randomTitle === "Mr.") {
+  //     await this.titleMrRadioButton.check();
+  //     return;
+  //   }
+  //   await this.titleMrsRadioButton.check();
+  // }
+
+  async selectTitle(title: string): Promise<void> {
+    if (title === "Mr.") {
       await this.titleMrRadioButton.check();
-      return;
+    } else {
+      await this.titleMrsRadioButton.check();
     }
-
-    await this.titleMrsRadioButton.check();
   }
 
   async selectRandomDateOfBirth(): Promise<void> {
@@ -170,19 +177,27 @@ export class SignupPage extends BasePage {
     });
   }
 
-  async selectRandomCountry(): Promise<string> {
+  async selectCountry(): Promise<void> {
     const countryDropdown: Locator = this.page.getByRole("combobox", {
       name: "Country",
     });
     await countryDropdown.click();
-    const options = await countryDropdown.locator("option").allTextContents();
-    const randomCountry = faker.helpers.arrayElement(options);
-    await countryDropdown.selectOption({ label: randomCountry });
-    return randomCountry;
+    await countryDropdown.selectOption({ label: this.newUser.country });
   }
 
+  // async selectRandomCountry(): Promise<string> {
+  //   const countryDropdown: Locator = this.page.getByRole("combobox", {
+  //     name: "Country",
+  //   });
+  //   await countryDropdown.click();
+  //   const options = await countryDropdown.locator("option").allTextContents();
+  //   const randomCountry = faker.helpers.arrayElement(options);
+  //   await countryDropdown.selectOption({ label: randomCountry });
+  //   return randomCountry;
+  // }
+
   async completeAccountInformationForm(): Promise<void> {
-    await this.selectTitle();
+    await this.selectTitle(this.newUser.title);
     await this.passwordInput.fill(this.newUser.password);
     await this.selectRandomDateOfBirth();
     await this.newsletterCheckbox.check();
@@ -192,7 +207,7 @@ export class SignupPage extends BasePage {
     await this.companyInput.fill(this.newUser.company);
     await this.address1Input.fill(this.newUser.address1);
     await this.address2Input.fill(this.newUser.address2);
-    await this.selectRandomCountry();
+    await this.selectCountry();
     await this.stateInput.fill(this.newUser.state);
     await this.cityInput.fill(this.newUser.city);
     await this.zipcodeInput.fill(this.newUser.zipcode);

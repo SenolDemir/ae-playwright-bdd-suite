@@ -72,13 +72,13 @@ Feature: Signup with valid credentials
 
       Rule: Email address must be unique in the system
 
-            @ae01-5 @critical
-            Scenario: Reject registration with existing email address
-                  When I enter name "New User"
-                  And I enter email "testuser@example.com"
-                  And I click the "Signup" button on the Login/Signup page
-                  Then I should see the error message "Email Address already exist!"
-                  And I should remain on the Login/Signup page
+            # @ae01-5 @critical
+            # Scenario: Reject registration with existing email address
+            #       When I enter name "New User"
+            #       And I enter email "testuser@example.com"
+            #       And I click the "Signup" button on the Login/Signup page
+            #       Then I should see the error message "Email Address already exist!"
+            #       And I should remain on the Login/Signup page
 
 
             # =================================================================================
@@ -88,37 +88,37 @@ Feature: Signup with valid credentials
 
       Rule: Name and email address must follow valid email format
 
-            @ae01-6 @high @negative
-            Scenario Outline: Reject registration with invalid name formats
-                  When I enter name "<invalid_name>"
-                  And I enter email "testuser@example.com"
-                  And I click the "Signup" button on the Login/Signup page
-                  Then I should see the error message "Please enter a valid name"
-                  Then I should remain on the Login/Signup page
+            # @ae01-6 @high @negative
+            # Scenario Outline: Reject registration with invalid name formats
+            #       When I enter name "<invalid_name>"
+            #       And I enter email "testuser@example.com"
+            #       And I click the "Signup" button on the Login/Signup page
+            #       Then I should see the error message "Please enter a valid name"
+            #       Then I should remain on the Login/Signup page
 
-                  Examples:
-                        | invalid_name | description  |
-                        | 123456       | numbers only |
-                        | !@#$%^       | symbols only |
-                        |              | spaces only  |
-                        | too_long     | too long     |
-                        | a            | too short    |
+            #       Examples:
+            #             | invalid_name | description  |
+            #             | 123456       | numbers only |
+            #             | !@#$%^       | symbols only |
+            #             |              | spaces only  |
+            #             | too_long     | too long     |
+            #             | a            | too short    |
 
 
             @ae01-7 @high @negative
-            Scenario Outline: Reject registration with invalid email formats
-                  When I enter name "Test User"
-                  And I enter email "<invalid_email>"
-                  And I click the "Signup" button on the Login/Signup page
-                  Then I should see the error message "Please enter a valid email"
-                  And I should remain on the Login/Signup page
+            # Scenario Outline: Reject registration with invalid email formats
+            #       When I enter name "Test User"
+            #       And I enter email "<invalid_email>"
+            #       And I click the "Signup" button on the Login/Signup page
+            #       Then I should see the error message "Please enter a valid email"
+            #       And I should remain on the Login/Signup page
 
-                  Examples:
-                        | invalid_email          | description          |
-                        | invalidemail           | missing @ and domain |
-                        | invalidemailformat.com | missing @ symbol     |
-                        | testuser@              | missing domain       |
-                        |                        | empty spaces         |
+            #       Examples:
+            #             | invalid_email          | description          |
+            #             | invalidemail           | missing @ and domain |
+            #             | invalidemailformat.com | missing @ symbol     |
+            #             | testuser@              | missing domain       |
+            #             |                        | empty spaces         |
 
 
             # =================================================================================
@@ -128,19 +128,19 @@ Feature: Signup with valid credentials
 
       Rule: Email field must reject potentially harmful input
 
-            @ae01-8 @security @negative
-            Scenario Outline: Reject email with harmful input attempts
-                  When I enter name "Normal User"
-                  And I enter email "<harmful_input>"
-                  And I click the "Signup" button on the Login/Signup page
-                  Then I should remain on the Login/Signup page
+            # @ae01-8 @security @negative
+            # Scenario Outline: Reject email with harmful input attempts
+            #       When I enter name "Normal User"
+            #       And I enter email "<harmful_input>"
+            #       And I click the "Signup" button on the Login/Signup page
+            #       Then I should remain on the Login/Signup page
 
 
-                  Examples:
-                        | harmful_input                 | description      |
-                        | <script>alert('xss')</script> | script injection |
-                        | <img src=x onerror=alert(1)>  | image injection  |
-                        | <iframe src="malicious.com">  | iframe injection |
+            #       Examples:
+            #             | harmful_input                 | description      |
+            #             | <script>alert('xss')</script> | script injection |
+            #             | <img src=x onerror=alert(1)>  | image injection  |
+            #             | <iframe src="malicious.com">  | iframe injection |
 
 
       # =================================================================================

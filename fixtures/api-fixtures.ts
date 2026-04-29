@@ -1,29 +1,36 @@
-import { test as base, expect } from "@playwright/test";
+import {
+  test as base,
+  expect,
+  request as playwrightRequest,
+  type APIRequestContext,
+} from "@playwright/test";
 import { UserFactory, type SignupUser } from "../test-data/UserFactory";
-import { UserService } from "../services/UserService";
+import { SignupService } from "../services/SignupService";
 import { ProductService } from "../services/ProductService";
 
-export interface ApiTestData {
-  newUser: SignupUser;
-}
+
 
 type ApiFixtures = {
-  testData: ApiTestData;
-  userService: UserService;
+  apiRequest: APIRequestContext;
+  signupService: SignupService;
   productService: ProductService;
 };
 
 export const test = base.extend<ApiFixtures>({
-  testData: async ({}, use) => {
-    await use({ newUser: UserFactory.createValidSignupUser() });
+  apiRequest: async ({}, use) => {
+    const baseURL = process.env.API_BASE_URL;
+    const context = await playwrightRequest.newContext({ baseURL });
+    await use(context);
+    await context.dispose();
   },
 
-  userService: async ({ request }, use) => {
-    await use(new UserService(request));
+
+  signupService: async ({ apiRequest }, use) => {
+    await use(new SignupService(apiRequest));
   },
 
-  productService: async ({ request }, use) => {
-    await use(new ProductService(request));
+  productService: async ({ apiRequest }, use) => {
+    await use(new ProductService(apiRequest));
   },
 });
 
