@@ -6,7 +6,7 @@
   "scripts": {
     "bdd": "npx bddgen",
     "tests": "npx bddgen && npx playwright test",
-    "test:specific": "npx playwright test codegen-intro.spec.js",
+    "test:specific": "npx bddgen && npx playwright test login.feature",
     "test:ui-all": "npx bddgen && npx playwright test features-gen/",
     "test:ui-tag": "npx bddgen test --tags '@ae01-1' && npx playwright test features-gen/",
     "test:api-all": "npx playwright test api-tests",

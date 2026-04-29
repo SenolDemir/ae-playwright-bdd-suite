@@ -1,10 +1,8 @@
-
 import { test, expect } from "../../fixtures/api-fixtures";
-import { SignupService } from "../../services/SignupService";
+import { SignupService } from "../../services/signup.service";
 import { UserFactory } from "../../test-data/UserFactory";
 
 test.describe("Signup API", () => {
-
   test("signup with valid payload", async ({ apiRequest, signupService }) => {
     const payload = SignupService.createNewUserPayload();
     const response = await apiRequest.post("createAccount", { form: payload });
@@ -14,5 +12,4 @@ test.describe("Signup API", () => {
     const body = await response.json();
     expect(body.responseCode).toBe(201);
   });
-  
 });

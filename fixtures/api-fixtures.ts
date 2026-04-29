@@ -5,10 +5,8 @@ import {
   type APIRequestContext,
 } from "@playwright/test";
 import { UserFactory, type SignupUser } from "../test-data/UserFactory";
-import { SignupService } from "../services/SignupService";
-import { ProductService } from "../services/ProductService";
-
-
+import { SignupService } from "../services/signup.service";
+import { ProductService } from "../services/product.service";
 
 type ApiFixtures = {
   apiRequest: APIRequestContext;
@@ -23,7 +21,6 @@ export const test = base.extend<ApiFixtures>({
     await use(context);
     await context.dispose();
   },
-
 
   signupService: async ({ apiRequest }, use) => {
     await use(new SignupService(apiRequest));
