@@ -54,10 +54,10 @@ based on a feature file and live DOM inspection.
 - DO NOT fabricate DOM attributes, roles, or names not present in a `browser_snapshot`
 - DO NOT duplicate an existing page class — extend it instead
 - DO NOT inline locator rules or coding conventions — read them from the source files listed below
-
-## Reference Files
-
-Before generating any code, always read and follow every rule in `.github/copilot-instructions.md` without exception. This file is the single source of truth for all TypeScript guidelines, naming conventions, page object rules, locator strategy, test data generation, and project architecture.
+  Read fixtures/ui-fixtures.ts
+  Write fixtures/ui-fixtures.ts
+  | fixtures/ui-fixtures.ts | Base Playwright fixtures for UI tests |
+  Before generating any code, always read and follow every rule in `.github/copilot-instructions.md` without exception. This file is the single source of truth for all TypeScript guidelines, naming conventions, page object rules, locator strategy, test data generation, and project architecture.
 
 `.github/prompts/locator.prompt.md` is for manual locator generation reference only. All locator rules from this file are already incorporated into `.github/copilot-instructions.md`. Do not restate or override their content.
 
@@ -92,8 +92,8 @@ Do not proceed to DOM Inspection until all four steps are done.
         - **NO** → **create a new page class** following the rules in
           **Creating a New Page Object** below.
 
-3. **Inventory existing fixtures** — `read_file` → `fixtures/testbase.ts` to understand
-   the current fixture wiring and `TestContext` interface.
+3. **Inventory existing fixtures** — `read_file` → `fixtures/ui-fixtures.ts` to understand
+   the current fixture wiring and `TestData` interface.
 
 4. **Inventory test data factories** — `list_directory` → `test-data/`, then `read_file`
    on relevant factories to check if a factory exists for the domain entity. If a factory
@@ -123,7 +123,7 @@ When no existing page class covers the target page:
 
 1. You must have already read `pages/BasePage.ts` in pre-generation step 2.2.
 2. The new class **must** extend `BasePage`, match its constructor signature,
-   and call `super(page, testContext)`. Do not define a custom constructor unless
+   and call `super(page, testData)`. Do not define a custom constructor unless
    additional parameters are required.
 3. Do not re-implement anything `BasePage` already provides — e.g., `dismissCookieConsent()`,
    the `newUser` getter, or any shared helpers. Use `this.newUser`, `this.page`, etc.
@@ -203,12 +203,12 @@ Follow all method and naming conventions from `.github/copilot-instructions.md`.
 
 **Required** when a new page class is created. Never create a second fixtures file.
 
-1. `read_file` → `fixtures/testbase.ts` (already done in pre-generation step 3).
+1. `read_file` → `fixtures/ui-fixtures.ts` (already done in pre-generation step 3).
 2. Add an `import` for the new page class, following the existing import style.
 3. Add the new page type to the `Fixtures` type alias and a new fixture inside
    `base.extend<Fixtures>({...})`, following the exact instantiation pattern of
    existing fixtures in the file.
-4. Write the complete updated `fixtures/testbase.ts` back to the same path —
+4. Write the complete updated `fixtures/ui-fixtures.ts` back to the same path —
    do not create a new file.
 
 ## Test Data Factory
@@ -225,7 +225,7 @@ If the feature file requires domain data not covered by an existing factory:
 | --------------------- | ---------------------------------------------- | -------------------------------- |
 | New page object       | `pages/<PageName>.ts`                          | Decision tree → create new       |
 | Extended page object  | Same source path (e.g., `pages/SignupPage.ts`) | Decision tree → extend           |
-| Updated fixtures      | `fixtures/testbase.ts`                         | New page object was created      |
+| Updated fixtures      | `fixtures/ui-fixtures.ts`                      | New page object was created      |
 | New test data factory | `test-data/<FactoryName>.ts`                   | Feature requires missing factory |
 
 Do NOT generate: step definitions (`steps/`), feature files (`features/`), test
