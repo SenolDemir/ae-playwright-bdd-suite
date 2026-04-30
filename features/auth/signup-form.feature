@@ -1,4 +1,4 @@
-@ae01 @auth @registration
+@ui01 @auth @registration
 Feature: Signup with valid credentials
       As a new user
       I want to register for an account with valid information
@@ -17,7 +17,7 @@ Feature: Signup with valid credentials
 
       Rule: A new user can register with valid details and delete their account
 
-            @ae01-1 @critical @positive @smoke @wip
+            @ui01-1 @critical @positive @smoke @wip
             Scenario: Successful registration with valid credentials and subsequent account deletion
                   When I submit valid signup credentials
                   Then I should be on the account information setup page
@@ -38,7 +38,7 @@ Feature: Signup with valid credentials
 
       Rule: Both name and email fields are required for registration
 
-            @ae01-2 @critical @negative @smoke
+            @ui01-2 @critical @negative @smoke
             Scenario: Reject registration with empty name field
                   When I leave the name field empty
                   And I enter email "valid_email"
@@ -47,7 +47,7 @@ Feature: Signup with valid credentials
                   Then I should remain on the Login/Signup page
 
 
-            @ae01-3 @critical @negative @wip
+            @ui01-3 @critical @negative @wip
             Scenario: Reject registration with empty email field
                   When I enter name "Test User"
                   And I leave the email field empty
@@ -56,7 +56,7 @@ Feature: Signup with valid credentials
                   Then I should remain on the Login/Signup page
 
 
-            @ae01-4 @critical @negative
+            @ui01-4 @critical @negative
             Scenario: Reject registration with both fields empty
                   When I leave the name field empty
                   And I leave the email field empty
@@ -72,7 +72,7 @@ Feature: Signup with valid credentials
 
       Rule: Email address must be unique in the system
 
-            # @ae01-5 @critical
+            # @ui01-5 @critical
             # Scenario: Reject registration with existing email address
             #       When I enter name "New User"
             #       And I enter email "testuser@example.com"
@@ -88,7 +88,7 @@ Feature: Signup with valid credentials
 
       Rule: Name and email address must follow valid email format
 
-            # @ae01-6 @high @negative
+            # @ui01-6 @high @negative
             # Scenario Outline: Reject registration with invalid name formats
             #       When I enter name "<invalid_name>"
             #       And I enter email "testuser@example.com"
@@ -105,7 +105,7 @@ Feature: Signup with valid credentials
             #             | a            | too short    |
 
 
-            @ae01-7 @high @negative
+            @ui01-7 @high @negative
             # Scenario Outline: Reject registration with invalid email formats
             #       When I enter name "Test User"
             #       And I enter email "<invalid_email>"
@@ -128,7 +128,7 @@ Feature: Signup with valid credentials
 
       Rule: Email field must reject potentially harmful input
 
-            # @ae01-8 @security @negative
+            # @ui01-8 @security @negative
             # Scenario Outline: Reject email with harmful input attempts
             #       When I enter name "Normal User"
             #       And I enter email "<harmful_input>"

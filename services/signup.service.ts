@@ -19,10 +19,10 @@ export class SignupService {
     overrides?: Partial<SignupPayload>,
   ): SignupPayload {
     const user = UserFactory.generateSignupUser();
-    return UserFactory.generateSignupPayload(user, overrides);
+    return UserFactory.toSignupPayload(user, overrides);
   }
   /**
    * const existingEmailPayload = SignupService
-   *        .createNewUserPayload({ email: "existing@test.com" });
+   *        .toSignupPayload({ email: "existing@test.com" });
    */
 }

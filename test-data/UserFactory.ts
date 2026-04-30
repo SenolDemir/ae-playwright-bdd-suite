@@ -111,7 +111,7 @@ export class UserFactory {
   }
 
   // transforms SignupUser to API's expected shape (payload)
-  static generateSignupPayload(
+  static toSignupPayload(
     user: SignupUser,
     overrides?: Partial<SignupPayload>,
   ): SignupPayload {
@@ -138,8 +138,8 @@ export class UserFactory {
        * for negative test scenarios, the overrides argument handles it 
        * without any new factory methods:
        * Duplicate email test, different title or country
-          const payload = UserFactory.generateSignupPayload(user, { email: "existing@test.com" });
-          const payload = UserFactory.generateSignupPayload(user, { title: "Mrs", country: "Canada" });
+          const payload = UserFactory.toSignupPayload(user, { email: "existing@test.com" });
+          const payload = UserFactory.toSignupPayload(user, { title: "Mrs", country: "Canada" });
        */
     };
   }

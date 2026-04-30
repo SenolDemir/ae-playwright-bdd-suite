@@ -1,4 +1,4 @@
-@ae03 @auth @login
+@ui03 @auth @login
 Feature: Login Functionality
       As a registered user
       I want to be able to login to the application
@@ -13,7 +13,7 @@ Feature: Login Functionality
                   And I navigate to "Signup / Login" page
                   Then I should see the signup form
 
-            @ae03-1 @positive @wip
+            @ui03-1 @positive @wip
             Scenario: Successful login with valid credentials
                   When I enter my email as "testuser_2026@example.com"
                   And I enter my password as "test123456"
