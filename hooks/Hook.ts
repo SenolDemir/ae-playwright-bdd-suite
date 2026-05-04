@@ -1,13 +1,16 @@
-import { After, Before } from "../fixtures/ui-fixtures.js";
+import { After, Before } from "../fixtures/ui.fixtures.js";
 import { BasePage } from "../pages/BasePage.js";
 
-Before(async ({ page, testData }) => {
-  const basePage = new BasePage(page, testData);
-
+Before(async ({ page}) => {
+ 
   await page.goto("/");
-  await basePage.dismissCookieConsent();
+  const consentButton = page.getByRole("button", { name: "Consent" });
+  if (await consentButton.isVisible()) {
+    await consentButton.click();
+  }
+
 });
 
 After(async ({}) => {
-  // Common scenario cleanup goes here.
+  // Common scenario cleanups can be added here if needed
 });

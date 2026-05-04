@@ -1,10 +1,10 @@
-import { test, expect } from "../../fixtures/api-fixtures";
-import { SignupService } from "../../services/signup.service";
+import { test, expect } from "../../fixtures/api.fixtures";
+import { SignupClient } from "../../api-clients/signup.client";
 import { UserFactory } from "../../test-data/UserFactory";
 
 test.describe("Signup API", () => {
-  test("signup with valid payload", async ({ apiRequest, signupService }) => {
-    const payload = SignupService.createNewUserPayload();
+  test("signup with valid payload", async ({ apiRequest, signupClient }) => {
+    const payload = SignupClient.createNewUserPayload();
     const response = await apiRequest.post("createAccount", { form: payload });
     console.log(await response.json());
     // response message is 201 but the API returns 200

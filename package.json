@@ -8,7 +8,7 @@
     "tests": "npx bddgen && npx playwright test",
     "test:specific": "npx bddgen && npx playwright test login.feature",
     "test:ui-all": "npx bddgen && npx playwright test features-gen/",
-    "test:ui-tag": "npx bddgen test --tags '@ae01-1' && npx playwright test features-gen/",
+    "test:ui-tag": "npx bddgen test --tags '@ui01-1' && npx playwright test features-gen/",
     "test:api-all": "npx playwright test api-tests",
     "test:api-tag": "npx playwright test --grep @api-test",
     "test:api-specific": "npx playwright test -g 'Signup API'",

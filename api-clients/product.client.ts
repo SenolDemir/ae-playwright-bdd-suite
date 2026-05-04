@@ -1,9 +1,9 @@
 import type { APIRequestContext, APIResponse } from "@playwright/test";
 
 /**
- * ProductService encapsulates all product-related API calls and payload templates.
+ * ProductClient encapsulates all product-related API calls and payload templates.
  */
-export class ProductService {
+export class ProductClient {
 	private readonly request: APIRequestContext;
 
 	constructor(request: APIRequestContext) {
@@ -14,7 +14,7 @@ export class ProductService {
 	 * Gets the product list
 	 */
 	async getProductsList(): Promise<APIResponse> {
-		return this.request.get("/productsList");
+		return this.request.get("productsList");
 	}
 
 	/**

@@ -1,4 +1,4 @@
-@ui01 @auth @registration
+@ui @ui01 @auth @registration
 Feature: Signup with valid credentials
       As a new user
       I want to register for an account with valid information

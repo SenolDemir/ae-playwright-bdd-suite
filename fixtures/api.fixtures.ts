@@ -5,13 +5,13 @@ import {
   type APIRequestContext,
 } from "@playwright/test";
 import { UserFactory, type SignupUser } from "../test-data/UserFactory";
-import { SignupService } from "../services/signup.service";
-import { ProductService } from "../services/product.service";
+import { SignupClient } from "../api-clients/signup.client";
+import { ProductClient } from "../api-clients/product.client";
 
 type ApiFixtures = {
   apiRequest: APIRequestContext;
-  signupService: SignupService;
-  productService: ProductService;
+  signupClient: SignupClient;
+  productClient: ProductClient;
 };
 
 export const test = base.extend<ApiFixtures>({
@@ -22,12 +22,12 @@ export const test = base.extend<ApiFixtures>({
     await context.dispose();
   },
 
-  signupService: async ({ apiRequest }, use) => {
-    await use(new SignupService(apiRequest));
+  signupClient: async ({ apiRequest }, use) => {
+    await use(new SignupClient(apiRequest));
   },
 
-  productService: async ({ apiRequest }, use) => {
-    await use(new ProductService(apiRequest));
+  productClient: async ({ apiRequest }, use) => {
+    await use(new ProductClient(apiRequest));
   },
 });
 

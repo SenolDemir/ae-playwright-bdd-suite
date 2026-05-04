@@ -3,19 +3,7 @@ import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
 export class HomePage extends BasePage {
-  public readonly productPageLink: Locator = this.page.getByRole("link", {
-    name: "Products",
-  });
-  public readonly signupOrLoginLink: Locator = this.page.getByRole("link", {
-    name: "Signup / Login",
-  });
-  public readonly logoutLink: Locator = this.page.getByRole("link", {
-    name: "Logout",
-  });
-  // Visible only after authentication.
-  public readonly deleteAccountLink: Locator = this.page.getByRole("link", {
-    name: "Delete Account",
-  });
+  
   // Visible only after authentication.
   public readonly loggedInAsText: Locator =
     this.page.getByText(/Logged in as/i);
@@ -31,25 +19,7 @@ export class HomePage extends BasePage {
 
   // ---------------------- methods --------------------------
 
-  async navigateTo(pageName: string): Promise<void> {
-    pageName = pageName.trim();
-    switch (pageName) {
-      case "Signup / Login":
-        await this.signupOrLoginLink.click();
-        break;
-      case "Products":
-        await this.productPageLink.click();
-        break;
-      case "Cart":
-        // Add navigation logic for the "Cart" page here
-        break;
-      case "Contact Us":
-        // Add navigation logic for the "Contact Us" page here
-        break;
-      default:
-        throw new Error(`Unknown page: ${pageName}`);
-    }
-  }
+  
 
   async expectHomePageVisible(): Promise<void> {
     await expect(this.page).toHaveURL(
@@ -67,7 +37,7 @@ export class HomePage extends BasePage {
   }
 
   async submitDeleteAccount(): Promise<void> {
-    await this.deleteAccountLink.click();
+    await this.nav.deleteAccountLink.click();
   }
 
   async expectAccountDeletedConfirmation(): Promise<void> {
@@ -83,9 +53,9 @@ export class HomePage extends BasePage {
     await expect(this.page).toHaveURL(
       process.env.BASE_URL || "https://www.automationexercise.com/",
     );
-    await expect(this.signupOrLoginLink).toBeVisible();
-    await expect(this.logoutLink).toHaveCount(0);
-    await expect(this.deleteAccountLink).toHaveCount(0);
-    await expect(this.loggedInAsText).toHaveCount(0);
+    await expect(this.nav.signupOrLoginLink).toBeVisible();
+    await expect(this.nav.logoutLink).toHaveCount(0);
+    await expect(this.nav.deleteAccountLink).toHaveCount(0);
+    await expect(this.nav.loggedInAsText).toHaveCount(0);
   }
 }

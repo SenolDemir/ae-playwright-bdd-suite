@@ -53,7 +53,7 @@ const uiBrowsers =
 
 const bddTestDir = defineBddConfig({
   features: "features/**/*.feature",
-  steps: ["steps/**/*.ts", "hooks/**/*.ts", "fixtures/ui-fixtures.ts"],
+  steps: ["steps/**/*.ts", "hooks/**/*.ts", "fixtures/ui.fixtures.ts"],
 });
 
 export default defineConfig({

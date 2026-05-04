@@ -1,4 +1,4 @@
-@ui03 @auth @login
+@ui @ui03 @auth @login
 Feature: Login Functionality
       As a registered user
       I want to be able to login to the application

@@ -22,8 +22,6 @@ Whenever a consent, cookie, or overlay dialog is present and blocks interaction 
 4. **Scenario Design**
    - For negative scenarios, explicitly test the behavior when overlays block interaction (e.g., user cannot proceed, navigation is prevented).
 
-5. **Documentation**
-   - Add a note in the scenario or agent output when overlay handling was required.
 
 # Agent Integration
 - All agents and runtime prompts must include these overlay handling steps before any interaction that could be blocked.

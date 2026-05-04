@@ -6,9 +6,9 @@ import {
 } from "../test-data/UserFactory";
 
 /**
- * SignupService encapsulates all signup-related API calls and payload templates.
+ * SignupClient encapsulates all signup-related API calls and payload templates.
  */
-export class SignupService {
+export class SignupClient {
   private readonly request: APIRequestContext;
 
   constructor(request: APIRequestContext) {
@@ -22,7 +22,7 @@ export class SignupService {
     return UserFactory.toSignupPayload(user, overrides);
   }
   /**
-   * const existingEmailPayload = SignupService
+   * const existingEmailPayload = SignupClient
    *        .toSignupPayload({ email: "existing@test.com" });
    */
 }
