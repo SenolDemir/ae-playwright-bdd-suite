@@ -92,11 +92,10 @@ Then("I should remain on the Login\\/Signup page", async ({ signupPage }) => {
 Then(
   "I should see the error message {string}",
   async ({ signupPage }, message: string) => {
-    await expect(signupPage.emailAlreadyExistsError).toHaveText(message);
+    await signupPage.expectSignupError(message);
   },
 );
 
-When("I leave the email field empty", async ({}) => {
-  // Step: And I leave the email field empty
-  // From: features/auth/signup-form.feature:47:19
+When("I leave the email field empty", async ({ signupPage }) => {
+  await signupPage.newUserEmailInput.clear();
 });

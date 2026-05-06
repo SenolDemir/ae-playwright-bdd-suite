@@ -94,7 +94,7 @@ The framework is organized into distinct layers, each with well-defined responsi
 ┌──────────────────▼──────────────┐    ┌─────────────────────────────────┐
 │       Page Object Model         │    │       API Test Layer            │
 │    (UI – browser actions)       │    │  Playwright native .spec.ts     │
-│    pages/ + fixtures/           │    │  api-tests/ grouped by domain   │
+│    pages/ + fixtures/           │    │  api/ grouped by domain         │
 └──────────────────┬──────────────┘    └──────────────┬──────────────────┘
                    │                                  │
 ┌──────────────────▼──────────────┐    ┌──────────────▼──────────────────┐
@@ -134,7 +134,7 @@ Each significant page of the application has a corresponding Page Object class. 
 **Component Object Layer (`/components`)**  
 Reusable UI fragments that appear across multiple pages are extracted into Component Object classes. This avoids duplicating locator definitions and interaction logic across multiple Page Objects. 
 
-**API Tests (`/api-tests`)**  
+**API Tests (`/api`)**  
 API tests are implemented using Playwright's native `test()` structure (`.spec.ts` files),  using Playwright's built-in `APIRequestContext`. They do not use BDD/Gherkin — instead, they follow a direct spec style that is more natural for HTTP-level assertions without the overhead of mapping Gherkin steps to request/response logic. All HTTP interactions are delegeted to the **Client Object layer** under `clients/`.
 
 **Client Object Layer - API Clients(`/clients`)**  
@@ -148,57 +148,62 @@ Playwright fixtures extend the base test context to inject Page Objects, Client 
 ## 📁 Project Structure
 
 ```
-├── .github/                  
+root/
+├── .github/
 │   ├── agents/
-│   │   ├── playwright-bdd-planner.md     # customized agent
-│   │   ├── playwright-bdd-generator.md   # customized agent
-│   │   ├── playwright-test-generator.md  # playright native agent
-│   │   ├── playwright-test-healer.md     # playright native agent  
-│   │   └── playwright-test-planner.md    # playright native agent
+│   │   ├── playwright-bdd-planner.md
+│   │   ├── playwright-bdd-generator.md
+│   │   ├── playwright-test-generator.md
+│   │   ├── playwright-test-healer.md
+│   │   └── playwright-test-planner.md
 │   └── prompts/
-│       ├── debugger.promt.md  # custom prompt instruction  
-│       └── locator.prompt.md         # custom prompt instruction
-├── features/                  # Gherkin feature files (UI tests only)
-│   └── auth/
-│   └── product/
-├── steps/                     # Step definition files (UI tests only)
-│   └── auth/
-│   └── product/
-├── pages/                     # Page Object Model classes
-│   ├── base.page.ts
-│   ├── login.page.ts
-│   ├── register.page.ts
-│   ├── products.page.ts
-│   └── ...
-├── components/                # Component Objects classes
-│   ├── base.component.ts
-│   ├── navbar.component.ts
-│   ├── product-card.component.ts
-│   └── ...
-├── api-tests/                 # Playwright native API spec tests
-│   ├── user.spec.ts
-│   ├── products.spec.ts
-│   └── ...
-├── api-clients/                  # Cleint Object classes (API Clients layer)
-│   ├── base.client.ts
-│   ├── user.client.ts
-│   ├── product.client.ts
-│   └── ...
-├── fixtures/                  # Playwright fixture definitions
-│   └── ui.fixtures.ts
-│   └── api.fixtures.ts
-├── hooks/                     # Global and test-specific hooks
-│   └── hooks.ts
-├── test-data/                 # Factories and interfaces for test data
-│   └── ...
-├── utils/                     # Utility functions and helpers
-│   └── helpers.ts
+│       ├── debugger.prompt.md
+│       └── locator.prompt.md
+│
+├── tests/
+│   ├── features/              # Gherkin feature files (BDD / UI tests)
+│   │   ├── auth/
+│   │   └── product/
+│   ├── steps/                 # Step definitions (BDD / UI tests)
+│   │   ├── auth/
+│   │   └── product/
+│   ├── api/                   # Playwright native API spec tests
+│   │   ├── signup.spec.ts
+│   │   └── products.spec.ts
+│   └── hooks/                 # Global and test-specific hooks
+│       └── hooks.ts
+│
+├── src/
+│   ├── pages/                 # Page Object Model classes
+│   │   ├── base.page.ts
+│   │   ├── login.page.ts
+│   │   ├── register.page.ts
+│   │   ├── products.page.ts
+│   │   └── ...
+│   ├── components/            # Component Object classes
+│   │   ├── base.component.ts
+│   │   ├── navbar.component.ts
+│   │   ├── product-card.component.ts
+│   │   └── ...
+│   ├── api-clients/           # Service/Client Object classes (API layer)
+│   │   ├── base.client.ts
+│   │   ├── user.client.ts
+│   │   └── product.client.ts
+│   ├── fixtures/              # Playwright fixture definitions
+│   │   ├── ui.fixtures.ts
+│   │   └── api.fixtures.ts
+│   ├── test-data/             # Faker factories & data interfaces
+│   │   └── ...
+│   └── utils/                 # Utility functions and helpers
+│       └── helpers.ts
+│
 ├── reports/                   # Generated test reports (git-ignored)
 │   ├── playwright-html/
-│   ├── pallure-results/       # raw Allure JSON data
-│   └── allure-report/         # generated Allure HTML report	
+│   ├── allure-results/        # Raw Allure JSON data
+│   └── allure-report/         # Generated Allure HTML report
+│
 ├── .env                       # Local environment variables (git-ignored)
-├── playwright.config.ts       # Playwright configuration
+├── playwright.config.ts
 └── package.json
 ```
 
@@ -380,7 +385,7 @@ npm run test:headed
 npx playwright test features/ui/login.feature
 
 # Run a specific API spec
-npx playwright test api-tests/user.spec.ts
+npx playwright test api/user.spec.ts
 
 # Filter tests by name or tag
 npx playwright test --grep "Login"

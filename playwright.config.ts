@@ -98,7 +98,7 @@ export default defineConfig({
     // ── API project (test discovery only) ─────────────────────
     {
       name: "api",
-      testDir: "tests/api-tests",
+      testDir: "tests/api",
       testMatch: "**/*.spec.ts",
     },
 

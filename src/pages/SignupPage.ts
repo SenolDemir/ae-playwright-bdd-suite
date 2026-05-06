@@ -4,8 +4,6 @@ import { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 
 export class SignupPage extends BasePage {
-  
-  
   // ----- signup form elements -------------------
   private readonly signupSection: Locator = this.page.locator(".signup-form");
   public readonly newUserNameInput: Locator =
@@ -21,7 +19,7 @@ export class SignupPage extends BasePage {
   );
 
   // ----------- account information form elements -------------------------
-  
+
   public readonly enterAccountInformationHeading: Locator = this.page.getByRole(
     "heading",
     { name: "Enter Account Information" },
@@ -120,6 +118,14 @@ export class SignupPage extends BasePage {
 
   async clickSignupButton(): Promise<void> {
     await this.signupButton.click();
+  }
+
+  async expectSignupError(message: string): Promise<void> {
+    if (message === "Email Address already exist!") {
+      await expect(this.emailAlreadyExistsError).toBeVisible();
+    } else {
+      await this.expectEmptyNameMessage(message);
+    }
   }
 
   // Get the browser's native validation message for name field
