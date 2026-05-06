@@ -2,7 +2,7 @@ import { expect } from "@playwright/test";
 import type { Locator, Page } from "@playwright/test";
 import type { TestData } from "../fixtures/ui.fixtures.js";
 import type { SignupUser } from "../test-data/UserFactory.js";
-import { NavBar } from "../components/NavBar.js";
+import { NavBar } from "../components/navbar.component.js";
 
 /**
  * BasePage class represents common functionality for all page objects
@@ -22,8 +22,6 @@ export class BasePage {
     this.testData = testData; // injected — caller owns it
     this.nav = new NavBar(page); // composed — BasePage owns it
   }
-
-
 
   // Shared helper - available to all page objects
   protected get newUser(): SignupUser {

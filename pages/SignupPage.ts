@@ -3,9 +3,10 @@ import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 
-
 export class SignupPage extends BasePage {
-  // signup form elements
+  
+  
+  // ----- signup form elements -------------------
   private readonly signupSection: Locator = this.page.locator(".signup-form");
   public readonly newUserNameInput: Locator =
     this.signupSection.getByPlaceholder("Name");
@@ -15,8 +16,12 @@ export class SignupPage extends BasePage {
     "button",
     { name: "Signup" },
   );
+  public readonly emailAlreadyExistsError: Locator = this.page.getByText(
+    "Email Address already exist!",
+  );
 
-  // account information form heading
+  // ----------- account information form elements -------------------------
+  
   public readonly enterAccountInformationHeading: Locator = this.page.getByRole(
     "heading",
     { name: "Enter Account Information" },
@@ -88,7 +93,7 @@ export class SignupPage extends BasePage {
     name: "Continue",
   });
 
-  // ---------------------- Functions ---------------------------------------------------
+  // ---------------------- Signup Forms Functions ---------------------------------------------------
 
   async expectSignupFormVisible(): Promise<void> {
     await expect(this.newUserNameInput).toBeVisible();
@@ -137,15 +142,13 @@ export class SignupPage extends BasePage {
     expect(validationMessage).toBe(message);
   }
 
-  // Account information form functions
+  // ------------  Account information form functions ------------------------------------
 
   async expectFormHeadingVisible(): Promise<void> {
     await expect(
       this.page.getByRole("heading", { name: "Enter Account Information" }),
     ).toBeVisible();
   }
-
-
 
   async selectTitle(title: string): Promise<void> {
     if (title === "Mr.") {
@@ -174,7 +177,6 @@ export class SignupPage extends BasePage {
     await countryDropdown.click();
     await countryDropdown.selectOption({ label: this.newUser.country });
   }
-
 
   async completeAccountInformationForm(): Promise<void> {
     await this.selectTitle(this.newUser.title);

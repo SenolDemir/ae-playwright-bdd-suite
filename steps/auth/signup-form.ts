@@ -86,9 +86,8 @@ Then("I should remain on the Login\\/Signup page", async ({ signupPage }) => {
 
 Then(
   "I should see the error message {string}",
-  async ({ signupPage }, arg: string) => {
-    // Step: Then I should remain on the Login/Signup page
-    // From: features/auth/signup-form.feature:41:19
+  async ({ signupPage }, message: string) => {
+    await expect(signupPage.emailAlreadyExistsError).toHaveText(message);
   },
 );
 

@@ -17,7 +17,7 @@ Feature: Signup with valid credentials
 
       Rule: A new user can register with valid details and delete their account
 
-            @ui01-1 @critical @positive @smoke @wip
+            @ui01-1 @critical @positive @smoke
             Scenario: Successful registration with valid credentials and subsequent account deletion
                   When I submit valid signup credentials
                   Then I should be on the account information setup page
@@ -72,13 +72,13 @@ Feature: Signup with valid credentials
 
       Rule: Email address must be unique in the system
 
-            # @ui01-5 @critical
-            # Scenario: Reject registration with existing email address
-            #       When I enter name "New User"
-            #       And I enter email "testuser@example.com"
-            #       And I click the "Signup" button on the Login/Signup page
-            #       Then I should see the error message "Email Address already exist!"
-            #       And I should remain on the Login/Signup page
+            @ui01-5 @critical
+            Scenario: Reject registration with existing email address
+                  When I enter name "Test User"
+                  And I enter email "testuser@example.com"
+                  And I click the "Signup" button on the Login/Signup page
+                  Then I should see the error message "Email Address already exist!"
+                  And I should remain on the Login/Signup page
 
 
             # =================================================================================

@@ -37,6 +37,11 @@
 	- [Reporting](#reporting)
 		- [Playwright HTML Report](#playwright-html-report)
 		- [Allure Report](#allure-report)
+	- [Parallel Execution](#parallel-execution)
+		- [Current Setup](#current-setup)
+		- [How to Control It](#how-to-control-it)
+		- [Cross-Browser Parallel](#cross-browser-parallel)
+		- [API Tests](#api-tests)
 	- [References](#references)
 
 ---
@@ -324,7 +329,7 @@ It is designed with a **centralized data strategy** to ensure consistency across
 | Playwright Test for VSCode      | Test runner integration, debugging, and one-click test execution        |
 | Cucumber (Gherkin) Full Support | Syntax highlighting and step definition navigation for `.feature` files |
 | Prettier                        | Consistent code formatting                                              |
-| DotENV                          | Syntax highlighting for `.env` files                                    |
+| dotenv                          | secure and modular management of environments                           |
 | npm Intellisense                | Autocomplete for npm module imports                                     |
 | GitHub Copilot                  | AI-powered code suggestions and test generation                         |
 ---
@@ -410,6 +415,39 @@ npx allure generate reports/allure-results --clean -o reports/allure-report
 # Open the report in a browser
 npx allure open reports/allure-report
 ```
+---
+
+## Parallel Execution
+
+### Current Setup
+
+| Setting         | Local  | CI     |
+| --------------- | ------ | ------ |
+| `fullyParallel` | `true` | `true` |
+| `workers`       | `4`    | `1`    |
+
+### How to Control It
+
+**1. Via environment variable (easiest)**
+```bash
+WORKERS=8 
+#then
+npx bddgen && npx playwright test
+```
+
+**2. Via CLI flag**
+```bash
+npx playwright test --workers=8
+```
+
+### Cross-Browser Parallel
+
+When `BROWSER_TYPE=all`, 7 browser projects × N workers multiply fast. Set `WORKERS` to a lower number (1–2) in that case to avoid resource exhaustion.
+
+### API Tests
+
+The `api` project has no worker override, so it inherits the global `workers` value and runs in parallel already.
+
 ---
 
 ## References
