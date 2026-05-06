@@ -1,4 +1,9 @@
-import { Given, When, Then, expect } from "../../fixtures/ui.fixtures.ts";
+import {
+  Given,
+  When,
+  Then,
+  expect,
+} from "../../../src/fixtures/ui.fixtures.ts";
 
 Given("I am on the Automation Exercise home page", async ({ homePage }) => {
   await homePage.expectHomePageVisible();

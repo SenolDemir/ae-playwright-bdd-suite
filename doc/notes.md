@@ -10,6 +10,10 @@
 @wip               → Work in progress (excluded from CI)
 
 
+# branch naming
+feature/ui01-signup-form
+
+
 # bdd-planner-agent prompt template
 
 ## Feature

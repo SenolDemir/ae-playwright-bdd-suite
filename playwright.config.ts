@@ -52,8 +52,12 @@ const uiBrowsers =
     : allProjects.filter(({ name }) => name === browserType);
 
 const bddTestDir = defineBddConfig({
-  features: "features/**/*.feature",
-  steps: ["steps/**/*.ts", "hooks/**/*.ts", "fixtures/ui.fixtures.ts"],
+  features: "tests/features/**/*.feature",
+  steps: [
+    "tests/steps/**/*.ts",
+    "tests/hooks/**/*.ts",
+    "src/fixtures/ui.fixtures.ts",
+  ],
 });
 
 export default defineConfig({
@@ -94,7 +98,7 @@ export default defineConfig({
     // ── API project (test discovery only) ─────────────────────
     {
       name: "api",
-      testDir: "api-tests",
+      testDir: "tests/api-tests",
       testMatch: "**/*.spec.ts",
     },
 

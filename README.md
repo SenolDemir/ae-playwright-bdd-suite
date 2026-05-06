@@ -12,7 +12,7 @@
 	- [Tech Stack](#tech-stack)
 	- [Architecture Overview](#architecture-overview)
 		- [Layer Responsibilities](#layer-responsibilities)
-	- [Project Structure](#project-structure)
+	- [📁 Project Structure](#-project-structure)
 	- [Key Design Decisions](#key-design-decisions)
 		- [Hybrid Test Style: BDD for UI, Native Spec for API](#hybrid-test-style-bdd-for-ui-native-spec-for-api)
 		- [Playwright BDD over Cucumber.js?](#playwright-bdd-over-cucumberjs)
@@ -145,7 +145,7 @@ Playwright fixtures extend the base test context to inject Page Objects, Client 
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 ├── .github/                  
