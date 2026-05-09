@@ -1,9 +1,9 @@
-import {
-  Given,
-  When,
-  Then,
-  expect,
-} from "../../../src/fixtures/ui.fixtures.ts";
+import {Given, When, Then, expect, } from "../../../src/fixtures/ui.fixtures.ts";
+import { faker } from "@faker-js/faker";
+
+const NAME_TOKENS: Record<string, () => string> = {
+  "[too_long]": () => faker.string.alpha({ length: 100 }),
+};
 
 Given("I am on the Automation Exercise home page", async ({ homePage }) => {
   await homePage.expectHomePageVisible();
@@ -52,8 +52,10 @@ When("I should be not logged in on the home page", async ({ homePage }) => {
 
 // ------------------------------------------------------------------
 
-When("I enter name {string}", async ({ signupPage }, name: string) => {
+When("I enter name {string}", async ({ signupPage }, rawName: string) => {
+  const name = NAME_TOKENS[rawName]?.() ?? rawName; // Replace token with pre-defined value if it exists
   await signupPage.enterNewUserName(name);
+
 });
 
 When("I enter email {string}", async ({ signupPage }, email: string) => {

@@ -42,6 +42,9 @@
 		- [How to Control It](#how-to-control-it)
 		- [Cross-Browser Parallel](#cross-browser-parallel)
 		- [API Tests](#api-tests)
+	- [Retries](#retries)
+		- [Current Setup](#current-setup-1)
+		- [Enabling Retries Locally](#enabling-retries-locally)
 	- [References](#references)
 
 ---
@@ -452,6 +455,32 @@ When `BROWSER_TYPE=all`, 7 browser projects × N workers multiply fast. Set `WOR
 ### API Tests
 
 The `api` project has no worker override, so it inherits the global `workers` value and runs in parallel already.
+
+## Retries
+
+### Current Setup
+
+```ts
+// playwright.config.ts
+retries: process.env.CI ? 2 : 0,
+```
+
+Locally: retries: 0 — no retries. A flaky test will fail immediately on first attempt.   
+In CI: retries: 2 — a failed test is retried up to 2 more times before being marked as failed.
+
+
+### Enabling Retries Locally
+To enable retries locally for debugging flaky tests, you can change configuration to 1 or 2, or give run the test with `--retries` flag.
+```bash
+npx playwright test --retries=2
+```
+
+Or scope it to a specific context
+
+```bash
+npx playwright test --retries=2 features/auth/login.feature
+npx playwright test --retries=2 api/user.spec.ts
+```
 
 ---
 

@@ -9,11 +9,13 @@ Feature: Signup with valid credentials
             And I navigate to "Signup / Login" page
             Then I should see the signup form
 
+
       # =================================================================================
       # Rule: Successful Registration and Account Deletion
       # Valid credentials should allow registration
       # Account deletion should work for authenticated users
       # =================================================================================
+
 
       Rule: A new user can register with valid details and delete their account
 
@@ -32,8 +34,7 @@ Feature: Signup with valid credentials
                   And I should be not logged in on the home page
 
             # =================================================================================
-            # Rule: Required Field Validation
-            # Empty fields should prevent form submission
+            # Rule: Field Validations
             # =================================================================================
 
       Rule: Both name and email fields are required for registration
@@ -65,11 +66,6 @@ Feature: Signup with valid credentials
                   Then I should remain on the Login/Signup page
 
 
-            # =================================================================================
-            # Rule: Duplicate Email Validation
-            # Already registered emails should be rejected
-            # =================================================================================
-
       Rule: Email address must be unique in the system
 
             @ui01-5 @critical
@@ -82,27 +78,26 @@ Feature: Signup with valid credentials
 
 
             # =================================================================================
-            # Rule: Name and Email Format Validation
             # Invalid email formats should be rejected
             # =================================================================================
 
       Rule: Name and email address must follow valid email format
 
-            # @ui01-6 @high @negative
-            # Scenario Outline: Reject registration with invalid name formats
-            #       When I enter name "<invalid_name>"
-            #       And I enter email "testuser@example.com"
-            #       And I click the "Signup" button on the Login/Signup page
-            #       Then I should see the error message "Please enter a valid name"
-            #       Then I should remain on the Login/Signup page
+            @ui01-6 @high @negative
+            Scenario Outline: Reject registration with invalid name formats
+                  When I enter name "<invalid_name>"
+                  And I enter email "testuser@example.com"
+                  And I click the "Signup" button on the Login/Signup page
+                  Then I should see the error message "<error_message>"
+                  Then I should remain on the Login/Signup page
 
-            #       Examples:
-            #             | invalid_name | description  |
-            #             | 123456       | numbers only |
-            #             | !@#$%^       | symbols only |
-            #             |              | spaces only  |
-            #             | too_long     | too long     |
-            #             | a            | too short    |
+                  Examples:
+                        | invalid_name | description  | error_message              |
+                        | 123456       | numbers only | Please enter a valid name  |
+                        | !@#$%^       | symbols only | Please enter a valid name  |
+                        |              | spaces only  | Please fill in this field. |
+                        | [too_long]   | too long     | Please enter a valid name  |
+                        | a            | too short    | Please enter a valid name  |
 
 
             @ui01-7 @high @negative
