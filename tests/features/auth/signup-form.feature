@@ -34,10 +34,9 @@ Feature: Signup with valid credentials
                   And I should be not logged in on the home page
 
             # =================================================================================
-            # Rule: Field Validations
-            # =================================================================================
 
-      Rule: Both name and email fields are required for registration
+
+      Rule: Valid name and email fields are required for registration
 
             @ui01-2 @critical @negative @smoke
             Scenario: Reject registration with empty name field
@@ -62,7 +61,7 @@ Feature: Signup with valid credentials
                   When I leave the name field empty
                   And I leave the email field empty
                   And I click the "Signup" button on the Login/Signup page
-                  Then I should see the error message "Please fill in this field."
+                  Then I should see the name field error message "Please fill in this field."
                   Then I should remain on the Login/Signup page
 
 
@@ -73,7 +72,7 @@ Feature: Signup with valid credentials
                   When I enter name "Test User"
                   And I enter email "testuser@example.com"
                   And I click the "Signup" button on the Login/Signup page
-                  Then I should see the error message "Email Address already exist!"
+                  Then I should see the existing email message "Email Address already exist!"
                   And I should remain on the Login/Signup page
 
 
@@ -81,14 +80,14 @@ Feature: Signup with valid credentials
             # Invalid email formats should be rejected
             # =================================================================================
 
-      Rule: Name and email address must follow valid email format
+      Rule: Name and email address must follow valid format
 
             @ui01-6 @high @negative
             Scenario Outline: Reject registration with invalid name formats
                   When I enter name "<invalid_name>"
                   And I enter email "testuser@example.com"
                   And I click the "Signup" button on the Login/Signup page
-                  Then I should see the error message "<error_message>"
+                  Then I should see the name field error message "<error_message>"
                   Then I should remain on the Login/Signup page
 
                   Examples:
@@ -101,19 +100,19 @@ Feature: Signup with valid credentials
 
 
             @ui01-7 @high @negative
-            # Scenario Outline: Reject registration with invalid email formats
-            #       When I enter name "Test User"
-            #       And I enter email "<invalid_email>"
-            #       And I click the "Signup" button on the Login/Signup page
-            #       Then I should see the error message "Please enter a valid email"
-            #       And I should remain on the Login/Signup page
+            Scenario Outline: Reject registration with invalid email formats
+                  When I enter name "Test User"
+                  And I enter email "<invalid_email>"
+                  And I click the "Signup" button on the Login/Signup page
+                  Then I should see the email field error message "<error_message>"
+                  And I should remain on the Login/Signup page
 
-            #       Examples:
-            #             | invalid_email          | description          |
-            #             | invalidemail           | missing @ and domain |
-            #             | invalidemailformat.com | missing @ symbol     |
-            #             | testuser@              | missing domain       |
-            #             |                        | empty spaces         |
+                  Examples:
+                        | invalid_email          | error_message                                                                           |
+                        | invalidemail           | Please include an '@' in the email address. 'invalidemail' is missing an '@'.           |
+                        | invalidemailformat.com | Please include an '@' in the email address. 'invalidemailformat.com' is missing an '@'. |
+                        | testuser@              | Please enter a part following '@'. 'testuser@' is incomplete.                           |
+                        |                        | Please fill in this field.                                                              |
 
 
             # =================================================================================

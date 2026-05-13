@@ -1,3 +1,4 @@
+
 import {Given, When, Then, expect, } from "../../../src/fixtures/ui.fixtures.ts";
 import { faker } from "@faker-js/faker";
 
@@ -53,9 +54,9 @@ When("I should be not logged in on the home page", async ({ homePage }) => {
 // ------------------------------------------------------------------
 
 When("I enter name {string}", async ({ signupPage }, rawName: string) => {
-  const name = NAME_TOKENS[rawName]?.() ?? rawName; // Replace token with pre-defined value if it exists
+  // Replace token with pre-defined value if it exists
+  const name = NAME_TOKENS[rawName]?.() ?? rawName;
   await signupPage.enterNewUserName(name);
-
 });
 
 When("I enter email {string}", async ({ signupPage }, email: string) => {
@@ -71,15 +72,20 @@ When(
 
 Then(
   "I should see the name field error message {string}",
-  async ({ signupPage }, message: string) => {
-    await signupPage.expectEmptyNameMessage(message);
-  },
-);
+  async ({ signupPage }, expectedMessage: string) => {
+
+    const actualMessage = await signupPage.getNameValidationMessage();
+    console.log(actualMessage);
+    expect(actualMessage).toBe(expectedMessage);
+
+  });
 
 Then(
   "I should see the email field error message {string}",
-  async ({ signupPage }, message: string) => {
-    await signupPage.expectEmptyEmailMessage(message);
+  async ({ signupPage }, expectedMessage: string) => {
+    const actualMessage = await signupPage.getEmailValidationMessage();    
+    expect(actualMessage).toBe(expectedMessage);
+  
   },
 );
 
@@ -92,11 +98,16 @@ Then("I should remain on the Login\\/Signup page", async ({ signupPage }) => {
 });
 
 Then(
-  "I should see the error message {string}",
-  async ({ signupPage }, message: string) => {
-    await signupPage.expectSignupError(message);
+  "I should see the existing email message {string}",
+  async ({ signupPage }, expectedMessage: string) => {
+   
+      const actualMessage = await signupPage.getExistingEmailMessage();
+      expect(actualMessage).toBe(expectedMessage);
+
   },
 );
+
+
 
 When("I leave the email field empty", async ({ signupPage }) => {
   await signupPage.newUserEmailInput.clear();

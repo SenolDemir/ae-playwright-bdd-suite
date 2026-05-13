@@ -4,7 +4,10 @@ import { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 
 export class SignupPage extends BasePage {
+
+
   // ----- signup form elements -------------------
+  
   private readonly signupSection: Locator = this.page.locator(".signup-form");
   public readonly newUserNameInput: Locator =
     this.signupSection.getByPlaceholder("Name");
@@ -120,32 +123,26 @@ export class SignupPage extends BasePage {
     await this.signupButton.click();
   }
 
-  async expectSignupError(message: string): Promise<void> {
-    if (message === "Email Address already exist!") {
-      await expect(this.emailAlreadyExistsError).toBeVisible();
-    } else {
-      await this.expectEmptyNameMessage(message);
-    }
+  async getNameValidationMessage(): Promise<string> {
+    return this.newUserNameInput.evaluate((input: HTMLInputElement) => {
+      return input.validationMessage;
+    });
   }
 
-  // Get the browser's native validation message for name field
-  async expectEmptyNameMessage(message: string): Promise<void> {
-    const validationMessage = await this.newUserNameInput.evaluate(
-      (input: HTMLInputElement) => {
-        return input.validationMessage;
-      },
-    );
-    expect(validationMessage).toBe(message);
+  async getExistingEmailMessage(): Promise<string> {
+    return this.emailAlreadyExistsError.innerText();
   }
 
-  // Get the browser's native validation message for email field
-  async expectEmptyEmailMessage(message: string): Promise<void> {
-    const validationMessage = await this.newUserEmailInput.evaluate(
-      (input: HTMLInputElement) => {
-        return input.validationMessage;
-      },
-    );
-    expect(validationMessage).toBe(message);
+  async getEmailValidationMessage(): Promise<string> {
+    return this.newUserEmailInput.evaluate((input: HTMLInputElement) => {
+      return input.validationMessage;
+    });
+  }
+
+  async isEmailInputValid(): Promise<boolean> {
+    return this.newUserEmailInput.evaluate((input: HTMLInputElement) => {
+      return input.validity.valid;
+    });
   }
 
   // ------------  Account information form functions ------------------------------------
