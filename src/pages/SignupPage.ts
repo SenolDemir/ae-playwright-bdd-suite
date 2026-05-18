@@ -4,10 +4,8 @@ import { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 
 export class SignupPage extends BasePage {
-
-
   // ----- signup form elements -------------------
-  
+
   private readonly signupSection: Locator = this.page.locator(".signup-form");
   public readonly newUserNameInput: Locator =
     this.signupSection.getByPlaceholder("Name");
@@ -214,4 +212,22 @@ export class SignupPage extends BasePage {
   async clickContinue(): Promise<void> {
     await this.continueButton.click();
   }
+  //--------------------------------------------------------------------
+
+  private scriptExecuted = false;
+
+  listenForScriptExecution(): void {
+    this.scriptExecuted = false; // reset before registering
+    this.page.once("dialog", async (dialog) => {
+      // once, not on
+      this.scriptExecuted = true;
+      await dialog.dismiss();
+    });
+  }
+
+  didScriptExecute(): boolean {
+    return this.scriptExecuted;
+  }
+
+  // -----------------------------------------------------------------
 }

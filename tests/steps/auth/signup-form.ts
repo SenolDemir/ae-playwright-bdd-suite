@@ -6,6 +6,11 @@ const NAME_TOKENS: Record<string, () => string> = {
   "[too_long]": () => faker.string.alpha({ length: 100 }),
 };
 
+const EMAIL_TOKENS: Record<string, () => string> = {
+  "[xss_email]": () => `<script>alert('xss')</script>@test.com`,
+  "[html_injection_email]": () => `"><img src=x onerror=alert(1)>@test.com`,
+};
+
 Given("I am on the Automation Exercise home page", async ({ homePage }) => {
   await homePage.expectHomePageVisible();
 });
@@ -59,7 +64,8 @@ When("I enter name {string}", async ({ signupPage }, rawName: string) => {
   await signupPage.enterNewUserName(name);
 });
 
-When("I enter email {string}", async ({ signupPage }, email: string) => {
+When("I enter email {string}", async ({ signupPage }, rawEmail: string) => {
+  const email = EMAIL_TOKENS[rawEmail]?.() ?? rawEmail;
   await signupPage.enterNewUserEmail(email);
 });
 
@@ -107,8 +113,8 @@ Then(
   },
 );
 
-
-
 When("I leave the email field empty", async ({ signupPage }) => {
   await signupPage.newUserEmailInput.clear();
 });
+
+

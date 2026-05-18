@@ -7,53 +7,7 @@
 #       Background:
 #             Given I am on the Automation Exercise home page
 
-#       # =================================================================================
-#       # Rule: Signup form validation (Step 1: Email + Name)
-#       # =================================================================================
-
-#       Rule: Email and name fields must be validated before account form is shown
-
-#            @critical
-#             Scenario: Reject registration with empty name field
-#                   And I navigate to the registration page
-#                   Then I should see the signup form
-#                   When I submit signup form with empty name and valid email
-#                   Then I should see error "Name is required" or validation message
-#                   And I should remain on the signup form
-
-#            @critical
-#             Scenario: Reject registration with empty email field
-#                   And I navigate to the registration page
-#                   Then I should see the signup form
-#                   When I submit signup form with valid name and empty email
-#                   Then I should see error "Email is required" or validation message
-#                   And I should remain on the signup form
-
-#           @critical
-#             Scenario: Reject registration with invalid email format
-#                   And I navigate to the registration page
-#                   Then I should see the signup form
-#                   When I submit signup form with valid name and invalid email "notanemail"
-#                   Then I should see error about invalid email format
-#                   And I should remain on the signup form
-
-#            @critical
-#             Scenario: Reject registration with spaces-only name
-#                   And I navigate to the registration page
-#                   Then I should see the signup form
-#                   When I submit signup form with spaces-only name and valid email
-#                   Then I should see error or validation message
-#                   And I should remain on the signup form
-
-#         @high
-#             Scenario: Reject registration with duplicate email
-#                   Given I have already registered with email "existing.user@automation.com"
-#                   And I am on the Automation Exercise home page
-#                   And I navigate to the registration page
-#                   Then I should see the signup form
-#                   When I submit signup form with name and duplicate email "existing.user@automation.com"
-#                   Then I should see error "Email Address already exists!"
-#                   And I should remain on the signup form
+#      
 
 #             # =================================================================================
 #             # Rule: Account information form validation (Step 2)

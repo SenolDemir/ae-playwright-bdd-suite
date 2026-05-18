@@ -113,6 +113,9 @@ Feature: Signup with valid credentials
                         | invalidemailformat.com | Please include an '@' in the email address. 'invalidemailformat.com' is missing an '@'. |
                         | testuser@              | Please enter a part following '@'. 'testuser@' is incomplete.                           |
                         |                        | Please fill in this field.                                                              |
+                        | @nodomain.com          | Please enter a part followed by '@'. '@nodomain.com' is incomplete.                     |
+                        | user @example.com      | A part followed by '@' should not contain the symbol ' '.                               |
+
 
 
             # =================================================================================
@@ -122,19 +125,21 @@ Feature: Signup with valid credentials
 
       Rule: Email field must reject potentially harmful input
 
-      # @ui01-8 @security @negative
-      # Scenario Outline: Reject email with harmful input attempts
-      #       When I enter name "Normal User"
-      #       And I enter email "<harmful_input>"
-      #       And I click the "Signup" button on the Login/Signup page
-      #       Then I should remain on the Login/Signup page
+            @ui01-8 @security @negative
+            Scenario Outline: Reject email with harmful input attempts
+                  When I enter name "Normal User"
+                  And I enter email "<crafted_input>"
+                  And I click the "Signup" button on the Login/Signup page with script execution attempt
+                  Then the browser should not execute any injected script
+                  Then I should remain on the Login/Signup page
 
 
-      #       Examples:
-      #             | harmful_input                 | description      |
-      #             | <script>alert('xss')</script> | script injection |
-      #             | <img src=x onerror=alert(1)>  | image injection  |
-      #             | <iframe src="malicious.com">  | iframe injection |
+                  Examples:
+                        | crafted_input                    | attack_vector         |
+                        | [xss_email]                      | XSS via local part    |
+                        | [html_injection_email]           | HTML injection        |
+                        | javascript:alert(1)@test.com     | Protocol injection    |
+                        | '; DROP TABLE users; --@test.com | SQL injection pattern |
 
 
       # =================================================================================
