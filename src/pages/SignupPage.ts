@@ -145,7 +145,7 @@ export class SignupPage extends BasePage {
 
   // ------------  Account information form functions ------------------------------------
 
-  async expectFormHeadingVisible(): Promise<void> {
+  async expectAccountSetupHeadingVisible(): Promise<void> {
     await expect(
       this.page.getByRole("heading", { name: "Enter Account Information" }),
     ).toBeVisible();

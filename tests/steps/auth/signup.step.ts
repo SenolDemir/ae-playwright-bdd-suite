@@ -101,6 +101,7 @@ Then("I leave the name field empty", async ({ signupPage }) => {
 
 Then("I should remain on the Login\\/Signup page", async ({ signupPage }) => {
   await signupPage.expectSignupFormVisible();
+
 });
 
 Then(

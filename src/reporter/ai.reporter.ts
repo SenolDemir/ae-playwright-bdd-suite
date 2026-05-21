@@ -1,6 +1,6 @@
 /**
  * AI Reporter Script
- * Reads Playwright JSON results, sends failures to Claude API,
+ * Reads Playwright JSON results, sends failures to Gemini API,
  * and generates a human-readable AI analysis report.
  *
  * Usage: npx ts-node scripts/ai-reporter.ts
@@ -14,7 +14,6 @@ import { generateHtmlReport } from "./html.report.generator.ts";
 import type {
   AiAnalysis,
   FailureSummary,
-  PlaywrightStats,
   PlaywrightResults,
 } from "./reporter.types.ts";
 
@@ -24,7 +23,6 @@ const RESULTS_PATH = path.resolve("reports/playwright-results.json");
 const REPORTS_DIR = path.resolve("reports/ai-report");
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const MODEL = "gemini-2.5-flash";
-
 
 // ─── Entry Point ─────────────────────────────────────────────────────────────
 
@@ -44,24 +42,23 @@ async function main() {
 
   const failures = extractFailures(results);
 
+  if (failures.length === 0) {
+    console.log("✅ No failures found — skipping AI analysis.");
+    return;
+  }
+
+  if (!GEMINI_API_KEY) {
+    console.error("GEMINI_API_KEY is not set in your .env file.");
+    process.exit(1);
+  }
+
+  console.log(
+    `📋 Found ${failures.length} failure(s). Sending to Gemini for analysis...\n`,
+  );
+
   fs.mkdirSync(REPORTS_DIR, { recursive: true });
 
-  let analysis: AiAnalysis;
-
-  if (failures.length === 0) {
-    console.log("✅ No failures found — generating a passing-run AI report.");
-    analysis = buildPassingRunAnalysis(results.stats);
-  } else {
-    if (!GEMINI_API_KEY) {
-      console.error("GEMINI_API_KEY is not set in your .env file.");
-      process.exit(1);
-    }
-
-    console.log(
-      `📋 Found ${failures.length} failure(s). Sending to Claude for analysis...\n`,
-    );
-    analysis = await analyzeWithGemini(failures, results.stats);
-  }
+  const analysis = await analyzeWithGemini(failures, results.stats);
 
   // Write JSON (machine-readable)
   const jsonPath = path.join(REPORTS_DIR, "ai-analysis.json");
@@ -76,20 +73,6 @@ async function main() {
   console.log(`   📄 HTML report: ${htmlPath}`);
   console.log(`   📦 JSON output: ${jsonPath}`);
   console.log(`\n   Open with: open ${htmlPath}\n`);
-}
-
-function buildPassingRunAnalysis(stats: PlaywrightStats): AiAnalysis {
-  const total = stats?.expected ?? 0;
-  return {
-    executiveSummary:
-      "All executed tests passed in this run. No failure patterns were detected, and no corrective actions are currently required.",
-    overallHealthScore: total > 0 ? 100 : 0,
-    rootCausePatterns: [],
-    categorizedFailures: [],
-    prioritizedFixOrder: [],
-    systemicIssues: [],
-    quickWins: [],
-  };
 }
 
 // ─── Extract Failures from Playwright JSON ───────────────────────────────────
@@ -113,6 +96,18 @@ function collectFailures(
 
   for (const spec of suite.specs ?? []) {
     for (const test of spec.tests ?? []) {
+      const annotations: Array<{ type: string; description?: string }> =
+        test.annotations ?? [];
+      const pageUrl = annotations.find(
+        (a) => a.type === "page-url",
+      )?.description;
+      const pageTitle = annotations.find(
+        (a) => a.type === "page-title",
+      )?.description;
+      const capturedAt = annotations.find(
+        (a) => a.type === "captured-at",
+      )?.description;
+
       for (const result of test.results ?? []) {
         if (result.status === "failed" || result.status === "timedOut") {
           const error = result.errors?.[0];
@@ -129,6 +124,9 @@ function collectFailures(
             duration: result.duration,
             isFlaky:
               test.results?.some((r: any) => r.status === "passed") ?? false,
+            pageUrl,
+            pageTitle,
+            capturedAt,
           });
         }
       }
@@ -150,7 +148,7 @@ function extractFailedStep(errorMessage: string): string {
   return lines[0]?.trim() ?? "";
 }
 
-// ─── Claude API Call ──────────────────────────────────────────────────────────
+// ─── Gemini API Call ──────────────────────────────────────────────────────────
 
 async function analyzeWithGemini(
   failures: FailureSummary[],
@@ -211,7 +209,7 @@ Failure #${i + 1}
   Error: ${f.errorMessage.slice(0, 500)}
   Retries: ${f.retries}
   Flaky: ${f.isFlaky}
-  Duration: ${f.duration}ms`,
+  Duration: ${f.duration}ms${f.pageUrl ? `\n  Page URL: ${f.pageUrl}` : ""}${f.pageTitle ? `\n  Page title: ${f.pageTitle}` : ""}${f.capturedAt ? `\n  Captured at: ${f.capturedAt}` : ""}`,
     )
     .join("\n");
 

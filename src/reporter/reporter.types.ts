@@ -10,6 +10,9 @@ export interface FailureSummary {
   retries: number;
   duration: number;
   isFlaky: boolean;
+  pageUrl?: string;
+  pageTitle?: string;
+  capturedAt?: string;
 }
 
 export interface RootCausePattern {
