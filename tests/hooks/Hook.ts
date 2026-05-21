@@ -9,6 +9,17 @@ Before(async ({ page }) => {
   }
 });
 
-After(async ({}) => {
-  // Common scenario cleanups can be added here if needed
+After(async ({ page, $testInfo }) => {
+  // when failure occurs, capture current URL and page title as annotations
+  // for better debugging context in reports
+  if ($testInfo.errors.length > 0) {
+    $testInfo.annotations.push({
+      type: "debug-context",
+      description: JSON.stringify({
+        url: page.url(),
+        title: await page.title(),
+        timestamp: new Date().toISOString(),
+      }),
+    });
+  }
 });

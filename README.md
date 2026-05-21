@@ -37,6 +37,9 @@
 	- [Reporting](#reporting)
 		- [Playwright HTML Report](#playwright-html-report)
 		- [Allure Report](#allure-report)
+		- [AI Report](#ai-report)
+			- [Failure Classification](#failure-classification)
+			- [Output](#output)
 	- [Parallel Execution](#parallel-execution)
 		- [Current Setup](#current-setup)
 		- [How to Control It](#how-to-control-it)
@@ -423,6 +426,39 @@ npx allure generate reports/allure-results --clean -o reports/allure-report
 # Open the report in a browser
 npx allure open reports/allure-report
 ```
+
+### AI Report
+
+Provides AI-powered failure analysis. After a test run containing failures, the reporter reads the Playwright JSON results, enriches each failure with page-level debug context captured by the After hook, and sends them to Gemini for root cause analysis. The output is a structured JSON analysis and a human-readable HTML report.
+
+
+#### Failure Classification
+
+The reporter classifies failures into one of the following categories:
+
+| Category            | Description                                                                      |
+| ------------------- | -------------------------------------------------------------------------------- |
+| `application_bug`   | App navigated to an unexpected page or did not show expected UI state            |
+| `assertion_failure` | Element found but returned unexpected content — possible locator or timing issue |
+| `locator_failure`   | Element could not be located in the DOM                                          |
+| `timeout`           | Step exceeded the configured timeout                                             |
+| `flaky`             | Test passed on retry — indicates intermittent instability                        |
+| `insufficient_data` | Debug context annotation was not captured — hook may not have executed           |
+
+#### Output
+
+The reporter generates two files under `reports/ai-report/`:
+
+```bash
+# Run the AI reporter separately against an existing results file
+npx ts-node src/reporter/ai.reporter.ts
+
+# Open the AI report
+pen reports/ai-report/index.html
+```
+
+> **Note:** Requires `GEMINI_API_KEY` to be set in your `.env` file. The reporter only calls the Gemini API when failures are present — passing runs generate a report locally without an API call.
+> 
 ---
 
 ## Parallel Execution

@@ -69,6 +69,7 @@ export default defineConfig({
   reporter: [
     ["line"],
     ["html", { outputFolder: "reports/playwright-html", open: "never" }],
+    ["json", { outputFile: "reports/playwright-results.json" }],
     // [
     //   "allure-playwright",
     //   {
