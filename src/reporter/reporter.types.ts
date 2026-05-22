@@ -13,6 +13,7 @@ export interface FailureSummary {
   pageUrl?: string;
   pageTitle?: string;
   capturedAt?: string;
+  pageSnapshot?: string;
 }
 
 export interface RootCausePattern {
@@ -32,6 +33,7 @@ export interface CategorizedFailure {
     | "test_data_issue"
     | "environment_issue"
     | "application_bug"
+    | "missing_feature"
     | "timeout"
     | "flaky";
   rootCauseSummary: string;

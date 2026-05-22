@@ -111,6 +111,14 @@ function collectFailures(
       for (const result of test.results ?? []) {
         if (result.status === "failed" || result.status === "timedOut") {
           const error = result.errors?.[0];
+
+          const errorContextAttachment = (result.attachments ?? []).find(
+            (a: { name: string; path?: string }) => a.name === "error-context",
+          );
+          const pageSnapshot = errorContextAttachment?.path
+            ? extractPageSnapshot(errorContextAttachment.path)
+            : undefined;
+
           acc.push({
             title: spec.title,
             fullPath: [...titles, spec.title].filter(Boolean).join(" › "),
@@ -127,6 +135,7 @@ function collectFailures(
             pageUrl,
             pageTitle,
             capturedAt,
+            pageSnapshot,
           });
         }
       }
@@ -146,6 +155,43 @@ function extractFailedStep(errorMessage: string): string {
   // Fallback: first meaningful line
   const lines = errorMessage.split("\n").filter((l) => l.trim());
   return lines[0]?.trim() ?? "";
+}
+
+// ─── Page Snapshot Extraction ─────────────────────────────────────────────────
+
+const SNAPSHOT_MAX_LINES = 150;
+
+/**
+ * Reads an error-context.md file produced by Playwright and returns the content
+ * of the `# Page snapshot` fenced code block. Returns undefined if the file does
+ * not exist or does not contain a snapshot section.
+ */
+function extractPageSnapshot(filePath: string): string | undefined {
+  if (!fs.existsSync(filePath)) return undefined;
+
+  const content = fs.readFileSync(filePath, "utf-8");
+
+  // Locate the fenced block under the "# Page snapshot" heading
+  const snapshotStart = content.indexOf("# Page snapshot");
+  if (snapshotStart === -1) return undefined;
+
+  const fenceOpen = content.indexOf("```", snapshotStart);
+  if (fenceOpen === -1) return undefined;
+
+  const blockStart = content.indexOf("\n", fenceOpen) + 1;
+  const fenceClose = content.indexOf("```", fenceOpen + 3);
+  if (fenceClose === -1) return undefined;
+
+  const raw = content.slice(blockStart, fenceClose).trimEnd();
+
+  // Trim to token budget
+  const lines = raw.split("\n");
+  if (lines.length <= SNAPSHOT_MAX_LINES) return raw;
+
+  return [
+    ...lines.slice(0, SNAPSHOT_MAX_LINES),
+    `... (${lines.length - SNAPSHOT_MAX_LINES} lines truncated)`,
+  ].join("\n");
 }
 
 // ─── Gemini API Call ──────────────────────────────────────────────────────────
@@ -209,7 +255,14 @@ Failure #${i + 1}
   Error: ${f.errorMessage.slice(0, 500)}
   Retries: ${f.retries}
   Flaky: ${f.isFlaky}
-  Duration: ${f.duration}ms${f.pageUrl ? `\n  Page URL: ${f.pageUrl}` : ""}${f.pageTitle ? `\n  Page title: ${f.pageTitle}` : ""}${f.capturedAt ? `\n  Captured at: ${f.capturedAt}` : ""}`,
+  Duration: ${f.duration}ms${f.pageUrl ? `\n  Page URL: ${f.pageUrl}` : ""}${f.pageTitle ? `\n  Page title: ${f.pageTitle}` : ""}${f.capturedAt ? `\n  Captured at: ${f.capturedAt}` : ""}${
+    f.pageSnapshot
+      ? `\n  Page snapshot (ARIA accessibility tree at moment of failure):\n${f.pageSnapshot
+          .split("\n")
+          .map((l) => `    ${l}`)
+          .join("\n")}`
+      : ""
+  }`,
     )
     .join("\n");
 
@@ -220,6 +273,14 @@ The suite uses:
 - Page Object Model with Component Objects
 - Semantic/role-based locators (resilient locator strategy)
 - API tests alongside UI tests
+
+## Page Snapshot Analysis Rules (apply these FIRST when a snapshot is present)
+
+1. Treat the "Page snapshot" as ground truth — it is the exact ARIA accessibility tree rendered by the browser at the moment of failure.
+2. Before hypothesising a locator issue, check whether the expected element (e.g. a validation message, error text) is PRESENT anywhere in the snapshot.
+3. If the expected element or text is ABSENT from the snapshot entirely, classify the failure as \`missing_feature\` — the application does not implement this behaviour. Do NOT classify it as a locator failure.
+4. Only classify as \`locator_failure\` if the expected content type IS present in the snapshot but is located at a different selector than what the test targets.
+5. If a snapshot shows a completely different application state (e.g. wrong page, unexpected error) classify as \`application_bug\` or \`environment_issue\` as appropriate.
 
 Test run summary:
 - Total: ${stats?.expected ?? "N/A"} tests
@@ -247,7 +308,7 @@ Analyze these failures and respond ONLY with a valid JSON object (no markdown, n
     {
       "failureNumber": <number>,
       "title": "test title",
-      "category": "locator_failure|assertion_failure|api_failure|test_data_issue|environment_issue|application_bug|timeout|flaky",
+      "category": "locator_failure|assertion_failure|api_failure|test_data_issue|environment_issue|application_bug|missing_feature|timeout|flaky",
       "rootCauseSummary": "one sentence hypothesis",
       "suggestedAction": "one concrete next step for the engineer",
       "priority": "critical|high|medium|low",
