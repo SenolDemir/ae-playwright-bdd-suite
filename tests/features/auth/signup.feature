@@ -72,8 +72,8 @@ Feature: Signup with valid credentials
                   When I enter name "Test User"
                   And I enter email "testuser@example.com"
                   And I click the "Signup" button on the Login/Signup page
-                  Then I should see the existing email message "Email Address already exist!"
-                  And I should remain on the Login/Signup page
+                  Then I should remain on the Login/Signup page
+                  And I should see the existing email message "Email Address already exist!"
 
 
             # =================================================================================
@@ -85,10 +85,11 @@ Feature: Signup with valid credentials
             @ui01-6 @high @negative
             Scenario Outline: Reject registration with invalid name formats
                   When I enter name "<invalid_name>"
-                  And I enter email "testuser@example.com"
+                  And I enter email "valid_email"
                   And I click the "Signup" button on the Login/Signup page
-                  Then I should see the name field error message "<error_message>"
                   Then I should remain on the Login/Signup page
+                  And I should see the name field error message "<error_message>"
+
 
                   Examples:
                         | invalid_name | description  | error_message              |

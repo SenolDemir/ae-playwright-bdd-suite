@@ -20,7 +20,6 @@
     "test:ui-tag:ai-report": "npm run test:ui-tag && npm run test:json && npm run report:ai",
     "report:ai": "npx ts-node src/reporter/ai.reporter.ts",
     "report:ai:open": "open reports/ai-report/index.html"
-    
   },
   "keywords": [],
   "author": "",
@@ -30,6 +29,7 @@
     "@faker-js/faker": "^10.4.0",
     "@playwright/test": "^1.59.0",
     "@types/node": "^25.5.0",
+    "allure": "^3.8.2",
     "allure-commandline": "^2.38.1",
     "allure-playwright": "^3.6.0",
     "playwright-bdd": "^8.5.0"
@@ -40,4 +40,3 @@
     "typescript": "^6.0.2"
   }
 }
-

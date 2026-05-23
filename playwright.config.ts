@@ -70,14 +70,14 @@ export default defineConfig({
     ["line"],
     ["html", { outputFolder: "reports/playwright-html", open: "never" }],
     ["json", { outputFile: "reports/playwright-results.json" }],
-    // [
-    //   "allure-playwright",
-    //   {
-    //     detail: true,
-    //     resultsDir: "reports/allure-results",
-    //     suiteTitle: false,
-    //   },
-    // ],
+    [
+      "allure-playwright",
+      {
+        detail: true,
+        resultsDir: "reports/allure-results",
+        suiteTitle: false,
+      },
+    ],
   ],
 
   use: {
