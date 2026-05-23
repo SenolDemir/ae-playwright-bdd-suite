@@ -1,6 +1,6 @@
-import { test, expect } from "../../fixtures/api.fixtures";
-import { SignupClient } from "../../api-clients/signup.client";
-import { UserFactory } from "../../test-data/UserFactory";
+import { test, expect } from "../../../src/fixtures/api.fixtures";
+import { SignupClient } from "../../../src/api-clients/signup.client";
+import { UserFactory } from "../../../src/test-data/UserFactory";
 
 test.describe("Signup API", () => {
   test("signup with valid payload", async ({ apiRequest, signupClient }) => {

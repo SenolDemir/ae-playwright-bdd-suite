@@ -1,4 +1,9 @@
-import { Given, When, Then, expect } from "../../fixtures/ui.fixtures.ts";
+import {
+  Given,
+  When,
+  Then,
+  expect,
+} from "../../../src/fixtures/ui.fixtures.ts";
 
 Then("the ALL PRODUCTS page is displayed", async ({ productPage }) => {
   await productPage.expectAllProductsPageVisible();

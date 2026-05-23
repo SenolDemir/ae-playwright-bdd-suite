@@ -52,8 +52,12 @@ const uiBrowsers =
     : allProjects.filter(({ name }) => name === browserType);
 
 const bddTestDir = defineBddConfig({
-  features: "features/**/*.feature",
-  steps: ["steps/**/*.ts", "hooks/**/*.ts", "fixtures/ui.fixtures.ts"],
+  features: "tests/features/**/*.feature",
+  steps: [
+    "tests/steps/**/*.ts",
+    "tests/hooks/**/*.ts",
+    "src/fixtures/ui.fixtures.ts",
+  ],
 });
 
 export default defineConfig({
@@ -65,14 +69,15 @@ export default defineConfig({
   reporter: [
     ["line"],
     ["html", { outputFolder: "reports/playwright-html", open: "never" }],
-    // [
-    //   "allure-playwright",
-    //   {
-    //     detail: true,
-    //     resultsDir: "reports/allure-results",
-    //     suiteTitle: false,
-    //   },
-    // ],
+    ["json", { outputFile: "reports/playwright-results.json" }],
+    [
+      "allure-playwright",
+      {
+        detail: true,
+        resultsDir: "reports/allure-results",
+        suiteTitle: false,
+      },
+    ],
   ],
 
   use: {
@@ -94,7 +99,7 @@ export default defineConfig({
     // ── API project (test discovery only) ─────────────────────
     {
       name: "api",
-      testDir: "api-tests",
+      testDir: "tests/api",
       testMatch: "**/*.spec.ts",
     },
 

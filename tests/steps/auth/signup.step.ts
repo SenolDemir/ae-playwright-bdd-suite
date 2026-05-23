@@ -1,4 +1,15 @@
-import { Given, When, Then, expect } from "../../fixtures/ui.fixtures.ts";
+
+import {Given, When, Then, expect, } from "../../../src/fixtures/ui.fixtures.ts";
+import { faker } from "@faker-js/faker";
+
+const NAME_TOKENS: Record<string, () => string> = {
+  "[too_long]": () => faker.string.alpha({ length: 100 }),
+};
+
+const EMAIL_TOKENS: Record<string, () => string> = {
+  "[xss_email]": () => `<script>alert('xss')</script>@test.com`,
+  "[html_injection_email]": () => `"><img src=x onerror=alert(1)>@test.com`,
+};
 
 Given("I am on the Automation Exercise home page", async ({ homePage }) => {
   await homePage.expectHomePageVisible();
@@ -47,11 +58,14 @@ When("I should be not logged in on the home page", async ({ homePage }) => {
 
 // ------------------------------------------------------------------
 
-When("I enter name {string}", async ({ signupPage }, name: string) => {
+When("I enter name {string}", async ({ signupPage }, rawName: string) => {
+  // Replace token with pre-defined value if it exists
+  const name = NAME_TOKENS[rawName]?.() ?? rawName;
   await signupPage.enterNewUserName(name);
 });
 
-When("I enter email {string}", async ({ signupPage }, email: string) => {
+When("I enter email {string}", async ({ signupPage }, rawEmail: string) => {
+  const email = EMAIL_TOKENS[rawEmail]?.() ?? rawEmail;
   await signupPage.enterNewUserEmail(email);
 });
 
@@ -64,15 +78,20 @@ When(
 
 Then(
   "I should see the name field error message {string}",
-  async ({ signupPage }, message: string) => {
-    await signupPage.expectEmptyNameMessage(message);
-  },
-);
+  async ({ signupPage }, expectedMessage: string) => {
+
+    const actualMessage = await signupPage.getNameValidationMessage();
+    console.log(actualMessage);
+    expect(actualMessage).toBe(expectedMessage);
+
+  });
 
 Then(
   "I should see the email field error message {string}",
-  async ({ signupPage }, message: string) => {
-    await signupPage.expectEmptyEmailMessage(message);
+  async ({ signupPage }, expectedMessage: string) => {
+    const actualMessage = await signupPage.getEmailValidationMessage();    
+    expect(actualMessage).toBe(expectedMessage);
+  
   },
 );
 
@@ -82,16 +101,21 @@ Then("I leave the name field empty", async ({ signupPage }) => {
 
 Then("I should remain on the Login\\/Signup page", async ({ signupPage }) => {
   await signupPage.expectSignupFormVisible();
+
 });
 
 Then(
-  "I should see the error message {string}",
-  async ({ signupPage }, message: string) => {
-    await expect(signupPage.emailAlreadyExistsError).toHaveText(message);
+  "I should see the existing email message {string}",
+  async ({ signupPage }, expectedMessage: string) => {
+   
+      const actualMessage = await signupPage.getExistingEmailMessage();
+      expect(actualMessage).toBe(expectedMessage);
+
   },
 );
 
-When("I leave the email field empty", async ({}) => {
-  // Step: And I leave the email field empty
-  // From: features/auth/signup-form.feature:47:19
+When("I leave the email field empty", async ({ signupPage }) => {
+  await signupPage.newUserEmailInput.clear();
 });
+
+
