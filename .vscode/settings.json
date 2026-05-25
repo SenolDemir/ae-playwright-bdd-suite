@@ -1,8 +1,10 @@
 {
-"cucumberautocomplete.steps": [
-    "steps/**/*.ts"
+  "cucumberautocomplete.steps": [
+    "tests/steps/**/*.ts",
+    "tests/hooks/**/*.ts",
+    "src/fixtures/ui.fixtures.ts"
   ],
-  "cucumberautocomplete.syncfeatures": "features/**/*.feature",
+  "cucumberautocomplete.syncfeatures": "tests/features/**/*.feature",
   "cucumberautocomplete.strictGherkinCompletion": false,
   "github.copilot.enable": {
     "filesystem": true

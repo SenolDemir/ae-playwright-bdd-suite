@@ -1,79 +1,90 @@
 
-## Installation & Adding Dependencies
-npm init -y
-npm install -D @playwright/test@latest 
-npm init playwright@latest
-
-typescript
-npm install typescript ts-node @types/node
-npx tsc --init
-
-npm install -D playwright-bdd
-npm install --save-dev @faker-js/faker
-npm install dotenv --save
+# tags
+@ui @smoke         → Quick sanity suite
+@api @smoke        → API sanity
+@ui @regression    → Full UI regression
+@api @regression   → Full API regression
+@auth              → Auth-specific runs		
+@positive
+@negative          → Negative test suite
+@wip               → Work in progress (excluded from CI)
 
 
-## Setup and Configurations
-- in tsconfig.json (strict mode rules, conflicts etc.)
-- generate workspace level setting.json file
-- in setting.json file:
-- adding custom test running commands
-
-## Project Structure
-.github   AI prompts
-features  stays pure Gherkin only
-pages     holds the POM classes
-fixtures  holds the injected fixture container
-hooks     
-steps     consumes the injected objects
-test-data
-reports
-utils
-.env
+# branch naming
+feature/ui01-signup-form
 
 
-## Page Object Injection Set Up in playwrigh-bdd
-it is set up by fixtures/ui-fixtures.ts file
-Page Objects should be added into this file in three block
-and injection via step function callback as an argument
-```typescript
-When(
-  "user logs in with {string} and {string}",
-  async ({ loginPage }, email: string, password: string) => {
-    await loginPage.login(email, password);
-  }
-);
-```
+# bdd-planner-agent prompt template
 
-### feature-gen folder
-playwright-bdd works by acting as a bridge between Cucumber's .feature files and Playwright's native test runner. Playwright's runner (@playwright/test) does not understand Gherkin syntax natively — it only knows how to run .spec.ts files. So playwright-bdd auto-generates those .spec.ts files from your .feature files into the features-gen folder (or whatever you configure it as), and Playwright then runs those generated files.
+## Feature
+Product Catalog
 
-## Reporting
+## Entry Point
+<!-- Navigation path relative to the base URL -->
+/product
 
-reports/
-├── playwright-html/     ← Playwright native HTML report
-├── allure-results/      ← raw Allure JSON data
-└── allure-report/       ← generated Allure HTML report
+## Scenario Type
+BOTH
 
-### Allure Report
-allure-result
-Keeps raw test results. It is not cleaned before each session.
+## Charter
+In scope:
+- All products are displayed on the products page
+- When a product is chosen, product details can be displayed
 
-Allure-report
-It is for html report. It is cleaned before each test run.
+Out of scope:
+- Adding a product to the cart
+- Wishlist functionality
+- Search and filter behavior
+- Any flow that requires authentication
 
-to generate and open the report immediately
-```json
-"allure:serve": "npx allure serve reports/allure-results"
-```
+## Specific Cases to Cover
+- Verify that each product card shows name, price, and image
+- Verify that clicking a product navigates to its detail page
+- Verify that the detail page displays the correct product name, price, category, and availability
+- Check behavior when navigating back to the product listing from a detail page
 
-to generate the report separately for later use:
-```json
-"allure:generate": "npx allure generate reports/allure-results --clean -o reports/allure-report",
-"allure:open": "npx allure open reports/allure-report",
-```
-
-Limitation of Allure Report:
-When you open generated html report, even the html page is closed, you have to end allure server manually by pressing <Ctril+C> in terminal session of it. Otherwise it remains working. 
+## Output Filename
+products-catalog-raw.feature
 
 
+<!------------------------ end -------------------------->
+
+
+# bdd-generator-agent runtime prompt template
+Read the feature file at the path below and generate or extend Playwright page object classes (locators and methods) accordingly.
+
+Feature file: features/...
+Follow all rules in copilot-instructions.md and .github/prompts/auth-login.prompt.md.
+Inventory existing page objects, fixtures, and test data factories before generating code. Extend existing files if possible, do not duplicate.
+Only update files in pages/, fixtures/ui-fixtures.ts, and test-data/ as needed. Do not generate step definitions or feature files.
+Provide a summary report of changes and locator confidence.
+
+
+# playwright-test-healer.agent runtime prompt
+Debug and fix the scenario tagged with @ae04-1 in product-catalog.feature
+
+
+<!------------------------ end -------------------------->
+
+
+# debugger prompt template (with tags < >)
+
+<error_context>
+[chrome] › .features-gen/features/product/product-catalog.feature.spec.js:12:5 
+Test: View all products and product details successfully
+Tags: @product @positive @wip
+</error_context>
+
+<failure_message>
+Error: expect(received).toBe(expected)
+Expected: "Women > Tops"
+Received: "Category: Women > Tops"
+</failure_message>
+
+<source_code>
+at ../pages/ProductDetailPage.ts:84
+82 |  for (const [field, value] of Object.entries(expected)) {
+83 |    const actual = await this.getProductDetailFieldValue(field);
+84 >    expect(actual).toBe(value);
+85 |  }
+</source_code>
