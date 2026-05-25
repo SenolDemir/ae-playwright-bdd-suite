@@ -16,10 +16,8 @@
     "report": "npx playwright show-report reports/playwright-html",
     "allure:generate": "allure generate reports/allure-results --output reports/allure-report --clean",
     "allure:open": "allure open reports/allure-report",
-    "allure:serve": "npx allure serve reports/allure-results",
-    "test:ui-tag:ai-report": "npm run test:ui-tag && npm run test:json && npm run report:ai",
-    "report:ai": "npx ts-node src/reporter/ai.reporter.ts",
-    "report:ai:open": "open reports/ai-report/index.html"
+    "allure:serve": "npx allure serve reports/allure-results"
+
   },
   "keywords": [],
   "author": "",
