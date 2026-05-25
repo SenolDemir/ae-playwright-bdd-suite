@@ -457,6 +457,8 @@ When `BROWSER_TYPE=all`, 7 browser projects × N workers multiply fast. Set `WOR
 
 The `api` project has no worker override, so it inherits the global `workers` value and runs in parallel already.
 
+---
+
 ## Retries
 
 ### Current Setup
