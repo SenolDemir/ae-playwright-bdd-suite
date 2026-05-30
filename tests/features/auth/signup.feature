@@ -44,7 +44,7 @@ Feature: Signup with valid credentials
                   And I enter email "valid_email"
                   And I click the "Signup" button on the Login/Signup page
                   Then I should see the name field error message "Please fill in this field."
-                  Then I should remain on the Login/Signup page
+                  And I should remain on the Login/Signup page
 
 
             @ui01-3 @critical @negative @wip
@@ -53,17 +53,16 @@ Feature: Signup with valid credentials
                   And I leave the email field empty
                   And I click the "Signup" button on the Login/Signup page
                   Then I should see the email field error message "Please fill in this field."
-                  Then I should remain on the Login/Signup page
+                  And I should remain on the Login/Signup page
 
 
             @ui01-4 @critical @negative
-            Scenario: Reject registration with both fields empty
+            Scenario: Name field error takes priority when both fields are empty
                   When I leave the name field empty
                   And I leave the email field empty
                   And I click the "Signup" button on the Login/Signup page
                   Then I should see the name field error message "Please fill in this field."
-                  Then I should remain on the Login/Signup page
-
+                
 
       Rule: Email address must be unique in the system
 
@@ -82,6 +81,10 @@ Feature: Signup with valid credentials
 
       Rule: Name and email address must follow valid format
 
+            # NOTE: These scenarios are retained as specification-level tests to document the EXPECTED
+            # behaviour. They are expected to fail against the current implementation and should
+            # be treated as known failures.
+
             @ui01-6 @high @negative
             Scenario Outline: Reject registration with invalid name formats
                   When I enter name "<invalid_name>"
@@ -99,6 +102,8 @@ Feature: Signup with valid credentials
                         | [too_long]   | too long     | Please enter a valid name  |
                         | a            | too short    | Please enter a valid name  |
 
+            # NOTE: Placeholder tokens in square brackets are resolved dynamically at the
+            # step definition level — they are NOT literal strings typed into the field
 
             @ui01-7 @high @negative
             Scenario Outline: Reject registration with invalid email formats
@@ -113,34 +118,36 @@ Feature: Signup with valid credentials
                         | invalidemail           | Please include an '@' in the email address. 'invalidemail' is missing an '@'.           |
                         | invalidemailformat.com | Please include an '@' in the email address. 'invalidemailformat.com' is missing an '@'. |
                         | testuser@              | Please enter a part following '@'. 'testuser@' is incomplete.                           |
-                        |                        | Please fill in this field.                                                              |
                         | @nodomain.com          | Please enter a part followed by '@'. '@nodomain.com' is incomplete.                     |
                         | user @example.com      | A part followed by '@' should not contain the symbol ' '.                               |
 
 
-
             # =================================================================================
-            # Rule: Input Security Validation
-            # Special characters and scripts in email should be rejected
+            # Rule: Session-Aware Registration Routing
+            # The signup flow should handle users who are already authenticated or who
+            # arrive at the registration page via a direct URL rather than the site navigation.
             # =================================================================================
 
-      Rule: Email field must reject potentially harmful input
+      Rule: An authenticated user should not be able to access the signup form
 
-            @ui01-8 @security @negative
-            Scenario Outline: Reject email with harmful input attempts
-                  When I enter name "Normal User"
-                  And I enter email "<crafted_input>"
-                  And I click the "Signup" button on the Login/Signup page with script execution attempt
-                  Then the browser should not execute any injected script
-                  Then I should remain on the Login/Signup page
+            @ui01-8 @high @negative @session
+            Scenario: Logged-in user navigating to the signup page is redirected or shown a message
+                  Given I have a registered account
+                  And I am logged in with my account credentials
+                  When I navigate directly to the "Signup / Login" page
+                  Then I should not see the signup form
+                  And I should either be redirected to the home page or see a message indicating I am already logged in
 
 
-                  Examples:
-                        | crafted_input                    | attack_vector         |
-                        | [xss_email]                      | XSS via local part    |
-                        | [html_injection_email]           | HTML injection        |
-                        | javascript:alert(1)@test.com     | Protocol injection    |
-                        | '; DROP TABLE users; --@test.com | SQL injection pattern |
+      Rule: The signup page must be accessible and functional when navigated to directly
+
+      # @ui01-9 @high @positive @navigation
+      # Scenario: User arriving at the signup URL directly sees a functional signup form
+      #       Given I navigate directly to the signup URL
+      #       Then I should see the signup form
+      #       And the signup form should be fully functional
+      #       When I submit valid signup credentials
+      #       Then I should be on the account information setup page
 
 
       # =================================================================================

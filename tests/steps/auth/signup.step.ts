@@ -29,12 +29,12 @@ When("I submit valid signup credentials", async ({ signupPage, page }) => {
   await expect(page).toHaveURL(/\/signup/);
 });
 
-Then("my account should be created successfully", async ({ signupPage }) => {
-  await signupPage.expectAccountCreated();
+Then("my account should be created successfully", async ({ accountSetupPage }) => {
+  await accountSetupPage.expectAccountCreated();
 });
 
-When("I click continue", async ({ page, signupPage }) => {
-  await signupPage.continueButton.click();
+When("I click continue", async ({ page, accountSetupPage }) => {
+  await accountSetupPage.clickContinue();
 });
 
 Then(

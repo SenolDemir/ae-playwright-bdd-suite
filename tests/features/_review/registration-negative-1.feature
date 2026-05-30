@@ -10,7 +10,7 @@
 #      
 
 #             # =================================================================================
-#             # Rule: Account information form validation (Step 2)
+#             # Account information form validation (Step 2)
 #             # =================================================================================
 
 #       Rule: Title and password must be selected/filled before proceeding
