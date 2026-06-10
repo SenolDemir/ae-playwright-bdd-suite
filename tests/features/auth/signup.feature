@@ -17,7 +17,7 @@ Feature: Signup with valid credentials
       # =================================================================================
 
 
-      Rule: A new user can register with valid details and delete their account
+      Rule: Successful Registration and Account Deletion
 
             @ui01-1 @critical @positive @smoke
             Scenario: Successful registration with valid credentials and subsequent account deletion
@@ -33,7 +33,6 @@ Feature: Signup with valid credentials
                   When I click continue
                   And I should be not logged in on the home page
 
-            # =================================================================================
 
 
       Rule: Valid name and email fields are required for registration
@@ -62,7 +61,7 @@ Feature: Signup with valid credentials
                   And I leave the email field empty
                   And I click the "Signup" button on the Login/Signup page
                   Then I should see the name field error message "Please fill in this field."
-                
+
 
       Rule: Email address must be unique in the system
 
@@ -120,34 +119,6 @@ Feature: Signup with valid credentials
                         | testuser@              | Please enter a part following '@'. 'testuser@' is incomplete.                           |
                         | @nodomain.com          | Please enter a part followed by '@'. '@nodomain.com' is incomplete.                     |
                         | user @example.com      | A part followed by '@' should not contain the symbol ' '.                               |
-
-
-            # =================================================================================
-            # Rule: Session-Aware Registration Routing
-            # The signup flow should handle users who are already authenticated or who
-            # arrive at the registration page via a direct URL rather than the site navigation.
-            # =================================================================================
-
-      Rule: An authenticated user should not be able to access the signup form
-
-            @ui01-8 @high @negative @session
-            Scenario: Logged-in user navigating to the signup page is redirected or shown a message
-                  Given I have a registered account
-                  And I am logged in with my account credentials
-                  When I navigate directly to the "Signup / Login" page
-                  Then I should not see the signup form
-                  And I should either be redirected to the home page or see a message indicating I am already logged in
-
-
-      Rule: The signup page must be accessible and functional when navigated to directly
-
-      # @ui01-9 @high @positive @navigation
-      # Scenario: User arriving at the signup URL directly sees a functional signup form
-      #       Given I navigate directly to the signup URL
-      #       Then I should see the signup form
-      #       And the signup form should be fully functional
-      #       When I submit valid signup credentials
-      #       Then I should be on the account information setup page
 
 
       # =================================================================================

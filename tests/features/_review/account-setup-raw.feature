@@ -50,7 +50,7 @@
 # - Date of Birth year range: 1900–2021 (static dropdown options)
 # ==================================================================================
 
-@ui @ui02 @auth @registration
+@ui @auth @registration
 Feature: Account Information Setup Negative Validation
   As a system administrator
   I want the account information setup form to reject invalid input data
@@ -72,7 +72,7 @@ Feature: Account Information Setup Negative Validation
 
   Rule: Password field must not be empty
 
-    @ui02-1 @negative
+    @negative
     Scenario: Registration is rejected when password field is left empty
       When I complete the account information form with valid data
       And I leave the "password" field empty
@@ -88,7 +88,7 @@ Feature: Account Information Setup Negative Validation
 
   Rule: Name field must not be empty
 
-    @ui02-2 @negative
+    @negative
     Scenario: Registration is rejected when the name field is cleared
       When I complete the account information form with valid data
       And I leave the "name" field empty
@@ -110,7 +110,7 @@ Feature: Account Information Setup Negative Validation
 
   Rule: All required address information fields must be filled
 
-    @ui02-3 @negative
+    @negative
     Scenario Outline: Registration is rejected when a required address field is left empty
       When I complete the account information form with valid data
       And I leave the "<field>" field empty
@@ -138,7 +138,7 @@ Feature: Account Information Setup Negative Validation
 
   Rule: Required text fields must reject whitespace-only input
 
-    @ui02-4 @negative @wip
+    @negative @wip
     Scenario Outline: Registration should be rejected when a required text field contains only spaces
       When I complete the account information form with valid data
       And I enter whitespace only in the "<field>" field
@@ -160,12 +160,11 @@ Feature: Account Information Setup Negative Validation
   # Observed: type=text, no pattern attribute — HTML5 does NOT enforce numeric format.
   # The browser accepts alphabetic characters ("ABCDEFG") without any validation error.
   # Server-side format validation is UNVERIFIED (not testable without completing registration).
-  # NEW STEP REQUIRED: "I enter {string} in the {string} field"
   # ==================================================================================
 
   Rule: Mobile Number field must accept only valid numeric input
 
-    @ui02-5 @negative @wip
+    @negative @wip
     Scenario Outline: Registration should be rejected when mobile number contains non-numeric characters
       When I complete the account information form with valid data
       And I enter "<mobile_input>" in the "mobile_number" field

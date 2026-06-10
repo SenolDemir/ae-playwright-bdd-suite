@@ -3,79 +3,59 @@ import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 
-
-
-
-
 export class AccountSetupPage extends BasePage {
   // ----------- account information form elements -------------------------
 
-  public readonly enterAccountInformationHeading: Locator = this.page.getByRole(
-    "heading",
-    { name: "Enter Account Information" },
-  );
+  public readonly enterAccountInformationHeading: Locator = this.page.getByRole("heading", {
+    name: "Enter Account Information",
+  });
 
   // account information Container
-  public readonly accountInformationForm: Locator = this.page.locator(
-    'form[action="/signup"]',
-  );
+  public readonly accountInformationForm: Locator = this.page.locator('form[action="/signup"]');
 
   // title radio buttons
-  public readonly titleMrRadioButton: Locator =
-    this.accountInformationForm.getByLabel("Mr.");
-  public readonly titleMrsRadioButton: Locator =
-    this.accountInformationForm.getByLabel("Mrs.");
+  public readonly titleMrRadioButton: Locator = this.accountInformationForm.getByLabel("Mr.");
+  public readonly titleMrsRadioButton: Locator = this.accountInformationForm.getByLabel("Mrs.");
 
   public readonly passwordInput: Locator = this.page.getByLabel("Password");
 
+  // Name input (pre-filled from Step 1 signup; data-qa="name")
+  public readonly nameInput: Locator = this.accountInformationForm.locator('[data-qa="name"]');
+
   // Date of Birth Dropdowns
-  public readonly daysDropdown: Locator =
-    this.accountInformationForm.locator('[data-qa="days"]');
-  public readonly monthsDropdown: Locator =
-    this.accountInformationForm.locator('[data-qa="months"]');
-  public readonly yearsDropdown: Locator =
-    this.accountInformationForm.locator('[data-qa="years"]');
+  public readonly daysDropdown: Locator = this.accountInformationForm.locator('[data-qa="days"]');
+  public readonly monthsDropdown: Locator = this.accountInformationForm.locator('[data-qa="months"]');
+  public readonly yearsDropdown: Locator = this.accountInformationForm.locator('[data-qa="years"]');
 
   // Checkboxes
-  public readonly newsletterCheckbox: Locator =
-    this.accountInformationForm.getByRole("checkbox", {
-      name: /Sign up for our newsletter!/i,
-    });
-  public readonly offersCheckbox: Locator =
-    this.accountInformationForm.getByRole("checkbox", {
-      name: /Receive special offers from our partners!/i,
-    });
+  public readonly newsletterCheckbox: Locator = this.accountInformationForm.getByRole("checkbox", {
+    name: /Sign up for our newsletter!/i,
+  });
+  public readonly offersCheckbox: Locator = this.accountInformationForm.getByRole("checkbox", {
+    name: /Receive special offers from our partners!/i,
+  });
 
   // Personal Information Inputs
-  public readonly firstNameInput: Locator =
-    this.accountInformationForm.getByLabel("First name");
-  public readonly lastNameInput: Locator =
-    this.accountInformationForm.getByLabel("Last name");
+  public readonly firstNameInput: Locator = this.accountInformationForm.getByLabel("First name");
+  public readonly lastNameInput: Locator = this.accountInformationForm.getByLabel("Last name");
   public readonly companyInput: Locator = this.page.getByLabel("Company", {
     exact: true,
   });
-  public readonly address1Input: Locator = this.accountInformationForm.locator(
-    '[data-qa="address"]',
-  );
-  public readonly address2Input: Locator =
-    this.accountInformationForm.getByLabel("Address 2");
-  public readonly stateInput: Locator =
-    this.accountInformationForm.getByLabel("State");
-  public readonly cityInput: Locator =
-    this.accountInformationForm.getByLabel("City");
-  public readonly zipcodeInput: Locator = this.page.locator(
-    '[data-qa="zipcode"]',
-  );
-  public readonly mobileNumberInput: Locator =
-    this.accountInformationForm.getByLabel("Mobile Number");
-  public readonly createAccountButton: Locator =
-    this.accountInformationForm.getByRole("button", { name: "Create Account" });
+  public readonly address1Input: Locator = this.accountInformationForm.locator('[data-qa="address"]');
+  public readonly address2Input: Locator = this.accountInformationForm.getByLabel("Address 2");
+  public readonly stateInput: Locator = this.accountInformationForm.getByLabel("State");
+  public readonly cityInput: Locator = this.accountInformationForm.getByLabel("City");
+  public readonly zipcodeInput: Locator = this.page.locator('[data-qa="zipcode"]');
+  public readonly mobileNumberInput: Locator = this.accountInformationForm.getByLabel("Mobile Number");
+  public readonly createAccountButton: Locator = this.accountInformationForm.getByRole("button", {
+    name: "Create Account",
+  });
 
   // Account created confirmation elements
-  public readonly accountCreatedHeading: Locator = this.page.getByRole(
-    "heading",
-    { name: "Account Created!", level: 2 },
-  );
+  public readonly accountCreatedHeading: Locator = this.page.getByRole("heading", {
+    name: "Account Created!",
+    level: 2,
+  });
 
   public readonly continueButton: Locator = this.page.getByRole("link", {
     name: "Continue",
@@ -84,9 +64,7 @@ export class AccountSetupPage extends BasePage {
   // ------------  Account information form functions ------------------------------------
 
   async expectAccountSetupHeadingVisible(): Promise<void> {
-    await expect(
-      this.page.getByRole("heading", { name: "Enter Account Information" }),
-    ).toBeVisible();
+    await expect(this.page.getByRole("heading", { name: "Enter Account Information" })).toBeVisible();
   }
 
   async selectTitle(title: string): Promise<void> {
@@ -140,9 +118,7 @@ export class AccountSetupPage extends BasePage {
   }
 
   async expectAccountCreated(): Promise<void> {
-    await expect(this.page).toHaveURL(
-      "https://www.automationexercise.com/account_created",
-    );
+    await expect(this.page).toHaveURL("https://www.automationexercise.com/account_created");
     await expect(this.accountCreatedHeading).toBeVisible();
     await expect(this.accountCreatedHeading).toHaveText("Account Created!");
   }
@@ -151,5 +127,60 @@ export class AccountSetupPage extends BasePage {
     await this.continueButton.click();
   }
 
+  // ── Negative / validation scenario methods ────────────────────────────
 
+  /**
+   * Returns the Locator for a given field name string.
+   * Normalises "first_name" and "mobile_number" (underscore variants)
+   * to their space-separated equivalents before lookup.
+   */
+  private getFieldLocator(fieldName: string): Locator {
+    const normalised = fieldName.toLowerCase().replace(/_/g, " ").trim();
+    const locatorMap: Record<string, Locator> = {
+      name: this.nameInput,
+      password: this.passwordInput,
+      "first name": this.firstNameInput,
+      "last name": this.lastNameInput,
+      address: this.address1Input,
+      state: this.stateInput,
+      city: this.cityInput,
+      zipcode: this.zipcodeInput,
+      "mobile number": this.mobileNumberInput,
+    };
+    const locator = locatorMap[normalised];
+    if (!locator) {
+      throw new Error(`AccountSetupPage: no locator mapped for field "${fieldName}"`);
+    }
+    return locator;
+  }
+
+  /** Fills the password field with an explicit value (use "" to test empty-password validation). */
+  async enterPassword(password: string): Promise<void> {
+    await this.passwordInput.fill(password);
+  }
+
+  /** Clears the named field so it is left empty before form submission. */
+  async clearField(fieldName: string): Promise<void> {
+    await this.getFieldLocator(fieldName).clear();
+  }
+
+  /** Fills the named field with whitespace-only text. */
+  async enterWhitespaceInField(fieldName: string): Promise<void> {
+    await this.getFieldLocator(fieldName).fill("   ");
+  }
+
+  /** Fills the mobile number field with an explicit value for format-validation tests. */
+  async enterMobileNumber(value: string): Promise<void> {
+    await this.mobileNumberInput.fill(value);
+  }
+
+  /**
+   * Asserts that the HTML5 native validation message for the named field
+   * matches the expected error string (e.g. "Please fill in this field.").
+   */
+  async expectFieldErrorMessage(fieldName: string, errorMessage: string): Promise<void> {
+    const locator = this.getFieldLocator(fieldName);
+    const validationMessage = await locator.evaluate((el: HTMLInputElement) => el.validationMessage);
+    expect(validationMessage).toBe(errorMessage);
+  }
 }

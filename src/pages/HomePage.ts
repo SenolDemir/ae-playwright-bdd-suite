@@ -3,35 +3,24 @@ import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
 export class HomePage extends BasePage {
-  
   // Visible only after authentication.
-  public readonly loggedInAsText: Locator =
-    this.page.getByText(/Logged in as/i);
+  public readonly loggedInAsText: Locator = this.page.getByText(/Logged in as/i);
 
   // Visible only after deleting an authenticated account.
-  public readonly accountDeletedHeading: Locator = this.page.getByRole(
-    "heading",
-    { name: "Account Deleted!" },
-  );
+  public readonly accountDeletedHeading: Locator = this.page.getByRole("heading", { name: "Account Deleted!" });
   public readonly continueLink: Locator = this.page.getByRole("link", {
     name: "Continue",
   });
 
   // ---------------------- methods --------------------------
 
-  
-
   async expectHomePageVisible(): Promise<void> {
-    await expect(this.page).toHaveURL(
-      process.env.BASE_URL || "https://www.automationexercise.com/",
-    );
+    await expect(this.page).toHaveURL(process.env.BASE_URL || "https://www.automationexercise.com/");
     await expect(this.page).toHaveTitle("Automation Exercise");
   }
 
   async expectLoggedIn(fullName: string): Promise<void> {
-    await expect(this.page).toHaveURL(
-      process.env.BASE_URL || "https://www.automationexercise.com/",
-    );
+    await expect(this.page).toHaveURL(process.env.BASE_URL || "https://www.automationexercise.com/");
     await expect(this.loggedInAsText).toBeVisible();
     await expect(this.loggedInAsText).toContainText(`Logged in as ${fullName}`);
   }
@@ -50,9 +39,7 @@ export class HomePage extends BasePage {
   }
 
   async expectNotLoggedInOnHomePage(): Promise<void> {
-    await expect(this.page).toHaveURL(
-      process.env.BASE_URL || "https://www.automationexercise.com/",
-    );
+    await expect(this.page).toHaveURL(process.env.BASE_URL || "https://www.automationexercise.com/");
     await expect(this.nav.signupOrLoginLink).toBeVisible();
     await expect(this.nav.logoutLink).toHaveCount(0);
     await expect(this.nav.deleteAccountLink).toHaveCount(0);
