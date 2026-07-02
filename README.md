@@ -24,6 +24,8 @@
 		- [GitHub Copilot](#github-copilot)
 		- [Playwright MCP (Model Context Protocol)](#playwright-mcp-model-context-protocol)
 		- [Playwright Agents](#playwright-agents)
+		- [playwright-bdd-planner](#playwright-bdd-planner)
+		- [playwright-bdd-generator](#playwright-bdd-generator)
 		- [Self-Healing Strategy](#self-healing-strategy)
 	- [Environment Management](#environment-management)
 	- [Test Data Strategy](#test-data-strategy)
@@ -272,21 +274,41 @@ Playwright MCP enables AI models to interact with a live browser session. In thi
 - **Validate locator resilience** by having the AI verify selectors against the live DOM
 
 ### Playwright Agents
-Playwright Agents extend AI assistance beyond code generation into the full test lifecycle, covering test case development and locator self-healing.
+Playwright Agents extend AI assistance beyond code generation into the full test lifecycle, covering test case development and locator self-healing. 
 
 **Test Generation with Playwright Agents**  
-Playwright provides a built-in planner agent; however, since a BDD-based framework is used, it is not designed to generate Gherkin feature files with scenarios and scenario steps. For this purpose, a custom agent "playwright-bdd-planner" has been created. This agent:
+
+Playwright provides a built-in planner agent, however it is not designed to generate Gherkin feature files with scenarios and scenario steps. To use agents for this workflow two custom agents are built based on plawright agents structure.
+- playwright-bdd-planner
+- playwright-bdd-generator
+
+### playwright-bdd-planner
+
+This agent:
 - Receives a test basis scope (feature charter) via chat prompt
 - Produces a raw feature file including scenarios and step definitions
 - Applies standard test design techniques: equivalence partitioning, boundary value analysis, happy path, edge case, and negative scenarios
 
 Rather than scoping the agent to an entire feature at once, feature charters are preferred. Validating one focused slice of behavior at a time builds more confidence than evaluating a large batch at once. It also prevents the AI from mixing primary flows, edge cases, and unrelated page behaviors together.
 
+[tablo]
+
 The agent generates the feature file into a dedicated review folder, where a human reviewer completes the test case development process.
 To get more insight about Playwright Agents have a look at this article:
 [Playwright Test Agents in 2026: what works, what breaks, and what's next](https://bug0.com/blog/playwright-test-agents) 
 
+
+### playwright-bdd-generator
+
+Takes a reviewed .feature file from the `_review/` folder as input and handles the implementation phase. It inspects the live DOM via Playwright MCP, then decides whether to create a new Page Object class or extend an existing one — never duplicating locators or methods already in place. Alongside page objects, it wires new fixtures and generates any missing test data factories. 
+
+It follow locator strategy to implement resilient locator structure.
+
+Output is strictly limited to `pages/`, `fixtures/`, and `test-data/` — step definitions and feature files are out of scope.
+
+
 ### Self-Healing Strategy
+
 Test resilience is maintained through two layers:
 - **Resilient Locator Strategy (preventive)** — as mentioned before.Semantic and role-based locators are preferred at authoring time to minimize the chance of locator breakage across UI changes (see Resilient Locator Strategy above).
   
