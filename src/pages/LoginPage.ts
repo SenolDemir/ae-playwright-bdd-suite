@@ -9,6 +9,8 @@ export class LoginPage extends BasePage {
   public readonly loginEmailInput: Locator = this.loginForm.locator('[data-qa="login-email"]');
   public readonly loginPasswordInput: Locator = this.loginForm.locator('[data-qa="login-password"]');
   public readonly loginButton: Locator = this.loginForm.locator('[data-qa="login-button"]');
+  public readonly loginErrorMessage: Locator = this.page.getByText('Your email or password is incorrect!');
+ 
 
   // ---------------------- Functions ---------------------------------------------------
 
@@ -18,5 +20,23 @@ export class LoginPage extends BasePage {
     await this.loginEmailInput.fill(email);
     await this.loginPasswordInput.fill(password);
     await this.loginButton.click();
+  }
+
+  async expectLoginPageVisible(): Promise<void> {
+    await expect(this.page).toHaveURL(/login/);
+    await expect(this.loginForm).toBeVisible();
+  }
+
+
+  async getLoginEmailValidationMessage(): Promise<string> {
+    return this.loginEmailInput.evaluate((input: HTMLInputElement) => {
+      return input.validationMessage;
+    });
+  }
+
+  async getLoginPasswordValidationMessage(): Promise<string> {
+    return this.loginPasswordInput.evaluate((input: HTMLInputElement) => {
+      return input.validationMessage;
+    });
   }
 }
