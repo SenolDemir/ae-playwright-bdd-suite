@@ -1,7 +1,9 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 // components/NavBar.ts
+
 export class NavBar {
+  
   public readonly homePageLink: Locator = this.page.getByRole("link", { name: "Home" });
   public readonly productsLink: Locator = this.page.getByRole("link", { name: "Products" });
   public readonly cartLink: Locator = this.page.getByRole("link", { name: "Cart" });
@@ -11,7 +13,9 @@ export class NavBar {
   public readonly deleteAccountLink: Locator = this.page.getByRole("link", { name: "Delete Account" });
   public readonly loggedInAsText: Locator = this.page.getByText(/Logged in as/i);
 
-  constructor(private readonly page: Page) {}
+  constructor(private readonly page: Page) {
+    
+  }
 
   async navigateTo(pageName: string): Promise<void> {
     pageName = pageName.trim();
@@ -23,10 +27,10 @@ export class NavBar {
         await this.productsLink.click();
         break;
       case "Cart":
-        // Add navigation logic for the "Cart" page here
+        await this.cartLink.click();
         break;
       case "Contact Us":
-        // Add navigation logic for the "Contact Us" page here
+        await this.contactUsLink.click();
         break;
       default:
         throw new Error(`Unknown page: ${pageName}`);
@@ -46,8 +50,10 @@ export class NavBar {
   }
 
   async expectNotLoggedIn(): Promise<void> {
+    await expect(this.page).toHaveURL(process.env.BASE_URL || "https://www.automationexercise.com/");
     await expect(this.signupOrLoginLink).toBeVisible();
     await expect(this.logoutLink).toHaveCount(0);
+    await expect(this.deleteAccountLink).toHaveCount(0);
     await expect(this.loggedInAsText).toHaveCount(0);
   }
 }

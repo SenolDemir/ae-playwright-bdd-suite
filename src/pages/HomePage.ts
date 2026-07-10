@@ -8,9 +8,9 @@ export class HomePage extends BasePage {
 
   // Visible only after deleting an authenticated account.
   public readonly accountDeletedHeading: Locator = this.page.getByRole("heading", { name: "Account Deleted!" });
-  public readonly continueLink: Locator = this.page.getByRole("link", {
-    name: "Continue",
-  });
+  // public readonly continueLink: Locator = this.page.getByRole("link", {
+  //   name: "Continue",
+  // });
 
   // ---------------------- functions  -----------------------------------
 
@@ -35,15 +35,5 @@ export class HomePage extends BasePage {
     await expect(this.accountDeletedHeading).toBeVisible();
   }
 
-  async clickContinue(): Promise<void> {
-    await this.continueLink.click();
-  }
-
-  async expectNotLoggedInOnHomePage(): Promise<void> {
-    await expect(this.page).toHaveURL(process.env.BASE_URL || "https://www.automationexercise.com/");
-    await expect(this.nav.signupOrLoginLink).toBeVisible();
-    await expect(this.nav.logoutLink).toHaveCount(0);
-    await expect(this.nav.deleteAccountLink).toHaveCount(0);
-    await expect(this.nav.loggedInAsText).toHaveCount(0);
-  }
+ 
 }

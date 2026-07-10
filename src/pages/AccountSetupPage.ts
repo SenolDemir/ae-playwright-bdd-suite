@@ -1,7 +1,6 @@
 import { BasePage } from "./BasePage.js";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
-import { faker } from "@faker-js/faker";
 
 export class AccountSetupPage extends BasePage {
   // ----------- account information form elements -------------------------
@@ -118,7 +117,8 @@ export class AccountSetupPage extends BasePage {
   }
 
   async expectAccountCreated(): Promise<void> {
-    await expect(this.page).toHaveURL("https://www.automationexercise.com/account_created");
+    // await expect(this.page).toHaveURL("https://www.automationexercise.com/account_created");
+    await expect(this.page).toHaveURL(/account_created$/);
     await expect(this.accountCreatedHeading).toBeVisible();
     await expect(this.accountCreatedHeading).toHaveText("Account Created!");
   }
