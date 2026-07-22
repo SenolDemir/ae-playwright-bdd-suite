@@ -310,9 +310,9 @@ Output is strictly limited to `pages/`, `fixtures/`, and `test-data/` — step d
 ### Self-Healing Strategy
 
 Test resilience is maintained through two layers:
-- **Resilient Locator Strategy (preventive)** — as mentioned before.Semantic and role-based locators are preferred at authoring time to minimize the chance of locator breakage across UI changes (see Resilient Locator Strategy above).
+- **Resilient Locator Strategy (preventive)** — semantic and role-based locators are preferred at authoring time to minimize the chance of locator breakage across UI changes (see Resilient Locator Strategy above)
   
-- **Playwright Healer Agent (reactive)** — when tests fail, the healer agent executes a self-healing loop to automatically repair them:
+- **Playwright Healer Agent (reactive)** — implemented via playwright-test-healer, this agent runs a semi-automated healing loop on failure:
   1. **Replays** the failing steps to reproduce the failure
   2. **Inspects** the current UI to locate equivalent elements or flows
   3. **Suggests a patch** — this may be a locator update, a wait adjustment, or a data fix, depending on the root cause
