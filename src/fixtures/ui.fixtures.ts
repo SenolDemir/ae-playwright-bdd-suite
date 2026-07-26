@@ -6,6 +6,7 @@ import { ProductPage } from "../pages/ProductPage";
 import { ProductDetailPage } from "../pages/ProductDetailPage";
 import { UserFactory, type SignupUser } from "../test-data/UserFactory";
 import { LoginPage } from "../pages/LoginPage";
+import { AccountSetupPage } from "../pages/AccountSetupPage";
 
 export interface TestData {
   newUser: SignupUser; // registration, login, checkout
@@ -21,6 +22,7 @@ type Fixtures = {
   homePage: HomePage;
   productPage: ProductPage;
   productDetailPage: ProductDetailPage;
+  accountSetupPage: AccountSetupPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -36,6 +38,12 @@ export const test = base.extend<Fixtures>({
     const signupPage = new SignupPage(page, testData);
     await use(signupPage);
   },
+
+  accountSetupPage: async ({ page, testData }, use) => {
+    const accountSetupPage = new AccountSetupPage(page, testData);
+    await use(accountSetupPage);
+  },
+  
   loginPage: async ({ page, testData }, use) => {
     const loginPage = new LoginPage(page, testData);
     await use(loginPage);

@@ -1,5 +1,13 @@
 # 🎭 AE Playwright AI-Augmented BDD Suite
 
+![Playwright](https://img.shields.io/badge/Playwright-1.59.0-45ba4b?logo=playwright&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript&logoColor=white)
+![playwright-bdd](https://img.shields.io/badge/playwright--bdd-8.5.0-brightgreen?logo=cucumber&logoColor=white)
+![Faker.js](https://img.shields.io/badge/%40faker--js%2Ffaker-10.4.0-F7DF1E?logo=javascript&logoColor=black)
+![Allure Reports](https://img.shields.io/badge/Allure_Reports-3.9.0-E85A2B?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgMjJoMjBMMTIgMnoiLz48L3N2Zz4=&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-ESM-339933?logo=nodedotjs&logoColor=white)
+
+
 > A production-grade test automation portfolio project targeting [AutomationExercise.com](https://www.automationexercise.com/) — combining Playwright, TypeScript, BDD, AI Agents and other AI-assisted tooling into a modern, resilient testing framework.
 
 ---
@@ -24,6 +32,8 @@
 		- [GitHub Copilot](#github-copilot)
 		- [Playwright MCP (Model Context Protocol)](#playwright-mcp-model-context-protocol)
 		- [Playwright Agents](#playwright-agents)
+		- [playwright-bdd-planner](#playwright-bdd-planner)
+		- [playwright-bdd-generator](#playwright-bdd-generator)
 		- [Self-Healing Strategy](#self-healing-strategy)
 	- [Environment Management](#environment-management)
 	- [Test Data Strategy](#test-data-strategy)
@@ -272,25 +282,45 @@ Playwright MCP enables AI models to interact with a live browser session. In thi
 - **Validate locator resilience** by having the AI verify selectors against the live DOM
 
 ### Playwright Agents
-Playwright Agents extend AI assistance beyond code generation into the full test lifecycle, covering test case development and locator self-healing.
+Playwright Agents extend AI assistance beyond code generation into the full test lifecycle, covering test case development and locator self-healing. 
 
 **Test Generation with Playwright Agents**  
-Playwright provides a built-in planner agent; however, since a BDD-based framework is used, it is not designed to generate Gherkin feature files with scenarios and scenario steps. For this purpose, a custom agent "playwright-bdd-planner" has been created. This agent:
+
+Playwright provides a built-in planner agent, however it is not designed to generate Gherkin feature files with scenarios and scenario steps. To use agents for this workflow two custom agents are built based on plawright agents structure.
+- playwright-bdd-planner
+- playwright-bdd-generator
+
+### playwright-bdd-planner
+
+This agent:
 - Receives a test basis scope (feature charter) via chat prompt
 - Produces a raw feature file including scenarios and step definitions
 - Applies standard test design techniques: equivalence partitioning, boundary value analysis, happy path, edge case, and negative scenarios
 
 Rather than scoping the agent to an entire feature at once, feature charters are preferred. Validating one focused slice of behavior at a time builds more confidence than evaluating a large batch at once. It also prevents the AI from mixing primary flows, edge cases, and unrelated page behaviors together.
 
+[tablo]
+
 The agent generates the feature file into a dedicated review folder, where a human reviewer completes the test case development process.
 To get more insight about Playwright Agents have a look at this article:
 [Playwright Test Agents in 2026: what works, what breaks, and what's next](https://bug0.com/blog/playwright-test-agents) 
 
+
+### playwright-bdd-generator
+
+Takes a reviewed .feature file from the `_review/` folder as input and handles the implementation phase. It inspects the live DOM via Playwright MCP, then decides whether to create a new Page Object class or extend an existing one — never duplicating locators or methods already in place. Alongside page objects, it wires new fixtures and generates any missing test data factories. 
+
+It follow locator strategy to implement resilient locator structure.
+
+Output is strictly limited to `pages/`, `fixtures/`, and `test-data/` — step definitions and feature files are out of scope.
+
+
 ### Self-Healing Strategy
+
 Test resilience is maintained through two layers:
-- **Resilient Locator Strategy (preventive)** — as mentioned before.Semantic and role-based locators are preferred at authoring time to minimize the chance of locator breakage across UI changes (see Resilient Locator Strategy above).
+- **Resilient Locator Strategy (preventive)** — semantic and role-based locators are preferred at authoring time to minimize the chance of locator breakage across UI changes (see Resilient Locator Strategy above)
   
-- **Playwright Healer Agent (reactive)** — when tests fail, the healer agent executes a self-healing loop to automatically repair them:
+- **Playwright Healer Agent (reactive)** — implemented via playwright-test-healer, this agent runs a semi-automated healing loop on failure:
   1. **Replays** the failing steps to reproduce the failure
   2. **Inspects** the current UI to locate equivalent elements or flows
   3. **Suggests a patch** — this may be a locator update, a wait adjustment, or a data fix, depending on the root cause
@@ -456,6 +486,8 @@ When `BROWSER_TYPE=all`, 7 browser projects × N workers multiply fast. Set `WOR
 ### API Tests
 
 The `api` project has no worker override, so it inherits the global `workers` value and runs in parallel already.
+
+---
 
 ## Retries
 

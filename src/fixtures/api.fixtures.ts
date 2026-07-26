@@ -7,10 +7,13 @@ import {
 import { UserFactory, type SignupUser } from "../test-data/UserFactory";
 import { SignupClient } from "../api-clients/signup.client";
 import { ProductClient } from "../api-clients/product.client";
+import { LoginClient } from "../api-clients/login.client";
+
 
 type ApiFixtures = {
   apiRequest: APIRequestContext;
   signupClient: SignupClient;
+  loginClient: LoginClient;
   productClient: ProductClient;
 };
 
@@ -28,6 +31,9 @@ export const test = base.extend<ApiFixtures>({
 
   productClient: async ({ apiRequest }, use) => {
     await use(new ProductClient(apiRequest));
+  },
+  loginClient: async ({ apiRequest }, use) => {
+    await use(new LoginClient(apiRequest));
   },
 });
 

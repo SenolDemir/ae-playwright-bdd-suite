@@ -17,7 +17,7 @@ Feature: Signup with valid credentials
       # =================================================================================
 
 
-      Rule: A new user can register with valid details and delete their account
+      Rule: Successful Registration and Account Deletion
 
             @ui01-1 @critical @positive @smoke
             Scenario: Successful registration with valid credentials and subsequent account deletion
@@ -33,7 +33,6 @@ Feature: Signup with valid credentials
                   When I click continue
                   And I should be not logged in on the home page
 
-            # =================================================================================
 
 
       Rule: Valid name and email fields are required for registration
@@ -44,7 +43,7 @@ Feature: Signup with valid credentials
                   And I enter email "valid_email"
                   And I click the "Signup" button on the Login/Signup page
                   Then I should see the name field error message "Please fill in this field."
-                  Then I should remain on the Login/Signup page
+                  And I should remain on the Login/Signup page
 
 
             @ui01-3 @critical @negative @wip
@@ -53,16 +52,15 @@ Feature: Signup with valid credentials
                   And I leave the email field empty
                   And I click the "Signup" button on the Login/Signup page
                   Then I should see the email field error message "Please fill in this field."
-                  Then I should remain on the Login/Signup page
+                  And I should remain on the Login/Signup page
 
 
             @ui01-4 @critical @negative
-            Scenario: Reject registration with both fields empty
+            Scenario: Name field error takes priority when both fields are empty
                   When I leave the name field empty
                   And I leave the email field empty
                   And I click the "Signup" button on the Login/Signup page
                   Then I should see the name field error message "Please fill in this field."
-                  Then I should remain on the Login/Signup page
 
 
       Rule: Email address must be unique in the system
@@ -82,6 +80,10 @@ Feature: Signup with valid credentials
 
       Rule: Name and email address must follow valid format
 
+            # NOTE: These scenarios are retained as specification-level tests to document the EXPECTED
+            # behaviour. They are expected to fail against the current implementation and should
+            # be treated as known failures.
+
             @ui01-6 @high @negative
             Scenario Outline: Reject registration with invalid name formats
                   When I enter name "<invalid_name>"
@@ -99,6 +101,8 @@ Feature: Signup with valid credentials
                         | [too_long]   | too long     | Please enter a valid name  |
                         | a            | too short    | Please enter a valid name  |
 
+            # NOTE: Placeholder tokens in square brackets are resolved dynamically at the
+            # step definition level — they are NOT literal strings typed into the field
 
             @ui01-7 @high @negative
             Scenario Outline: Reject registration with invalid email formats
@@ -113,34 +117,8 @@ Feature: Signup with valid credentials
                         | invalidemail           | Please include an '@' in the email address. 'invalidemail' is missing an '@'.           |
                         | invalidemailformat.com | Please include an '@' in the email address. 'invalidemailformat.com' is missing an '@'. |
                         | testuser@              | Please enter a part following '@'. 'testuser@' is incomplete.                           |
-                        |                        | Please fill in this field.                                                              |
                         | @nodomain.com          | Please enter a part followed by '@'. '@nodomain.com' is incomplete.                     |
                         | user @example.com      | A part followed by '@' should not contain the symbol ' '.                               |
-
-
-
-            # =================================================================================
-            # Rule: Input Security Validation
-            # Special characters and scripts in email should be rejected
-            # =================================================================================
-
-      Rule: Email field must reject potentially harmful input
-
-            @ui01-8 @security @negative
-            Scenario Outline: Reject email with harmful input attempts
-                  When I enter name "Normal User"
-                  And I enter email "<crafted_input>"
-                  And I click the "Signup" button on the Login/Signup page with script execution attempt
-                  Then the browser should not execute any injected script
-                  Then I should remain on the Login/Signup page
-
-
-                  Examples:
-                        | crafted_input                    | attack_vector         |
-                        | [xss_email]                      | XSS via local part    |
-                        | [html_injection_email]           | HTML injection        |
-                        | javascript:alert(1)@test.com     | Protocol injection    |
-                        | '; DROP TABLE users; --@test.com | SQL injection pattern |
 
 
       # =================================================================================

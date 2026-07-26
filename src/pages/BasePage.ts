@@ -27,4 +27,8 @@ export class BasePage {
   protected get newUser(): SignupUser {
     return this.testData.newUser;
   }
+
+  protected async getValidationMessage(locator: Locator): Promise<string> {
+    return locator.evaluate((el: HTMLInputElement) => el.validationMessage);
+  }
 }
