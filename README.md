@@ -1,5 +1,13 @@
 # 🎭 AE Playwright AI-Augmented BDD Suite
 
+![Playwright](https://img.shields.io/badge/Playwright-1.59.0-45ba4b?logo=playwright&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript&logoColor=white)
+![playwright-bdd](https://img.shields.io/badge/playwright--bdd-8.5.0-brightgreen?logo=cucumber&logoColor=white)
+![Faker.js](https://img.shields.io/badge/%40faker--js%2Ffaker-10.4.0-F7DF1E?logo=javascript&logoColor=black)
+![Allure Reports](https://img.shields.io/badge/Allure_Reports-3.9.0-E85A2B?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgMjJoMjBMMTIgMnoiLz48L3N2Zz4=&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-ESM-339933?logo=nodedotjs&logoColor=white)
+
+
 > A production-grade test automation portfolio project targeting [AutomationExercise.com](https://www.automationexercise.com/) — combining Playwright, TypeScript, BDD, AI Agents and other AI-assisted tooling into a modern, resilient testing framework.
 
 ---
@@ -310,9 +318,9 @@ Output is strictly limited to `pages/`, `fixtures/`, and `test-data/` — step d
 ### Self-Healing Strategy
 
 Test resilience is maintained through two layers:
-- **Resilient Locator Strategy (preventive)** — as mentioned before.Semantic and role-based locators are preferred at authoring time to minimize the chance of locator breakage across UI changes (see Resilient Locator Strategy above).
+- **Resilient Locator Strategy (preventive)** — semantic and role-based locators are preferred at authoring time to minimize the chance of locator breakage across UI changes (see Resilient Locator Strategy above)
   
-- **Playwright Healer Agent (reactive)** — when tests fail, the healer agent executes a self-healing loop to automatically repair them:
+- **Playwright Healer Agent (reactive)** — implemented via playwright-test-healer, this agent runs a semi-automated healing loop on failure:
   1. **Replays** the failing steps to reproduce the failure
   2. **Inspects** the current UI to locate equivalent elements or flows
   3. **Suggests a patch** — this may be a locator update, a wait adjustment, or a data fix, depending on the root cause

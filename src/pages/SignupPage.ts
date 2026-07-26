@@ -1,7 +1,8 @@
 import { BasePage } from "./BasePage.js";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
-import { faker } from "@faker-js/faker";
+import { faker, th } from "@faker-js/faker";
+;
 
 export class SignupPage extends BasePage {
   // ----- signup form elements -------------------
@@ -51,9 +52,7 @@ export class SignupPage extends BasePage {
   }
 
   async getNameValidationMessage(): Promise<string> {
-    return this.newUserNameInput.evaluate((input: HTMLInputElement) => {
-      return input.validationMessage;
-    });
+    return this.getValidationMessage(this.newUserNameInput);
   }
 
   async getExistingEmailMessage(): Promise<string> {
@@ -61,9 +60,7 @@ export class SignupPage extends BasePage {
   }
 
   async getEmailValidationMessage(): Promise<string> {
-    return this.newUserEmailInput.evaluate((input: HTMLInputElement) => {
-      return input.validationMessage;
-    });
+    return this.getValidationMessage(this.newUserEmailInput);
   }
 
   async isEmailInputValid(): Promise<boolean> {
