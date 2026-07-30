@@ -1,14 +1,8 @@
-import {
-  test as base,
-  expect,
-  request as playwrightRequest,
-  type APIRequestContext,
-} from "@playwright/test";
-import { UserFactory, type SignupUser } from "../test-data/UserFactory";
-import { SignupClient } from "../api-clients/signup.client";
-import { ProductClient } from "../api-clients/product.client";
-import { LoginClient } from "../api-clients/login.client";
-
+import { test as base, expect, request as playwrightRequest, type APIRequestContext } from "@playwright/test";
+import { UserFactory, type SignupUser } from "../data/UserFactory";
+import { SignupClient } from "../clients/signup.client";
+import { ProductClient } from "../clients/product.client";
+import { LoginClient } from "../clients/login.client";
 
 type ApiFixtures = {
   apiRequest: APIRequestContext;

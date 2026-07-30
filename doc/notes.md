@@ -56,7 +56,7 @@ Read the feature file at the path below and generate or extend Playwright page o
 Feature file: features/...
 Follow all rules in copilot-instructions.md and .github/prompts/auth-login.prompt.md.
 Inventory existing page objects, fixtures, and test data factories before generating code. Extend existing files if possible, do not duplicate.
-Only update files in pages/, fixtures/ui-fixtures.ts, and test-data/ as needed. Do not generate step definitions or feature files.
+Only update files in pages/, fixtures/ui-fixtures.ts, and data/ as needed. Do not generate step definitions or feature files.
 Provide a summary report of changes and locator confidence.
 
 

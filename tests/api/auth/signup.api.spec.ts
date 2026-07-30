@@ -1,8 +1,9 @@
 import { test, expect } from "../../../src/fixtures/api.fixtures";
-import { SignupClient } from "../../../src/api-clients/signup.client";
-import { UserFactory } from "../../../src/test-data/UserFactory";
+import { SignupClient } from "../../../src/clients/signup.client";
+import { UserFactory } from "../../../src/data/UserFactory";
 
 test.describe("Signup API", () => {
+  
   test("signup with valid payload", async ({ apiRequest, signupClient }) => {
     const payload = SignupClient.createNewUserPayload();
     const response = await apiRequest.post("createAccount", { form: payload });
@@ -12,4 +13,6 @@ test.describe("Signup API", () => {
     const body = await response.json();
     expect(body.responseCode).toBe(201);
   });
+
+  
 });

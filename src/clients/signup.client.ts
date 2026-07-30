@@ -1,5 +1,5 @@
 import type { APIRequestContext, APIResponse } from "@playwright/test";
-import { UserFactory, type SignupUser } from "../test-data/UserFactory";
+import { UserFactory, type SignupUser } from "../data/UserFactory";
 import type { SignupPayload } from "./api.models";
 
 /**
