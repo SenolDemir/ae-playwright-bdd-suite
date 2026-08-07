@@ -36,7 +36,7 @@
 		- [playwright-bdd-generator](#playwright-bdd-generator)
 		- [Self-Healing Strategy](#self-healing-strategy)
 	- [Environment Management](#environment-management)
-	- [Test Data Strategy](#test-data-strategy)
+	- [Test Data Strategy](#data-strategy)
 	- [Getting Started](#getting-started)
 		- [Prerequisites](#prerequisites)
 		- [Recommended VS Code Extensions](#recommended-vs-code-extensions)
@@ -198,14 +198,14 @@ root/
 │   │   ├── navbar.component.ts
 │   │   ├── product-card.component.ts
 │   │   └── ...
-│   ├── api-clients/           # Service/Client Object classes (API layer)
+│   ├── clients/               # Service/Client Object classes (API layer)
 │   │   ├── base.client.ts
 │   │   ├── user.client.ts
 │   │   └── product.client.ts
 │   ├── fixtures/              # Playwright fixture definitions
 │   │   ├── ui.fixtures.ts
 │   │   └── api.fixtures.ts
-│   ├── test-data/             # Faker factories & data interfaces
+│   ├── data/                  # Faker factories & data interfaces
 │   │   └── ...
 │   └── utils/                 # Utility functions and helpers
 │       └── helpers.ts
@@ -312,7 +312,7 @@ Takes a reviewed .feature file from the `_review/` folder as input and handles t
 
 It follow locator strategy to implement resilient locator structure.
 
-Output is strictly limited to `pages/`, `fixtures/`, and `test-data/` — step definitions and feature files are out of scope.
+Output is strictly limited to `pages/`, `fixtures/`, and `data/` — step definitions and feature files are out of scope.
 
 
 ### Self-Healing Strategy

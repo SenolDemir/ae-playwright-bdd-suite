@@ -95,7 +95,7 @@ Do not proceed to DOM Inspection until all four steps are done.
 3. **Inventory existing fixtures** — `read_file` → `fixtures/ui-fixtures.ts` to understand
    the current fixture wiring and `TestData` interface.
 
-4. **Inventory test data factories** — `list_directory` → `test-data/`, then `read_file`
+4. **Inventory test data factories** — `list_directory` → `data/`, then `read_file`
    on relevant factories to check if a factory exists for the domain entity. If a factory
    is needed and missing, note it for generation.
 
@@ -139,8 +139,7 @@ export class ExamplePage extends BasePage {
   private readonly exampleForm: Locator = this.page.locator("...");
 
   // ── Element locators (public readonly) ────────────────────
-  public readonly nameInput: Locator =
-    this.exampleForm.getByPlaceholder("Name");
+  public readonly nameInput: Locator = this.exampleForm.getByPlaceholder("Name");
 
   // ── Methods ───────────────────────────────────────────────
 
@@ -215,7 +214,7 @@ Follow all method and naming conventions from `.github/copilot-instructions.md`.
 
 If the feature file requires domain data not covered by an existing factory:
 
-1. Create an interface in `test-data/` for the data shape.
+1. Create an interface in `data/` for the data shape.
 2. Create a factory class with a static `create*()` method using `@faker-js/faker`.
 3. Follow the existing `UserFactory` pattern.
 
@@ -226,7 +225,7 @@ If the feature file requires domain data not covered by an existing factory:
 | New page object       | `pages/<PageName>.ts`                          | Decision tree → create new       |
 | Extended page object  | Same source path (e.g., `pages/SignupPage.ts`) | Decision tree → extend           |
 | Updated fixtures      | `fixtures/ui-fixtures.ts`                      | New page object was created      |
-| New test data factory | `test-data/<FactoryName>.ts`                   | Feature requires missing factory |
+| New test data factory | `data/<FactoryName>.ts`                        | Feature requires missing factory |
 
 Do NOT generate: step definitions (`steps/`), feature files (`features/`), test
 configuration files, or any file outside the paths listed above.

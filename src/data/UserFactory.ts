@@ -2,11 +2,8 @@ import { faker } from "@faker-js/faker";
 
 /**
  * How the factory is structured:
- * SignupUser (central data for new user)
-     │
-     └── generateSignupPayload(user) 
-              │
-              └──  SignupPayload → (assigns fields forAPI shape) 
+ * UserFactory.generateSignupUser() → SignupUser
+ * SignupClient.toSignupPayload(user) → SignupPayload (API shape)
  */
 
 export const COUNTRIES = [
@@ -44,27 +41,6 @@ export interface SignupUser {
   readonly mobileNumber: string;
 }
 
-export interface SignupPayload {
-  [key: string]: string;
-  name: string;
-  email: string;
-  password: string;
-  title: string;
-  birth_date: string;
-  birth_month: string;
-  birth_year: string;
-  firstname: string;
-  lastname: string;
-  company: string;
-  address1: string;
-  address2: string;
-  country: string;
-  zipcode: string;
-  state: string;
-  city: string;
-  mobile_number: string;
-}
-
 export class UserFactory {
   static randomCountry(): Country {
     return faker.helpers.arrayElement([...COUNTRIES]);
@@ -78,8 +54,7 @@ export class UserFactory {
     return faker.internet.password({
       length: 8,
       memorable: true,
-      pattern:
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
     });
   }
 
@@ -107,40 +82,6 @@ export class UserFactory {
       city: faker.location.city(),
       zipcode: faker.location.zipCode(),
       mobileNumber: faker.phone.number(),
-    };
-  }
-
-  // transforms SignupUser to API's expected shape (payload)
-  static toSignupPayload(
-    user: SignupUser,
-    overrides?: Partial<SignupPayload>,
-  ): SignupPayload {
-    return {
-      name: user.fullName, // reads from SignupUser
-      email: user.email, // reads from SignupUser
-      password: user.password, // ... same for all fields
-      title: user.title,
-      birth_date: user.dayOfBirth ?? "",
-      birth_month: user.monthOfBirth ?? "",
-      birth_year: user.yearOfBirth ?? "",
-      firstname: user.firstName,
-      lastname: user.lastName,
-      company: user.company,
-      address1: user.address1,
-      address2: user.address2,
-      country: user.country,
-      zipcode: user.zipcode,
-      state: user.state,
-      city: user.city,
-      mobile_number: user.mobileNumber,
-      ...overrides,
-      /** ...overrides:
-       * for negative test scenarios, the overrides argument handles it 
-       * without any new factory methods:
-       * Duplicate email test, different title or country
-          const payload = UserFactory.toSignupPayload(user, { email: "existing@test.com" });
-          const payload = UserFactory.toSignupPayload(user, { title: "Mrs", country: "Canada" });
-       */
     };
   }
 }
