@@ -27,7 +27,7 @@
 		- [Resilient Locator Strategy](#resilient-locator-strategy)
 		- [Page Object Model](#page-object-model)
 			- [Component Objects](#component-objects)
-			- [Client Objects (API)](#client-objects-api)
+			- [API Object Model (AOM)](#api-object-model-aom)
 	- [AI Augmentation](#ai-augmentation)
 		- [GitHub Copilot](#github-copilot)
 		- [Playwright MCP (Model Context Protocol)](#playwright-mcp-model-context-protocol)
@@ -36,7 +36,7 @@
 		- [playwright-bdd-generator](#playwright-bdd-generator)
 		- [Self-Healing Strategy](#self-healing-strategy)
 	- [Environment Management](#environment-management)
-	- [Test Data Strategy](#data-strategy)
+	- [Test Data Strategy](#test-data-strategy)
 	- [Getting Started](#getting-started)
 		- [Prerequisites](#prerequisites)
 		- [Recommended VS Code Extensions](#recommended-vs-code-extensions)
@@ -81,7 +81,7 @@ The project was built without a formal requirements document. All user stories a
 | Language | [TypeScript](https://www.typescriptlang.org/) (strict mode) |
 | BDD Layer | [playwright-bdd](https://vitalets.github.io/playwright-bdd/) |
 | UI Pattern | Page Object Model (POM) |
-| API Testing | Playwright built-in `APIRequestContext` + API Client Object Layer |
+| API Testing | Playwright built-in `APIRequestContext` + API Object Model |
 | Test Data | [@faker-js/faker](https://fakerjs.dev/) |
 | Env Management | [dotenv](https://github.com/motdotla/dotenv) |
 | AI Augmentation | GitHub Copilot + Playwright Agents + Playwright MCP |
@@ -91,7 +91,7 @@ The project was built without a formal requirements document. All user stories a
 
 ## Architecture Overview
 
-The framework is organized into distinct layers, each with well-defined responsibilities. UI tests flow from Gherkin feature files through step definitions into the Page Object Model, while API tests use Playwright's native spec structure backed by the Client Object layer. Both layers share common supporting utilities.
+The framework is organized into distinct layers, each with well-defined responsibilities. UI tests flow from Gherkin feature files through step definitions into the Page Object Model, while API tests use Playwright's native spec structure backed by the API Object layer. Both layers share common supporting utilities.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -111,7 +111,7 @@ The framework is organized into distinct layers, each with well-defined responsi
 └──────────────────┬──────────────┘    └──────────────┬──────────────────┘
                    │                                  │
 ┌──────────────────▼──────────────┐    ┌──────────────▼──────────────────┐
-│    Component Objects            │    │      Client Objects.            │
+│    Component Objects            │    │      API Objects Model          │
 │  Reusable UI fragment classes   │    │  clients/ wrapping              │
 │  components/.                   │    │  APIRequestContext              │
 └──────────────────┬──────────────┘    └───────────────┬─────────────────┘
@@ -144,17 +144,17 @@ Each significant page of the application has a corresponding Page Object class. 
 - Exposing high-level action methods (e.g., `login(email, password)`)
 - Keeping assertions out of the POM layer (separation of concerns)
 
-**Component Object Layer (`/components`)**  
+**Component Object Model (`/components`)**  
 Reusable UI fragments that appear across multiple pages are extracted into Component Object classes. This avoids duplicating locator definitions and interaction logic across multiple Page Objects. 
 
 **API Tests (`/api`)**  
-API tests are implemented using Playwright's native `test()` structure (`.spec.ts` files),  using Playwright's built-in `APIRequestContext`. They do not use BDD/Gherkin — instead, they follow a direct spec style that is more natural for HTTP-level assertions without the overhead of mapping Gherkin steps to request/response logic. All HTTP interactions are delegeted to the **Client Object layer** under `clients/`.
+API tests are implemented using Playwright's native `test()` structure (`.spec.ts` files),  using Playwright's built-in `APIRequestContext`. They do not use BDD/Gherkin — instead, they follow a direct spec style that is more natural for HTTP-level assertions without the overhead of mapping Gherkin steps to request/response logic. All HTTP interactions are delegeted to the **API Object Model** under `clients/`.
 
-**Client Object Layer - API Clients(`/clients`)**  
-Provides a clean abstraction over Playwright's `APIRequestContext`. Each domain (Users, Products, Cart, etc.) has a dedicated Client class with strongly typed request/response methods, reused across both API spec tests and UI test setup hooks.
+**API Object Model (`/clients`)**  
+Provides a clean abstraction over Playwright's `APIRequestContext`. Each domain (Users, Products, Cart, etc.) has a dedicated client class with strongly typed request/response methods, reused across both API spec tests and UI test setup hooks.
 
 **Fixtures (`/fixtures`)**  
-Playwright fixtures extend the base test context to inject Page Objects, Client Objects, and shared configuration — keeping step definitions and spec files clean and enabling dependency injection across the suite.
+Playwright fixtures extend the base test context to inject Page Objects, API Client Objects, and shared configuration — keeping step definitions and spec files clean and enabling dependency injection across the suite.
 
 ---
 
@@ -198,7 +198,7 @@ root/
 │   │   ├── navbar.component.ts
 │   │   ├── product-card.component.ts
 │   │   └── ...
-│   ├── clients/               # Service/Client Object classes (API layer)
+│   ├── clients/               # Service/Client Object classes
 │   │   ├── base.client.ts
 │   │   ├── user.client.ts
 │   │   └── product.client.ts
@@ -255,9 +255,9 @@ POMs follow strict separation of concerns:
 #### Component Objects 
 Component Objects extend the POM pattern by modelling recurring UI fragments as independent, reusable classes. This pattern significantly reduces locator duplication across the suite and keeps Page Object classes focused on page-level flows rather than fragment-level implementation details.
 
-#### Client Objects (API)
+#### API Object Model (AOM)
 Mirrors the POM philosophy applied to API interactions:
-- Each `*Client` class encapsulates all API calls for a given domain.
+- Each `*client` class encapsulates all API calls for a given domain.
 - Client classes are reusable across both API tests and UI test fixtures (e.g., pre-creating a user via API before a UI scenario).
 
 ---

@@ -1,6 +1,7 @@
 import { test, expect } from "../../../src/fixtures/api.fixtures";
 import { SignupClient } from "../../../src/clients/signup.client";
-import { UserFactory } from "../../../src/data/UserFactory";
+
+
 
 test.describe("Signup API CRUD Test", () => {
 
@@ -33,7 +34,7 @@ test.describe("Signup API CRUD Test", () => {
         email: payload.email,
         password: payload.password,
       });
-      
+
       const response = await apiRequest.put("updateAccount", { form: updatedPayload });
       console.log(await response.json());
       expect(response.status()).toBe(200);
