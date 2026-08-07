@@ -44,4 +44,14 @@ export class SignupClient {
    * const existingEmailPayload = SignupClient
    *        .toSignupPayload(user, { email: "existing@test.com" });
    */
+
+
+  async getUserDetailsByEmail(email: string): Promise<APIResponse> {
+    return this.request.get("getUserDetailByEmail", {
+      params: { email },
+    });
+  }
+
+
+  
 }
