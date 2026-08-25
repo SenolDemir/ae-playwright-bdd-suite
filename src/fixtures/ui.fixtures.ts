@@ -4,7 +4,7 @@ import { SignupPage } from "../pages/SignupPage";
 import { HomePage } from "../pages/HomePage";
 import { ProductPage } from "../pages/ProductPage";
 import { ProductDetailPage } from "../pages/ProductDetailPage";
-import { UserFactory, type SignupUser } from "../test-data/UserFactory";
+import { UserFactory, type SignupUser } from "../data/UserFactory";
 import { LoginPage } from "../pages/LoginPage";
 import { AccountSetupPage } from "../pages/AccountSetupPage";
 
@@ -43,7 +43,7 @@ export const test = base.extend<Fixtures>({
     const accountSetupPage = new AccountSetupPage(page, testData);
     await use(accountSetupPage);
   },
-  
+
   loginPage: async ({ page, testData }, use) => {
     const loginPage = new LoginPage(page, testData);
     await use(loginPage);

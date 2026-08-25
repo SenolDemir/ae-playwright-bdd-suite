@@ -1,36 +1,60 @@
 import { test, expect } from "../../../src/fixtures/api.fixtures";
-import { SignupClient } from "../../../src/api-clients/signup.client";
+import { SignupClient } from "../../../src/clients/signup.client";
 
 test.describe("Login API", () => {
-
-test("login with valid payload", async ({ apiRequest, loginClient}) => {
-
-
+  test("login with valid payload", async ({ apiRequest, loginClient }) => {
     const response = await apiRequest.post("verifyLogin", {
       form: {
         email: process.env.TEST_USER_EMAIL || "",
         password: process.env.TEST_USER_PASSWORD || "",
       },
     });
-      console.log(await response.json());
-      expect (response.status()).toBe(200);
+    console.log(await response.json());
+    expect(response.status()).toBe(200);
+  });
+
+  test("login with valid payload with API Object", async ({ apiRequest, loginClient }) => {
+    const response = await loginClient.login();
+    console.log(await response.json());
+    expect(response.status()).toBe(200);
+  });
+
+  test("verify login without email parameter", async ({ apiRequest, loginClient }) => {
+    const response = await loginClient.login({ email: "" });
+    const body = await response.json();
+    console.log(await response.json());
+
+    expect(response.status()).toBe(200);
+    expect(response.statusText()).toBe("OK");
+    expect(body.responseCode).toBe(404);
+    expect(body.message).toBe("User not found!");
+  });
+
+  test("verify login with invlaid email parameter", async ({ apiRequest, loginClient }) => {
+    const response = await loginClient.login({ email: "not-an-email" });
+    const body = await response.json();
+    console.log(await response.json());
+
+    expect(response.status()).toBe(200);
+    expect(response.statusText()).toBe("OK");
+    expect(body.responseCode).toBe(404);
+    expect(body.message).toBe("User not found!");
+  });
+
+
+  test("verify login with invlaid password parameter", async ({ apiRequest, loginClient }) => {
+    const response = await loginClient.login({ password: "not-a-password" });
+    const body = await response.json();
+    console.log(await response.json());
+
+    expect(response.status()).toBe(200);
+    expect(response.statusText()).toBe("OK");
+    expect(body.responseCode).toBe(404);
+    expect(body.message).toBe("User not found!");
+  });
+
+
+
 
 
 });
-
-test("login with valid payload with API Object", async ({ apiRequest, loginClient}) => {
-
-      const response = await loginClient.login();
-      console.log(await response.json());
-      expect(response.status()).toBe(200);
-});
-
-
-
-
-
-});
-  
-
-
-

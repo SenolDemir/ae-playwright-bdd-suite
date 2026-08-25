@@ -1,16 +1,9 @@
 import type { APIRequestContext, APIResponse } from "@playwright/test";
 import { expect } from "@playwright/test";
+import type { LoginPayload } from "./api.models";
 
 
-export type LoginPayload = {
-  email: string;
-  password: string;
-};
 
-export type LoginResponse = {
-  token?: string;
-  message?: string;
-};
 
 export class LoginClient {
   private readonly request: APIRequestContext;

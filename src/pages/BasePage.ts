@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test";
 import type { Locator, Page } from "@playwright/test";
 import type { TestData } from "../fixtures/ui.fixtures.js";
-import type { SignupUser } from "../test-data/UserFactory.js";
+import type { SignupUser } from "../data/UserFactory.js";
 import { NavBar } from "../components/navbar.component.js";
 
 /**

@@ -23,7 +23,7 @@ This project is an AI-augmented test suite using Playwright for end-to-end testi
 - Use camelCase for variables, functions, and methods
 - Prefix private class members with underscore (\_)
 - Use ALL_CAPS for constants
-- Use kebab-case for folder and directory names (e.g. test-data, page-objects, step-definitions)
+- Use kebab-case for folder and directory names (e.g. data, page-objects, step-definitions)
 
 ## TypeScript Guidelines
 
@@ -47,7 +47,7 @@ This project is an AI-augmented test suite using Playwright for end-to-end testi
 - Step definitions live in `steps/`
 - Tests (feature files) live in `features/`
 - Shared fixtures live in `fixtures/`
-- Test data factories and interfaces live in `test-data/`
+- Test data factories and interfaces live in `data/`
 - Utility functions live in `utils/`
 
 ### Page Object Rules
@@ -62,13 +62,14 @@ This project is an AI-augmented test suite using Playwright for end-to-end testi
 ### Locator Strategy
 
 **Priority Order (Accessibility-First):**
+
 1. `getByRole(role, { name })`
 2. `getByLabel('...')`
 3. `getByPlaceholder('...')`
 4. `getByTestId('...')` for data-testid attributes only
 5. `locator('[data-qa="..."]')` for stable data-qa attributes
-6–8. `getByText('...')`, `getByAltText('...')`, `getByTitle('...')`
-9–11. `locator('[name="..."]')`, `locator('#id')`, CSS selectors (last resort)
+   6–8. `getByText('...')`, `getByAltText('...')`, `getByTitle('...')`
+   9–11. `locator('[name="..."]')`, `locator('#id')`, CSS selectors (last resort)
 
 Never use: XPath, hashed class names, `.nth()`, `.first()`, `.last()`, `.or()` chains
 
@@ -79,7 +80,7 @@ Never use: XPath, hashed class names, `.nth()`, `.first()`, `.last()`, `.or()` c
 ## Test Data Generation
 
 - Use `@faker-js/faker` library for generating realistic test data
-- Create factory functions in `test-data/` directory for domain-specific data
+- Create factory functions in `data/` directory for domain-specific data
 - Factory functions should return typed objects matching domain interfaces
 - Prefer factories over inline faker calls in step definitions
   - ✅ `const user = UserFactory.createValidUser()`
