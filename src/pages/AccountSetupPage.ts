@@ -181,6 +181,7 @@ export class AccountSetupPage extends BasePage {
   async expectFieldErrorMessage(fieldName: string, errorMessage: string): Promise<void> {
     const locator = this.getFieldLocator(fieldName);
     const validationMessage = await locator.evaluate((el: HTMLInputElement) => el.validationMessage);
-    expect(validationMessage).toBe(errorMessage);
+    // normalize Linux Chromium vs macOS Chrome native message wording
+    expect(validationMessage.replace("fill out", "fill in")).toBe(errorMessage);
   }
 }

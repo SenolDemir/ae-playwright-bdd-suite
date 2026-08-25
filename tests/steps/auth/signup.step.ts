@@ -71,13 +71,13 @@ When("I click the {string} button on the Login\\/Signup page", async ({ signupPa
 
 Then("I should see the name field error message {string}", async ({ signupPage }, expectedMessage: string) => {
   const actualMessage = await signupPage.getNameValidationMessage();
-  console.log(actualMessage);
-  expect(actualMessage).toBe(expectedMessage);
+  // normalize Linux Chromium vs macOS Chrome native message wording
+  expect(actualMessage.replace("fill out", "fill in")).toBe(expectedMessage);
 });
 
 Then("I should see the email field error message {string}", async ({ signupPage }, expectedMessage: string) => {
   const actualMessage = await signupPage.getEmailValidationMessage();
-  expect(actualMessage).toBe(expectedMessage);
+  expect(actualMessage.replace("fill out", "fill in")).toBe(expectedMessage);
 });
 
 Then("I leave the name field empty", async ({ signupPage }) => {

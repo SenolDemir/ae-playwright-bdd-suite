@@ -4,15 +4,12 @@ import { SignupPage } from "../pages/SignupPage";
 import { HomePage } from "../pages/HomePage";
 import { ProductPage } from "../pages/ProductPage";
 import { ProductDetailPage } from "../pages/ProductDetailPage";
-import { UserFactory, type SignupUser } from "../data/UserFactory";
+import { UserFactory } from "../data/UserFactory";
+import type { TestData } from "../types/fixture.types";
 import { LoginPage } from "../pages/LoginPage";
 import { AccountSetupPage } from "../pages/AccountSetupPage";
 
-export interface TestData {
-  newUser: SignupUser; // registration, login, checkout
-  // product?: ProductData; // add when build cart/order tests
-  // order?: OrderData;     // add when build order history tests
-}
+export type { TestData };
 
 type Fixtures = {
   // ...set types of your custom fixtures

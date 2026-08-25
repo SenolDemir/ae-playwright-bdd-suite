@@ -163,52 +163,74 @@ Playwright fixtures extend the base test context to inject Page Objects, API Cli
 ```
 root/
 ├── .github/
-│   ├── agents/
-│   │   ├── playwright-bdd-planner.md
-│   │   ├── playwright-bdd-generator.md
-│   │   ├── playwright-test-generator.md
-│   │   ├── playwright-test-healer.md
-│   │   └── playwright-test-planner.md
-│   └── prompts/
-│       ├── debugger.prompt.md
-│       └── locator.prompt.md
+│   ├── agents/                # Custom Copilot agent definitions
+│   │   ├── playwright-bdd-planner.agent.md
+│   │   ├── playwright-bdd-generator.agent.md
+│   │   ├── playwright-test-generator.agent.md
+│   │   ├── playwright-test-healer.agent.md
+│   │   └── playwright-test-planner.agent.md
+│   ├── prompts/               # Reusable Copilot prompt files
+│   │   ├── auth-login.prompt.md
+│   │   ├── consent-overlay.prompt.md
+│   │   ├── debugger.prompt.md
+│   │   └── locator.prompt.md
+│   ├── workflows/             # GitHub Actions CI workflows
+│   │   ├── ci-e2e-test.yml
+│   │   └── copilot-setup-steps.yml
+│   └── copilot-instructions.md
 │
 ├── tests/
 │   ├── features/              # Gherkin feature files (BDD / UI tests)
 │   │   ├── auth/
+│   │   │   ├── account-setup.feature
+│   │   │   ├── login.feature
+│   │   │   └── signup.feature
 │   │   └── product/
+│   │       └── product-catalog.feature
 │   ├── steps/                 # Step definitions (BDD / UI tests)
 │   │   ├── auth/
+│   │   │   ├── account-setup.step.ts
+│   │   │   ├── login.steps.ts
+│   │   │   └── signup.step.ts
 │   │   └── product/
+│   │       └── product-catalog.ts
 │   ├── api/                   # Playwright native API spec tests
-│   │   ├── signup.spec.ts
-│   │   └── products.spec.ts
+│   │   ├── auth/
+│   │   │   ├── login.api.spec.ts
+│   │   │   └── signup.api.spec.ts
+│   │   ├── product/
+│   │   │   └── product.api.spec.ts
+│   │   └── seed.spec.ts
 │   └── hooks/                 # Global and test-specific hooks
-│       └── hooks.ts
+│       └── Hook.ts
 │
 ├── src/
 │   ├── pages/                 # Page Object Model classes
-│   │   ├── base.page.ts
-│   │   ├── login.page.ts
-│   │   ├── register.page.ts
-│   │   ├── products.page.ts
-│   │   └── ...
+│   │   ├── BasePage.ts
+│   │   ├── HomePage.ts
+│   │   ├── LoginPage.ts
+│   │   ├── SignupPage.ts
+│   │   ├── AccountSetupPage.ts
+│   │   ├── ProductPage.ts
+│   │   └── ProductDetailPage.ts
 │   ├── components/            # Component Object classes
-│   │   ├── base.component.ts
-│   │   ├── navbar.component.ts
-│   │   ├── product-card.component.ts
-│   │   └── ...
-│   ├── clients/               # Service/Client Object classes
+│   │   └── navbar.component.ts
+│   ├── clients/               # API Object Model — one client per domain
 │   │   ├── base.client.ts
-│   │   ├── user.client.ts
+│   │   ├── login.client.ts
+│   │   ├── signup.client.ts
 │   │   └── product.client.ts
 │   ├── fixtures/              # Playwright fixture definitions
 │   │   ├── ui.fixtures.ts
 │   │   └── api.fixtures.ts
 │   ├── data/                  # Faker factories & data interfaces
-│   │   └── ...
+│   │   └── UserFactory.ts
+│   ├── types/                 # Shared TypeScript type definitions
+│   │   ├── api.types.ts
+│   │   ├── fixture.types.ts
+│   │   └── user.types.ts
 │   └── utils/                 # Utility functions and helpers
-│       └── helpers.ts
+│       └── page.context.ts
 │
 ├── reports/                   # Generated test reports (git-ignored)
 │   ├── playwright-html/

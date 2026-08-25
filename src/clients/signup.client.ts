@@ -1,6 +1,7 @@
 import type { APIRequestContext, APIResponse } from "@playwright/test";
-import { UserFactory, type SignupUser } from "../data/UserFactory";
-import type { SignupPayload } from "./api.models";
+import { UserFactory } from "../data/UserFactory";
+import type { SignupUser } from "../types/user.types";
+import type { SignupPayload } from "../types/api.types";
 
 /**
  * SignupClient encapsulates all signup-related API calls and payload templates.
@@ -45,13 +46,9 @@ export class SignupClient {
    *        .toSignupPayload(user, { email: "existing@test.com" });
    */
 
-
   async getUserDetailsByEmail(email: string): Promise<APIResponse> {
     return this.request.get("getUserDetailByEmail", {
       params: { email },
     });
   }
-
-
-  
 }

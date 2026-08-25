@@ -10,10 +10,7 @@ import type { Page, TestInfo } from "@playwright/test";
  *   - `page-title`  — the document title at the moment of failure
  *   - `captured-at` — ISO 8601 timestamp of the capture
  */
-export async function capturePageContext(
-  page: Page,
-  testInfo: TestInfo,
-): Promise<void> {
+export async function capturePageContext(page: Page, testInfo: TestInfo): Promise<void> {
   const [title] = await Promise.allSettled([page.title()]);
 
   testInfo.annotations.push({

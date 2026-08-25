@@ -1,5 +1,5 @@
 import { After, Before } from "../../src/fixtures/ui.fixtures.js";
-import { capturePageContext } from "../../src/utils/page-context.js";
+import { capturePageContext } from "../../src/utils/page.context.js";
 
 Before(async ({ page }) => {
   await page.goto("/");

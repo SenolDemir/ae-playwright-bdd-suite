@@ -2,8 +2,6 @@ import { sign } from "node:crypto";
 import { Given, When, Then, expect } from "../../../src/fixtures/ui.fixtures.ts";
 import { LoginPage } from "../../../src/pages/LoginPage.ts";
 
-
-
 Then("I should be on the login page", async ({ loginPage }) => {
   await loginPage.expectLoginPageVisible();
 });
@@ -45,13 +43,16 @@ Then("I should see an error message {string}", async ({ loginPage }, errorMessag
   await expect(loginPage.loginErrorMessage).toHaveText(errorMessage);
 });
 
-
 Then("the email field should show a validation error as {string}", async ({ loginPage }, expectedMessage: string) => {
   const actualMessage = await loginPage.getLoginEmailValidationMessage();
-  expect(actualMessage).toBe(expectedMessage);
+  // normalize Linux Chromium vs macOS Chrome native message wording
+  expect(actualMessage.replace("fill out", "fill in")).toBe(expectedMessage);
 });
 
-Then("the password field should show a validation error as {string}", async ({ loginPage }, expectedMessage: string) => {
-  const actualMessage = await loginPage.getLoginPasswordValidationMessage();
-  expect(actualMessage).toBe(expectedMessage);
-});
+Then(
+  "the password field should show a validation error as {string}",
+  async ({ loginPage }, expectedMessage: string) => {
+    const actualMessage = await loginPage.getLoginPasswordValidationMessage();
+    expect(actualMessage.replace("fill out", "fill in")).toBe(expectedMessage);
+  },
+);

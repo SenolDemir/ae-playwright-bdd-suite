@@ -1,6 +1,3 @@
-import type { APIRequestContext, APIResponse } from "@playwright/test";
-
-
 export interface SignupPayload {
   [key: string]: string;
   name: string;
@@ -22,7 +19,6 @@ export interface SignupPayload {
   mobile_number: string;
 }
 
-
 export type LoginPayload = {
   email: string;
   password: string;
@@ -32,5 +28,3 @@ export type LoginResponse = {
   token?: string;
   message?: string;
 };
-
-
