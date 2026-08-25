@@ -59,7 +59,7 @@ Feature: User Registration Account Setup  Validation
                   When I complete the account information form with valid data
                   And I leave the "<field>" field empty
                   And I submit the registration
-                  Then I should see the "<field>" field error message "Please fill in this field."
+                  Then I should see the "<field>" field error message "Please fill out this field."
 
                   Examples:
                         | field         |

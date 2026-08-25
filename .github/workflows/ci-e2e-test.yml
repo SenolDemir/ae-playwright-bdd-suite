@@ -21,7 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BASE_URL:  ${{ vars.BASE_URL || 'https://www.automationexercise.com/'}}
+      API_BASE_URL: ${{ vars.API_BASE_URL || 'https://www.automationexercise.com/api/' }}
       BROWSER_TYPE: ${{ vars.BROWSER_TYPE || 'chromium'}}
+      TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+      TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
      
     steps:
       - name: Checkout repository
@@ -75,7 +78,7 @@ jobs:
  
       - name: Generate Allure report
         if: ${{ !cancelled() }}
-        run: npx allure generate reports/allure-results --clean -o reports/allure-report
+        run: npx allure generate reports/allure-results --output reports/allure-report --clean
  
       - name: Upload Allure HTML report
         uses: actions/upload-artifact@v4

@@ -23,10 +23,8 @@ export class ProductDetailPage extends BasePage {
   public readonly addToCartButton: Locator = this.page.getByRole("button", {
     name: /Add to cart/i,
   });
-  public readonly notFoundHeading: Locator = this.page.getByRole("heading", {
-    name: /Page not found/i,
-  });
-  public readonly urlInfo: Locator = this.page.getByText(/product_details\/invalid-id/i);
+  // App renders an empty product template for invalid IDs — no proper 404 page exists
+  public readonly notFoundHeading: Locator = this.productDetailSection.getByRole("heading");
 
   // ── Review form locators ─────────────────────────────
 
@@ -40,8 +38,8 @@ export class ProductDetailPage extends BasePage {
   // ── Methods ─────────────────────────────────────────
 
   async expectProductNotFoundVisible(): Promise<void> {
-    await expect(this.notFoundHeading).toBeVisible();
-    await expect(this.urlInfo).toBeVisible();
+    await expect(this.notFoundHeading).toHaveText("");
+    await expect(this.page).toHaveURL(/\/product_details\/\d+/);
   }
 
   public async verifyProductDetails(expected: Record<string, string>): Promise<void> {
