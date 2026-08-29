@@ -13,7 +13,7 @@ This project is an AI-augmented test suite using Playwright for end-to-end testi
 - **Design Pattern**: Page Object Model (POM)
 - **Test Data Generation**: @faker-js/faker
 - **AI Augmentation**: GitHub Copilot + Playwright MCP for code suggestions and test generation
-- **Reporting**: Playwright built-in reports (current) + Allure Reports (planned)
+- **Reporting**: Playwright built-in reports + Allure Reports
 
 # Project general coding standards
 

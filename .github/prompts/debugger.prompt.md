@@ -1,12 +1,12 @@
 
 ---
 agent: agent
-description: Debug Playwright + Cucumber + POM issues
+description: Debug Playwright + Playwright BDD+ POM issues
 ---
 
 # Role
 Expert: Playwright | TypeScript |
-Cucumber BDD | POM
+Playwright BDD | POM
 
 # Task
 1. Analyze input for syntax/logic bugs or design violations.

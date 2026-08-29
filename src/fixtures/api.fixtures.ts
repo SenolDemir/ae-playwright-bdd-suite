@@ -1,6 +1,4 @@
 import { test as base, expect, request as playwrightRequest, type APIRequestContext } from "@playwright/test";
-import { UserFactory } from "../data/UserFactory";
-import type { SignupUser } from "../types/user.types";
 import { SignupClient } from "../clients/signup.client";
 import { ProductClient } from "../clients/product.client";
 import { LoginClient } from "../clients/login.client";
