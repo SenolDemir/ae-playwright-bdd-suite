@@ -206,13 +206,13 @@ root/
 │
 ├── src/
 │   ├── pages/                 # Page Object Model classes
-│   │   ├── BasePage.ts
-│   │   ├── HomePage.ts
-│   │   ├── LoginPage.ts
-│   │   ├── SignupPage.ts
-│   │   ├── AccountSetupPage.ts
-│   │   ├── ProductPage.ts
-│   │   └── ProductDetailPage.ts
+│   │   ├── base.page.ts
+│   │   ├── home.page.ts
+│   │   ├── login.page.ts
+│   │   ├── signup.page.ts
+│   │   ├── account-setup.page.ts
+│   │   ├── product.page.ts
+│   │   └── product-detail.page.ts
 │   ├── components/            # Component Object classes
 │   │   └── navbar.component.ts
 │   ├── clients/               # API Object Model — one client per domain

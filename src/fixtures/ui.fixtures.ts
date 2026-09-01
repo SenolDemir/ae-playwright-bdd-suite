@@ -1,13 +1,13 @@
 import { expect } from "@playwright/test";
 import { test as base, createBdd } from "playwright-bdd";
-import { SignupPage } from "../pages/SignupPage";
-import { HomePage } from "../pages/HomePage";
-import { ProductPage } from "../pages/ProductPage";
-import { ProductDetailPage } from "../pages/ProductDetailPage";
+import { SignupPage } from "../pages/signup.page";
+import { HomePage } from "../pages/home.page";
+import { ProductPage } from "../pages/product.page";
+import { ProductDetailPage } from "../pages/product-detail.page";
 import { UserFactory } from "../data/UserFactory";
 import type { TestData } from "../types/fixture.types";
-import { LoginPage } from "../pages/LoginPage";
-import { AccountSetupPage } from "../pages/AccountSetupPage";
+import { LoginPage } from "../pages/login.page";
+import { AccountSetupPage } from "../pages/account-setup.page";
 
 export type { TestData };
 
