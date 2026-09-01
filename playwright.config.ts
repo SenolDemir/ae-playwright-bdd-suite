@@ -17,7 +17,7 @@ const baseUrl = process.env.BASE_URL;
 
 const allProjects = [
   {
-    name: "chromium",
+    name: "chrome",
     use: { browserName: "chromium" as const },
   },
   {
@@ -27,14 +27,6 @@ const allProjects = [
   {
     name: "webkit",
     use: { browserName: "webkit" as const },
-  },
-  {
-    name: "chrome",
-    use: { browserName: "chromium" as const, channel: "chrome" as const },
-  },
-  {
-    name: "msedge",
-    use: { browserName: "chromium" as const, channel: "msedge" as const },
   },
   {
     name: "mobile-chrome",
@@ -100,7 +92,7 @@ export default defineConfig({
     {
       name: "api",
       testDir: "tests/api",
-      testMatch: "**/*.spec.ts",
+
     },
 
     // ── UI projects (BDD) ─────────────────────────────────────

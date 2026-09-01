@@ -3,6 +3,7 @@ import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
 export class AccountSetupPage extends BasePage {
+  
   // ----------- account information form elements -------------------------
 
   public readonly enterAccountInformationHeading: Locator = this.page.getByRole("heading", {
