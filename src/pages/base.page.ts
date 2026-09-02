@@ -1,31 +1,18 @@
-import { expect } from "@playwright/test";
+// src/pages/base.page.ts
 import type { Locator, Page } from "@playwright/test";
-import type { TestData } from "../types/fixture.types.js";
-import type { SignupUser } from "../types/user.types.js";
 import { NavBar } from "../components/navbar.component.js";
 
 /**
- * BasePage class represents common functionality for all page objects
+ * BasePage — common functionality shared by all page objects.
+ * Does not carry test data; subclasses that need data declare it themselves.
  */
 export class BasePage {
   protected readonly page: Page;
-  protected readonly testData: TestData;
   public readonly nav: NavBar;
 
-  /**
-   * Constructs a BasePage instance
-   * @param page - The Playwright Page object
-   * @param testData - The shared test data
-   */
-  constructor(page: Page, testData: TestData) {
-    this.page = page; // injected — caller owns it
-    this.testData = testData; // injected — caller owns it
-    this.nav = new NavBar(page); // composed — BasePage owns it
-  }
-
-  // Shared helper - available to all page objects
-  protected get newUser(): SignupUser {
-    return this.testData.newUser;
+  constructor(page: Page) {
+    this.page = page;
+    this.nav = new NavBar(page);
   }
 
   protected async getValidationMessage(locator: Locator): Promise<string> {

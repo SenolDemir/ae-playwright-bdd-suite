@@ -1,9 +1,17 @@
+import type { Page } from "@playwright/test";
 import { BasePage } from "./base.page.js";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
+import type { SignupData } from "../types/signup.types.js";
 
 export class AccountSetupPage extends BasePage {
-  
+  constructor(
+    page: Page,
+    private readonly signupData: SignupData,
+  ) {
+    super(page);
+  }
+
   // ----------- account information form elements -------------------------
 
   public readonly enterAccountInformationHeading: Locator = this.page.getByRole("heading", {
@@ -77,13 +85,13 @@ export class AccountSetupPage extends BasePage {
 
   async selectRandomDateOfBirth(): Promise<void> {
     await this.daysDropdown.selectOption({
-      label: this.newUser.dayOfBirth,
+      label: this.signupData.dayOfBirth,
     });
     await this.monthsDropdown.selectOption({
-      label: this.newUser.monthOfBirth,
+      label: this.signupData.monthOfBirth,
     });
     await this.yearsDropdown.selectOption({
-      label: this.newUser.yearOfBirth,
+      label: this.signupData.yearOfBirth,
     });
   }
 
@@ -92,25 +100,25 @@ export class AccountSetupPage extends BasePage {
       name: "Country",
     });
     await countryDropdown.click();
-    await countryDropdown.selectOption({ label: this.newUser.country });
+    await countryDropdown.selectOption({ label: this.signupData.country });
   }
 
   async completeAccountSetupForm(): Promise<void> {
-    await this.selectTitle(this.newUser.title);
-    await this.passwordInput.fill(this.newUser.password);
+    await this.selectTitle(this.signupData.title);
+    await this.passwordInput.fill(this.signupData.password);
     await this.selectRandomDateOfBirth();
     await this.newsletterCheckbox.check();
     await this.offersCheckbox.check();
-    await this.firstNameInput.fill(this.newUser.firstName);
-    await this.lastNameInput.fill(this.newUser.lastName);
-    await this.companyInput.fill(this.newUser.company);
-    await this.address1Input.fill(this.newUser.address1);
-    await this.address2Input.fill(this.newUser.address2);
+    await this.firstNameInput.fill(this.signupData.firstName);
+    await this.lastNameInput.fill(this.signupData.lastName);
+    await this.companyInput.fill(this.signupData.company);
+    await this.address1Input.fill(this.signupData.address1);
+    await this.address2Input.fill(this.signupData.address2);
     await this.selectCountry();
-    await this.stateInput.fill(this.newUser.state);
-    await this.cityInput.fill(this.newUser.city);
-    await this.zipcodeInput.fill(this.newUser.zipcode);
-    await this.mobileNumberInput.fill(this.newUser.mobileNumber);
+    await this.stateInput.fill(this.signupData.state);
+    await this.cityInput.fill(this.signupData.city);
+    await this.zipcodeInput.fill(this.signupData.zipcode);
+    await this.mobileNumberInput.fill(this.signupData.mobileNumber);
   }
 
   async submitAccountSetup(): Promise<void> {

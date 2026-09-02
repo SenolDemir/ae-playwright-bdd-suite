@@ -3,7 +3,6 @@ import { expect, type Locator, type Page } from "@playwright/test";
 // components/NavBar.ts
 
 export class NavBar {
-  
   public readonly homePageLink: Locator = this.page.getByRole("link", { name: "Home" });
   public readonly productsLink: Locator = this.page.getByRole("link", { name: "Products" });
   public readonly cartLink: Locator = this.page.getByRole("link", { name: "Cart" });
@@ -13,9 +12,7 @@ export class NavBar {
   public readonly deleteAccountLink: Locator = this.page.getByRole("link", { name: "Delete Account" });
   public readonly loggedInAsText: Locator = this.page.getByText(/Logged in as/i);
 
-  constructor(private readonly page: Page) {
-    
-  }
+  constructor(private readonly page: Page) {}
 
   async navigateTo(pageName: string): Promise<void> {
     pageName = pageName.trim();
@@ -45,12 +42,18 @@ export class NavBar {
     return text;
   }
 
+  async expectLoggedIn(fullName?: string): Promise<void> {
+    await expect(this.page).toHaveURL(process.env.BASE_URL || "https://www.automationexercise.com/");
+    await expect(this.loggedInAsText).toBeVisible();
+  }
+
   async logout(): Promise<void> {
     await this.logoutLink.click();
   }
 
   async expectNotLoggedIn(): Promise<void> {
-    await expect(this.page).toHaveURL(process.env.BASE_URL || "https://www.automationexercise.com/");
+    const baseUrl = process.env.BASE_URL ?? "https://www.automationexercise.com";
+    await expect(this.page).toHaveURL(new URL("/login", baseUrl).toString());
     await expect(this.signupOrLoginLink).toBeVisible();
     await expect(this.logoutLink).toHaveCount(0);
     await expect(this.deleteAccountLink).toHaveCount(0);

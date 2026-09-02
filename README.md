@@ -224,11 +224,11 @@ root/
 │   │   ├── ui.fixtures.ts
 │   │   └── api.fixtures.ts
 │   ├── data/                  # Faker factories & data interfaces
-│   │   └── UserFactory.ts
+│   │   └── signup.generator.ts
 │   ├── types/                 # Shared TypeScript type definitions
 │   │   ├── api.types.ts
 │   │   ├── fixture.types.ts
-│   │   └── user.types.ts
+│   │   └── signup.types.ts
 │   └── utils/                 # Utility functions and helpers
 │       └── page.context.ts
 │

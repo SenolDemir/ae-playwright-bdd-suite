@@ -1,11 +1,13 @@
 import { Given, When, Then, expect } from "../../../src/fixtures/ui.fixtures.ts";
 import { faker } from "@faker-js/faker";
+import { SignupDataGenerator } from "../../../src/data/signup.generator.js";
 
 const NAME_TOKENS: Record<string, () => string> = {
   "[too_long]": () => faker.string.alpha({ length: 100 }),
 };
 
 const EMAIL_TOKENS: Record<string, () => string> = {
+  "[valid_email]": () => SignupDataGenerator.generateSignupData().email,
   "[xss_email]": () => `<script>alert('xss')</script>@test.com`,
   "[html_injection_email]": () => `"><img src=x onerror=alert(1)>@test.com`,
 };
@@ -36,8 +38,8 @@ When("I click continue", async ({ page, accountSetupPage }) => {
   await accountSetupPage.clickContinue();
 });
 
-Then("I should be logged in as a registered user on the home page", async ({ homePage, testData }) => {
-  await homePage.expectLoggedIn(testData.newUser.fullName);
+Then("I should be logged in as a registered user on the home page", async ({ loginPage, signupData }) => {
+  await loginPage.nav.expectLoggedIn(signupData.fullName);
 });
 
 When("I submit to delete the account", async ({ homePage }) => {

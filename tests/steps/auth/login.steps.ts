@@ -22,8 +22,8 @@ When("I click the login button", async ({ loginPage }) => {
   await loginPage.loginButton.click();
 });
 
-Then("I should be logged in successfully", async ({ homePage }) => {
-  await homePage.expectLoggedIn();
+Then("I should be logged in successfully", async ({ loginPage }) => {
+  await loginPage.nav.expectLoggedIn();
 });
 
 Then("I should see {string} in the navigation", async ({ loginPage }, username: string) => {
