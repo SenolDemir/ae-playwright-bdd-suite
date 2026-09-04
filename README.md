@@ -182,14 +182,12 @@ root/
 ├── tests/
 │   ├── features/              # Gherkin feature files (BDD / UI tests)
 │   │   ├── auth/
-│   │   │   ├── account-setup.feature
 │   │   │   ├── login.feature
 │   │   │   └── signup.feature
 │   │   └── product/
 │   │       └── product-catalog.feature
 │   ├── steps/                 # Step definitions (BDD / UI tests)
 │   │   ├── auth/
-│   │   │   ├── account-setup.step.ts
 │   │   │   ├── login.steps.ts
 │   │   │   └── signup.step.ts
 │   │   └── product/
@@ -226,8 +224,7 @@ root/
 │   ├── data/                  # Faker factories & data interfaces
 │   │   └── signup.generator.ts
 │   ├── types/                 # Shared TypeScript type definitions
-│   │   ├── api.types.ts
-│   │   ├── fixture.types.ts
+│   │   ├── login.types.ts
 │   │   └── signup.types.ts
 │   └── utils/                 # Utility functions and helpers
 │       └── page.context.ts
