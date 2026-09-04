@@ -1,11 +1,11 @@
 # 🎭 AE Playwright AI-Augmented BDD Suite
 
-![Playwright](https://img.shields.io/badge/Playwright-1.59.0-45ba4b?logo=playwright&logoColor=white)
+![Playwright](https://img.shields.io/badge/Playwright-1.62.0-45ba4b?logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript&logoColor=white)
-![playwright-bdd](https://img.shields.io/badge/playwright--bdd-8.5.0-brightgreen?logo=cucumber&logoColor=white)
+![playwright-bdd](https://img.shields.io/badge/playwright--bdd-9.2.0-brightgreen?logo=cucumber&logoColor=white)
 ![Faker.js](https://img.shields.io/badge/%40faker--js%2Ffaker-10.4.0-F7DF1E?logo=javascript&logoColor=black)
 ![Allure Reports](https://img.shields.io/badge/Allure_Reports-3.9.0-E85A2B?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgMjJoMjBMMTIgMnoiLz48L3N2Zz4=&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-ESM-339933?logo=nodedotjs&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-22.22.3-339933?logo=nodedotjs&logoColor=white)
 
 
 > A production-grade test automation portfolio project targeting [AutomationExercise.com](https://www.automationexercise.com/) — combining Playwright, TypeScript, BDD, AI Agents and other AI-assisted tooling into a modern, resilient testing framework.
@@ -77,15 +77,15 @@ The project was built without a formal requirements document. All user stories a
 
 | Layer | Technology |
 |---|---|
-| Test Runner | [Playwright](https://playwright.dev/) |
-| Language | [TypeScript](https://www.typescriptlang.org/) (strict mode) |
-| BDD Layer | [playwright-bdd](https://vitalets.github.io/playwright-bdd/) |
+| Test Runner | [Playwright](https://playwright.dev/) 1.62.0 |
+| Language | [TypeScript](https://www.typescriptlang.org/) 6.0.2 (strict mode) |
+| BDD Layer | [playwright-bdd](https://vitalets.github.io/playwright-bdd/) 9.2.0 |
 | UI Pattern | Page Object Model (POM) |
 | API Testing | Playwright built-in `APIRequestContext` + API Object Model |
-| Test Data | [@faker-js/faker](https://fakerjs.dev/) |
-| Env Management | [dotenv](https://github.com/motdotla/dotenv) |
+| Test Data | [@faker-js/faker](https://fakerjs.dev/) 10.4.0 |
+| Env Management | [dotenv](https://github.com/motdotla/dotenv) 17.3.1 |
 | AI Augmentation | GitHub Copilot + Playwright Agents + Playwright MCP |
-| Reporting | Playwright HTML Report + Allure Report |
+| Reporting | Playwright HTML Report + Allure Report 3.9.0 |
 
 ---
 
@@ -376,7 +376,7 @@ It is designed with a **centralized data strategy** to ensure consistency across
 
 ### Prerequisites
 
-- Node.js `>= 18.x`
+- Node.js `>= 20.x` (the project currently uses Node.js `22.22.3`)
 - npm `>= 9.x`
 
 ### Recommended VS Code Extensions

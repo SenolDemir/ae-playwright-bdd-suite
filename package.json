@@ -24,10 +24,10 @@
   "type": "module",
   "devDependencies": {
     "@faker-js/faker": "^10.4.0",
-    "@playwright/test": "^1.59.0",
+    "@playwright/test": "^1.62.0",
     "@types/node": "^25.5.0",
     "allure-playwright": "^3.9.0",
-    "playwright-bdd": "^8.5.0"
+    "playwright-bdd": "^9.2.0"
   },
   "dependencies": {
     "dotenv": "^17.3.1",
