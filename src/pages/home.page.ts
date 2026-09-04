@@ -1,4 +1,4 @@
-import { BasePage } from "./BasePage.js";
+import { BasePage } from "./base.page.js";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
@@ -18,13 +18,6 @@ export class HomePage extends BasePage {
     await expect(this.page).toHaveURL(process.env.BASE_URL || "https://www.automationexercise.com/");
     await expect(this.page).toHaveTitle("Automation Exercise");
   }
-
-  async expectLoggedIn(fullName?: string): Promise<void> {
-    await expect(this.page).toHaveURL(process.env.BASE_URL || "https://www.automationexercise.com/");
-    await expect(this.nav.loggedInAsText).toBeVisible();
-    
-  }
-
 
   async submitDeleteAccount(): Promise<void> {
     await this.nav.deleteAccountLink.click();

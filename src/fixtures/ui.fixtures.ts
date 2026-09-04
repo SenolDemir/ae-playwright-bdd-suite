@@ -1,22 +1,17 @@
+// src/fixtures/ui.fixtures.ts
 import { expect } from "@playwright/test";
 import { test as base, createBdd } from "playwright-bdd";
-import { SignupPage } from "../pages/SignupPage";
-import { HomePage } from "../pages/HomePage";
-import { ProductPage } from "../pages/ProductPage";
-import { ProductDetailPage } from "../pages/ProductDetailPage";
-import { UserFactory, type SignupUser } from "../data/UserFactory";
-import { LoginPage } from "../pages/LoginPage";
-import { AccountSetupPage } from "../pages/AccountSetupPage";
-
-export interface TestData {
-  newUser: SignupUser; // registration, login, checkout
-  // product?: ProductData; // add when build cart/order tests
-  // order?: OrderData;     // add when build order history tests
-}
+import { SignupPage } from "../pages/signup.page.js";
+import { HomePage } from "../pages/home.page.js";
+import { ProductPage } from "../pages/product.page.js";
+import { ProductDetailPage } from "../pages/product-detail.page.js";
+import { LoginPage } from "../pages/login.page.js";
+import { AccountSetupPage } from "../pages/account-setup.page.js";
+import { SignupDataGenerator } from "../data/signup.generator.js";
+import type { SignupData } from "../types/signup.types.js";
 
 type Fixtures = {
-  // ...set types of your custom fixtures
-  testData: TestData;
+  signupData: SignupData;
   signupPage: SignupPage;
   loginPage: LoginPage;
   homePage: HomePage;
@@ -26,39 +21,29 @@ type Fixtures = {
 };
 
 export const test = base.extend<Fixtures>({
-  // implementing custom fixtures
-  testData: async ({}, use) => {
-    const testData: TestData = {
-      newUser: UserFactory.generateSignupUser(),
-      // product: ProductFactory.createProduct(),
-    };
-    await use(testData);
-  },
-  signupPage: async ({ page, testData }, use) => {
-    const signupPage = new SignupPage(page, testData);
-    await use(signupPage);
+
+  signupData: async ({}, use) => {
+    await use(SignupDataGenerator.generateSignupData());
   },
 
-  accountSetupPage: async ({ page, testData }, use) => {
-    const accountSetupPage = new AccountSetupPage(page, testData);
-    await use(accountSetupPage);
+  signupPage: async ({ page, signupData }, use) => {
+    await use(new SignupPage(page, signupData));
+  },
+  accountSetupPage: async ({ page, signupData }, use) => {
+    await use(new AccountSetupPage(page, signupData));
   },
 
-  loginPage: async ({ page, testData }, use) => {
-    const loginPage = new LoginPage(page, testData);
-    await use(loginPage);
+  loginPage: async ({ page }, use) => {
+    await use(new LoginPage(page));
   },
-  homePage: async ({ page, testData }, use) => {
-    const homePage = new HomePage(page, testData);
-    await use(homePage);
+  homePage: async ({ page }, use) => {
+    await use(new HomePage(page));
   },
-  productPage: async ({ page, testData }, use) => {
-    const productPage = new ProductPage(page, testData);
-    await use(productPage);
+  productPage: async ({ page }, use) => {
+    await use(new ProductPage(page));
   },
-  productDetailPage: async ({ page, testData }, use) => {
-    const productDetailPage = new ProductDetailPage(page, testData);
-    await use(productDetailPage);
+  productDetailPage: async ({ page }, use) => {
+    await use(new ProductDetailPage(page));
   },
 });
 

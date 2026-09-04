@@ -1,33 +1,43 @@
+// src/fixtures/api.fixtures.ts
 import { test as base, expect, request as playwrightRequest, type APIRequestContext } from "@playwright/test";
-import { UserFactory, type SignupUser } from "../data/UserFactory";
 import { SignupClient } from "../clients/signup.client";
 import { ProductClient } from "../clients/product.client";
 import { LoginClient } from "../clients/login.client";
+import { SignupDataGenerator } from "../data/signup.generator";
+import type { SignupData } from "../types/signup.types";
 
 type ApiFixtures = {
-  apiRequest: APIRequestContext;
+  apiContext: APIRequestContext;
+  signupData: SignupData;
   signupClient: SignupClient;
   loginClient: LoginClient;
   productClient: ProductClient;
 };
 
 export const test = base.extend<ApiFixtures>({
-  apiRequest: async ({}, use) => {
+  apiContext: async ({}, use) => {
     const baseURL = process.env.API_BASE_URL;
     const context = await playwrightRequest.newContext({ baseURL });
     await use(context);
     await context.dispose();
   },
 
-  signupClient: async ({ apiRequest }, use) => {
-    await use(new SignupClient(apiRequest));
+  // Same generator as UI tests — one source of truth for signup data shape,
+  // resolved once per test, independent of any browser/page context.
+  signupData: async ({}, use) => {
+    await use(SignupDataGenerator.generateSignupData());
   },
 
-  productClient: async ({ apiRequest }, use) => {
-    await use(new ProductClient(apiRequest));
+  signupClient: async ({ apiContext }, use) => {
+    await use(new SignupClient(apiContext));
   },
-  loginClient: async ({ apiRequest }, use) => {
-    await use(new LoginClient(apiRequest));
+
+  productClient: async ({ apiContext }, use) => {
+    await use(new ProductClient(apiContext));
+  },
+
+  loginClient: async ({ apiContext }, use) => {
+    await use(new LoginClient(apiContext));
   },
 });
 

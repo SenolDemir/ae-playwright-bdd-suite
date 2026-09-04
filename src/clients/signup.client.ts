@@ -1,10 +1,9 @@
 import type { APIRequestContext, APIResponse } from "@playwright/test";
-import { UserFactory, type SignupUser } from "../data/UserFactory";
-import type { SignupPayload } from "./api.models";
+import { SignupDataGenerator } from "../data/signup.generator";
+import type { SignupData } from "../types/signup.types";
+import type { SignupPayload } from "../types/signup.types";
 
-/**
- * SignupClient encapsulates all signup-related API calls and payload templates.
- */
+
 export class SignupClient {
   private readonly request: APIRequestContext;
 
@@ -13,12 +12,13 @@ export class SignupClient {
   }
 
   static createNewUserPayload(overrides?: Partial<SignupPayload>): SignupPayload {
-    const user = UserFactory.generateSignupUser();
+    const user = SignupDataGenerator.generateSignupData();
     return SignupClient.toSignupPayload(user, overrides);
   }
 
-  // transforms SignupUser to API's expected shape (payload)
-  static toSignupPayload(user: SignupUser, overrides?: Partial<SignupPayload>): SignupPayload {
+  // transforms SignupData to API's expected shape (payload) 
+  // by mapping its fields to the expected API keys.
+  static toSignupPayload(user: SignupData, overrides?: Partial<SignupPayload>): SignupPayload {
     return {
       name: user.fullName,
       email: user.email,
@@ -45,13 +45,9 @@ export class SignupClient {
    *        .toSignupPayload(user, { email: "existing@test.com" });
    */
 
-
   async getUserDetailsByEmail(email: string): Promise<APIResponse> {
     return this.request.get("getUserDetailByEmail", {
       params: { email },
     });
   }
-
-
-  
 }

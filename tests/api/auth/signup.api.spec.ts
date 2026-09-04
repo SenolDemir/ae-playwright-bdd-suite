@@ -5,13 +5,13 @@ import { SignupClient } from "../../../src/clients/signup.client";
 
 test.describe("Signup API CRUD Test", () => {
 
-  test("CRUD Lifecycle", async ({ apiRequest, signupClient }) => {
+  test("CRUD Lifecycle", async ({ apiContext, signupClient }) => {
     const payload = SignupClient.createNewUserPayload();
     let responseBody;
    
 
     await test.step("Create: new user account", async () => {
-      const response = await apiRequest.post("createAccount", { form: payload });
+      const response = await apiContext.post("createAccount", { form: payload });
       console.log(await response.json());
       // response message is 201 but the API returns 200
       expect(response.status()).toBe(200);
@@ -35,7 +35,7 @@ test.describe("Signup API CRUD Test", () => {
         password: payload.password,
       });
 
-      const response = await apiRequest.put("updateAccount", { form: updatedPayload });
+      const response = await apiContext.put("updateAccount", { form: updatedPayload });
       console.log(await response.json());
       expect(response.status()).toBe(200);
       responseBody = await response.json();
@@ -46,7 +46,7 @@ test.describe("Signup API CRUD Test", () => {
 
     await test.step("Delete: Verify Delete user account", async () => {
 
-      const response = await apiRequest.delete("deleteAccount", { 
+      const response = await apiContext.delete("deleteAccount", { 
         form: { email: payload.email,
                 password: payload.password }
       });

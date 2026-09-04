@@ -1,9 +1,6 @@
 import type { APIRequestContext, APIResponse } from "@playwright/test";
 import { expect } from "@playwright/test";
-import type { LoginPayload } from "./api.models";
-
-
-
+import type { LoginPayload } from "../types/login.types";
 
 export class LoginClient {
   private readonly request: APIRequestContext;

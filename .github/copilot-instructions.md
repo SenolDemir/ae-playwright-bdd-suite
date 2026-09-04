@@ -13,17 +13,18 @@ This project is an AI-augmented test suite using Playwright for end-to-end testi
 - **Design Pattern**: Page Object Model (POM)
 - **Test Data Generation**: @faker-js/faker
 - **AI Augmentation**: GitHub Copilot + Playwright MCP for code suggestions and test generation
-- **Reporting**: Playwright built-in reports (current) + Allure Reports (planned)
+- **Reporting**: Playwright built-in reports + Allure Reports
 
 # Project general coding standards
 
 ## Naming Conventions
 
-- Use PascalCase for component names, interfaces, and type aliases
+- Use PascalCase for class names and interfaces
 - Use camelCase for variables, functions, and methods
 - Prefix private class members with underscore (\_)
 - Use ALL_CAPS for constants
 - Use kebab-case for folder and directory names (e.g. data, page-objects, step-definitions)
+- Use lowercase dot-notation for file names, scoped by type: `login.page.ts`, `user.type.ts`, `base.client.ts`, `auth.steps.ts`, `user.factory.ts`
 
 ## TypeScript Guidelines
 

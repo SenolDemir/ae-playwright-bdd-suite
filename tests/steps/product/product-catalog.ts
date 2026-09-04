@@ -17,12 +17,11 @@ When(
   "I clicks on {string} for the first product",
   async ({ page, productPage }, arg: string) => {
     await productPage.viewFirstProduct();
-    await page.waitForTimeout(5000);
   },
 );
 
 Then("I am navigated to the product detail page", async ({ page }) => {
-  await expect(page.url()).toContain("/product_details/");
+  await expect(page).toHaveURL(/\/product_details\//);
 });
 
 Then(

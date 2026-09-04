@@ -8,7 +8,7 @@
     "tests": "npx bddgen && npx playwright test",
     "test:specific": "npx bddgen && npx playwright test login.feature",
     "test:ui-all": "npx bddgen && npx playwright test features-gen/",
-    "test:ui-tag": "npx bddgen test --tags '@ui04' && npx playwright test features-gen/",
+    "test:ui-tag": "npx bddgen test --tags '@ui01' && npx playwright test features-gen/",
     "test:api-all": "npx playwright test api",
     "test:api-tag": "npx playwright test --grep @api-test",
     "test:api-specific": "npx playwright test -g 'Signup API'",
@@ -17,7 +17,6 @@
     "allure:generate": "allure generate reports/allure-results --output reports/allure-report --clean",
     "allure:open": "allure open reports/allure-report",
     "allure:serve": "npx allure serve reports/allure-results"
-
   },
   "keywords": [],
   "author": "",
@@ -25,14 +24,13 @@
   "type": "module",
   "devDependencies": {
     "@faker-js/faker": "^10.4.0",
-    "@playwright/test": "^1.59.0",
+    "@playwright/test": "^1.62.0",
     "@types/node": "^25.5.0",
     "allure-playwright": "^3.9.0",
-    "playwright-bdd": "^8.5.0"
+    "playwright-bdd": "^9.2.0"
   },
   "dependencies": {
     "dotenv": "^17.3.1",
-    "ts-node": "^10.9.2",
     "typescript": "^6.0.2"
   }
 }
