@@ -1,0 +1,49 @@
+name: Run API tests
+
+on:
+  workflow_dispatch:
+#   pull_request:
+#     branches: [main]
+#   schedule:
+#     - cron: "0 3 * * *" 
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL:  ${{ vars.BASE_URL || 'https://www.automationexercise.com/'}}
+      API_BASE_URL: ${{ vars.API_BASE_URL || 'https://www.automationexercise.com/api/' }}
+      TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+      TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+     
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare .env
+        run: cp .env.example .env || true
+
+      - name: Run API tests only
+        run: npx playwright test api
+
+      - name: Upload Playwright HTML report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: reports/playwright-html
+          retention-days: 30
