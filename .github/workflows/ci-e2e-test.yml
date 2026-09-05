@@ -19,7 +19,7 @@ jobs:
     env:
       BASE_URL:  ${{ vars.BASE_URL || 'https://www.automationexercise.com/'}}
       API_BASE_URL: ${{ vars.API_BASE_URL || 'https://www.automationexercise.com/api/' }}
-      BROWSER_TYPE: ${{ vars.BROWSER_TYPE || 'chromium'}}
+      BROWSER_TYPE: ${{ vars.BROWSER_TYPE || 'chrome'}}
       TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
       TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
      
