@@ -1,15 +1,12 @@
-name: playwright BDD e2e sharded pipeline
+name: playwright e2e test (sharded)
 
 on:
   workflow_dispatch:
   # pull_request:
-  #   branches: [main, develop]
+  #   branches: [main]
   # schedule:
   #   - cron: "0 3 * * *"
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 env:
   BASE_URL: ${{ vars.BASE_URL || 'https://www.automationexercise.com/' }}
@@ -103,7 +100,7 @@ jobs:
       - name: Upload Unified Playwright HTML Report
         uses: actions/upload-artifact@v4
         with:
-          name: HTML-Playwright-Report
+          name: playwright-html-report
           path: playwright-report/
           retention-days: 14
  

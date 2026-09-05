@@ -1,4 +1,4 @@
-name: playwright BDD e2e pipeline (ui + api)
+name: playwright e2e test
 
 on:
   workflow_dispatch:
