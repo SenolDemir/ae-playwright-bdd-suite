@@ -2,6 +2,7 @@ import { test, expect } from "../../../src/fixtures/api.fixtures";
 import { SignupClient } from "../../../src/clients/signup.client";
 
 test.describe("Login API", () => {
+  
   test("login with valid payload", async ({ apiContext, loginClient }) => {
     const response = await apiContext.post("verifyLogin", {
       form: {
@@ -9,8 +10,14 @@ test.describe("Login API", () => {
         password: process.env.TEST_USER_PASSWORD || "",
       },
     });
-    console.log(await response.json());
+    // console.log(await response.json());
     expect(response.status()).toBe(200);
+   
+
+    const body = await response.json();
+    expect(body.responseCode).toBe(200);
+    expect(body.message).toBe("User exists!");
+
   });
 
   test("login with valid payload with API Object", async ({ apiContext, loginClient }) => {
@@ -41,7 +48,6 @@ test.describe("Login API", () => {
     expect(body.message).toBe("User not found!");
   });
 
-
   test("verify login with invlaid password parameter", async ({ apiContext, loginClient }) => {
     const response = await loginClient.login({ password: "not-a-password" });
     const body = await response.json();
@@ -52,9 +58,4 @@ test.describe("Login API", () => {
     expect(body.responseCode).toBe(404);
     expect(body.message).toBe("User not found!");
   });
-
-
-
-
-
 });

@@ -38,8 +38,8 @@ jobs:
         run: cp .env.example .env || true
 
       - name: Run API tests only
-        run: npx playwright test api
-
+        run: npm run tests:api-all
+        
       - name: Upload Playwright HTML report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
