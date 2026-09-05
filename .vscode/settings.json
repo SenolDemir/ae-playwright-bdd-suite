@@ -8,5 +8,8 @@
   "cucumberautocomplete.strictGherkinCompletion": false,
   "github.copilot.enable": {
     "filesystem": true
-  }
+  },
+  "yaml.validate": true,
+  "yaml.format.enable": true,
+  "editor.formatOnSave": true
 }
