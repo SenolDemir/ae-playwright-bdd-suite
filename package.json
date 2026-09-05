@@ -16,7 +16,8 @@
     "report": "npx playwright show-report reports/playwright-html",
     "allure:generate": "allure generate reports/allure-results --output reports/allure-report --clean",
     "allure:open": "allure open reports/allure-report",
-    "allure:serve": "npx allure serve reports/allure-results"
+    "allure:serve": "npx allure serve reports/allure-results",
+    "test:sharded": "npx bddgen && npx playwright test --shard"
   },
   "keywords": [],
   "author": "",
