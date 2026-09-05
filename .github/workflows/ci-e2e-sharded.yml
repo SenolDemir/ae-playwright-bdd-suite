@@ -69,14 +69,6 @@ jobs:
           path: blob-report
           retention-days: 1
 
-      - name: Upload Allure raw results (shard ${{ matrix.shardIndex }})
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results-${{ matrix.shardIndex }}
-          path: reports/allure-results/
-          retention-days: 1
-
   merge-reports:
     if: ${{ !cancelled() }}
     needs: [playwright-tests]
@@ -113,26 +105,4 @@ jobs:
           path: playwright-report
           retention-days: 30
 
-      - name: Download all Allure raw results
-        uses: actions/download-artifact@v4
-        with:
-          pattern: allure-results-*
-          path: reports/allure-results
-          merge-multiple: true
-
-      - name: Upload combined Allure raw results
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results
-          path: reports/allure-results/
-          retention-days: 30
-
-      - name: Generate Allure report
-        run: npx allure-commandline generate reports/allure-results --output reports/allure-report --clean
-
-      - name: Upload Allure HTML report
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: reports/allure-report/
-          retention-days: 30
+    
