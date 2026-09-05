@@ -62,7 +62,7 @@ jobs:
 
         # Runs: npx bddgen && npx playwright test --shard=X/5
       - name: Run tests (shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
-        run: npm run test:shard -- ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        run: npm run test:sharded -- ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Upload blob report (shard ${{ matrix.shardIndex }})
         if: ${{ !cancelled() }}
