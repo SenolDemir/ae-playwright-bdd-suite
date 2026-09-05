@@ -2,10 +2,7 @@ import "dotenv/config";
 import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig } from "playwright-bdd";
 
-const parseBoolean = (
-  value: string | undefined,
-  defaultValue: boolean,
-): boolean => {
+const parseBoolean = (value: string | undefined, defaultValue: boolean): boolean => {
   if (value === undefined) return defaultValue;
   return value.toLowerCase() === "true";
 };
@@ -38,18 +35,11 @@ const allProjects = [
   },
 ];
 
-const uiBrowsers =
-  browserType === "all"
-    ? allProjects
-    : allProjects.filter(({ name }) => name === browserType);
+const uiBrowsers = browserType === "all" ? allProjects : allProjects.filter(({ name }) => name === browserType);
 
 const bddTestDir = defineBddConfig({
   features: "tests/features/**/*.feature",
-  steps: [
-    "tests/steps/**/*.ts",
-    "tests/hooks/**/*.ts",
-    "src/fixtures/ui.fixtures.ts",
-  ],
+  steps: ["tests/steps/**/*.ts", "tests/hooks/**/*.ts", "src/fixtures/ui.fixtures.ts"],
 });
 
 export default defineConfig({
@@ -58,19 +48,32 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : parseInt(process.env.WORKERS ?? "4"),
 
-  reporter: [
-    ["line"],
-    ["html", { outputFolder: "reports/playwright-html", open: "never" }],
-    ["json", { outputFile: "reports/playwright-results.json" }],
-    [
-      "allure-playwright",
-      {
-        detail: true,
-        resultsDir: "reports/allure-results",
-        suiteTitle: false,
-      },
-    ],
-  ],
+  reporter: process.env.CI
+    ? [
+        ["blob", { outputDir: "blob-report" }],
+        ["line"],
+        [
+          "allure-playwright",
+          {
+            detail: true,
+            resultsDir: "reports/allure-results",
+            suiteTitle: false,
+          },
+        ],
+      ]
+    : [
+        ["line"],
+        ["html", { outputFolder: "reports/playwright-html", open: "never" }],
+        ["json", { outputFile: "reports/playwright-results.json" }],
+        [
+          "allure-playwright",
+          {
+            detail: true,
+            resultsDir: "reports/allure-results",
+            suiteTitle: false,
+          },
+        ],
+      ],
 
   use: {
     screenshot: "only-on-failure",
@@ -92,7 +95,6 @@ export default defineConfig({
     {
       name: "api",
       testDir: "tests/api",
-
     },
 
     // ── UI projects (BDD) ─────────────────────────────────────
