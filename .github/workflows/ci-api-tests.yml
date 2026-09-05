@@ -13,10 +13,9 @@ concurrency:
 
 jobs:
   api-tests:
-    timeout-minutes: 60
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     env:
-      BASE_URL:  ${{ vars.BASE_URL || 'https://www.automationexercise.com/'}}
       API_BASE_URL: ${{ vars.API_BASE_URL || 'https://www.automationexercise.com/api/' }}
       TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
       TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
