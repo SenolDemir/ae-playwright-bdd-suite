@@ -1,14 +1,14 @@
 // src/fixtures/ui.fixtures.ts
 import { expect } from "@playwright/test";
 import { test as base, createBdd } from "playwright-bdd";
-import { SignupPage } from "../pages/signup.page.js";
-import { HomePage } from "../pages/home.page.js";
-import { ProductPage } from "../pages/product.page.js";
-import { ProductDetailPage } from "../pages/product-detail.page.js";
-import { LoginPage } from "../pages/login.page.js";
-import { AccountSetupPage } from "../pages/account-setup.page.js";
-import { SignupDataGenerator } from "../data/signup.generator.js";
-import type { SignupData } from "../types/signup.types.js";
+import { SignupPage } from "../pages/signup.page";
+import { HomePage } from "../pages/home.page";
+import { ProductPage } from "../pages/product.page";
+import { ProductDetailPage } from "../pages/product-detail.page";
+import { LoginPage } from "../pages/login.page";
+import { AccountSetupPage } from "../pages/account-setup.page";
+import { SignupDataGenerator } from "../data/signup.generator";
+import type { SignupData } from "../types/signup.types";
 
 type Fixtures = {
   signupData: SignupData;
@@ -21,7 +21,6 @@ type Fixtures = {
 };
 
 export const test = base.extend<Fixtures>({
-
   signupData: async ({}, use) => {
     await use(SignupDataGenerator.generateSignupData());
   },

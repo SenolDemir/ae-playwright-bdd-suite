@@ -1,6 +1,5 @@
-import { sign } from "node:crypto";
-import { Given, When, Then, expect } from "../../../src/fixtures/ui.fixtures.ts";
-import { LoginPage } from "../../../src/pages/login.page.ts";
+import { Given, When, Then, expect } from "../../../src/fixtures/ui.fixtures";
+
 
 Then("I should be on the login page", async ({ loginPage }) => {
   await loginPage.expectLoginPageVisible();

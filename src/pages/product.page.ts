@@ -1,9 +1,8 @@
-import { BasePage } from "./base.page.js";
+import { BasePage } from "./base.page";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
 export class ProductPage extends BasePage {
-  
   // Container locator
   private readonly allProductsSection: Locator = this.page.getByRole("region", { name: /All Products/i });
 
@@ -22,8 +21,6 @@ export class ProductPage extends BasePage {
 
   async viewFirstProduct(): Promise<void> {
     await this.firstProductViewButton.click();
-    
-  
   }
 
   async expectProductsListVisible(): Promise<void> {
