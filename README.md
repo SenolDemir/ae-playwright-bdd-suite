@@ -224,7 +224,8 @@ root/
 │   ├── data/                  # Faker factories & data interfaces
 │   │   └── signup.generator.ts
 │   ├── types/                 # Shared TypeScript type definitions
-│   │   ├── login.types.ts
+│   ├── api-models/
+│   │   ├── login.api-model.ts
 │   │   └── signup.types.ts
 │   └── utils/                 # Utility functions and helpers
 │       └── page.context.ts

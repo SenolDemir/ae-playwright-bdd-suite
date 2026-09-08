@@ -4,11 +4,10 @@
     "tests/hooks/**/*.ts",
     "src/fixtures/ui.fixtures.ts"
   ],
+  
   "cucumberautocomplete.syncfeatures": "tests/features/**/*.feature",
   "cucumberautocomplete.strictGherkinCompletion": false,
-  "github.copilot.enable": {
-    "filesystem": true
-  },
+  
   "yaml.validate": true,
   "yaml.format.enable": true,
   "editor.formatOnSave": true
