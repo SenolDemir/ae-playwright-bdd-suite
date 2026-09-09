@@ -35,7 +35,7 @@ When("I click the logout button", async ({ loginPage }) => {
 });
 
 Then("I should not be logged in", async ({ loginPage }) => {
-  await loginPage.nav.expectNotLoggedIn();
+  await loginPage.nav.expectNotLoggedInLoginPage();
 });
 
 Then("I should see an error message {string}", async ({ loginPage }, errorMessage: string) => {

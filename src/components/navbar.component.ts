@@ -51,9 +51,17 @@ export class NavBar {
     await this.logoutLink.click();
   }
 
-  async expectNotLoggedIn(): Promise<void> {
-    const baseUrl = process.env.BASE_URL ?? "https://www.automationexercise.com";
-    await expect(this.page).toHaveURL(baseUrl);
+  async expectNotLoggedInLoginPage(): Promise<void> {
+    const Url = "https://www.automationexercise.com/login";
+    await expect(this.page).toHaveURL(Url);
+    await expect(this.signupOrLoginLink).toBeVisible();
+    await expect(this.logoutLink).toHaveCount(0);
+    await expect(this.loggedInAsText).toHaveCount(0);
+  }
+
+  async expectNotLoggedInHomePage(): Promise<void> {
+    const Url = "https://www.automationexercise.com";
+    await expect(this.page).toHaveURL(Url);
     await expect(this.signupOrLoginLink).toBeVisible();
     await expect(this.logoutLink).toHaveCount(0);
     await expect(this.deleteAccountLink).toHaveCount(0);

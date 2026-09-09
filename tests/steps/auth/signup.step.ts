@@ -51,7 +51,7 @@ Then("I should see the account deleted confirmation", async ({ homePage }) => {
 });
 
 When("I should be not logged in on the home page", async ({ homePage }) => {
-  await homePage.nav.expectNotLoggedIn();
+  await homePage.nav.expectNotLoggedInHomePage();
 });
 
 // ---------------- Signup Entry Form --------------------------------------------------

@@ -1,4 +1,4 @@
-@ui @ui03 @auth @login
+@ui @ui02 @auth @login
 Feature: Login Functionality
       As a registered user
       I want to be able to login to the application
@@ -12,7 +12,7 @@ Feature: Login Functionality
                   And I navigate to "Signup / Login" page
                   Then I should be on the login page
 
-            @ui03-1 @positive
+            @ui02-1 @positive
             Scenario: Successful login with valid credentials
                   When I enter my email as "testuser_2026@example.com"
                   And I enter my password as "test123456"
@@ -20,7 +20,7 @@ Feature: Login Functionality
                   Then I should be logged in successfully
                   And I should see "Logged in as Test User" in the navigation
 
-            @ui03-2 @positive
+            @ui02-2 @positive
             Scenario: Successful logout after login
                   When I enter my email as "testuser_2026@example.com"
                   And I enter my password as "test123456"
@@ -38,38 +38,38 @@ Feature: Login Functionality
                   And I navigate to "Signup / Login" page
                   Then I should be on the login page
 
-            @ui03-3 @negative
+            @ui02-3 @negative
             Scenario: Login fails with incorrect password
                   When I enter my email as "testuser_2026@example.com"
                   And I enter my password as "wrongPassword!"
                   And I click the login button
                   Then I should see an error message "Your email or password is incorrect!"
 
-            @ui03-4 @negative
+            @ui02-4 @negative
             Scenario: Login fails with unregistered email
                   When I enter my email as "notregistered@example.com"
                   And I enter my password as "test123456"
                   And I click the login button
                   Then I should see an error message "Your email or password is incorrect!"
 
-            @ui03-5 @negative
+            @ui02-5 @negative
             Scenario: Login fails with empty email field
                   When I enter my password as "test123456"
                   And I click the login button
                   Then the email field should show a validation error as "Please fill in this field."
 
-            @ui03-6 @negative
+            @ui02-6 @negative
             Scenario: Login fails with empty password field
                   When I enter my email as "testuser_2026@example.com"
                   And I click the login button
                   Then the password field should show a validation error as "Please fill in this field."
 
-            @ui03-7 @negative
+            @ui02-7 @negative
             Scenario: Login fails with both fields empty
                   When I click the login button
                   Then the email field should show a validation error as "Please fill in this field."
 
-            @ui03-8 @negative
+            @ui02-8 @negative
             Scenario: Login fails with invalid email format
                   When I enter my email as "not-an-email"
                   And I enter my password as "test123456"

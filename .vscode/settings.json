@@ -1,14 +1,11 @@
 {
-  "cucumberautocomplete.steps": [
-    "tests/steps/**/*.ts",
-    "tests/hooks/**/*.ts",
-    "src/fixtures/ui.fixtures.ts"
-  ],
-  
+  "cucumberautocomplete.steps": ["tests/steps/**/*.ts", "tests/hooks/**/*.ts", "src/fixtures/ui.fixtures.ts"],
+
   "cucumberautocomplete.syncfeatures": "tests/features/**/*.feature",
   "cucumberautocomplete.strictGherkinCompletion": false,
-  
-  "yaml.validate": true,
-  "yaml.format.enable": true,
-  "editor.formatOnSave": true
+
+  "[yaml]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  }
 }
