@@ -9,7 +9,7 @@
     "test:specific": "npx bddgen && npx playwright test login.feature",
     "test:ui-all": "npx bddgen && npx playwright test features-gen/",
     "test:ui-tag": "npx bddgen test --tags '@ui03' && npx playwright test features-gen/",
-    "test:api-all": "npx playwright test api",
+    "test:api-all": "npx playwright test --project=api",
     "test:api-tag": "npx playwright test --grep @api-test",
     "test:api-specific": "npx playwright test -g 'Signup API'",
     "test:json": "npx playwright test features-gen/ --reporter=json > reports/playwright-results.json",
