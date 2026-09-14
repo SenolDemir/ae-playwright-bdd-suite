@@ -384,17 +384,15 @@ Continuous integration is implemented with **GitHub Actions**, mirroring the sam
 | Workflow                      | File                 | Purpose                                                                                         |
 | ----------------------------- | -------------------- | ----------------------------------------------------------------------------------------------- |
 | Playwright E2E Test           | `ci-e2e-test.yml`    | Runs the full UI + API suite in a single job and publishes Playwright + Allure reports          |
-| Playwright E2E Test (Sharded) | `ci-e2e-sharded.yml` | Splits the UI/API suite across 5 parallel shards, then merges blob reports into one HTML report |
-| Run API Tests                 | `ci-api-tests.yml`   | Runs only the `api` project for fast, isolated API regression feedback                          |
+| Playwright E2E Test (Sharded) | `ci-e2e-sharded.yml` | Splits the UI/API suite across 5 parallel shards, then merges blob reports into one HTML report |                        |
 
+### Local Parity
+
+Every CI job calls the same npm scripts documented in [Running Tests](#running-tests) (`tests`, `test:sharded`), so a workflow failure can always be reproduced locally with the identical command.
 
 > [!Note]
 > All workflows currently trigger on `workflow_dispatch` (manual run) only. `pull_request` and scheduled `cron` triggers are ready to be enabled, and also `repository_dispatch` can be added to integrate CI pipeline.
 
-
-### Local Parity
-
-Every CI job calls the same npm scripts documented in [Running Tests](#running-tests) (`tests`, `test:api-all`, `test:sharded`), so a workflow failure can always be reproduced locally with the identical command.
 
 ---
 

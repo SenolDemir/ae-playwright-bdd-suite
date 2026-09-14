@@ -1,4 +1,15 @@
 
+# known limitations
+
+### API tests fail in GitHub Actions with "Unexpected token '<' ... is not valid JSON"
+- Symptom: `response.json()` throws because the body is an HTML page
+  (`<!DOCTYPE ...`) instead of the expected JSON, on every test/retry in a run.
+- Root cause: `automationexercise.com` sits behind bot/WAF protection that
+  blocks known datacenter/cloud IP ranges (including GitHub-hosted runners), serving an HTML challenge/block page instead of the API response. This is IP-reputation based, not transient, so retries don't help.
+- Not a regression in test code or app behavior — the same tests pas locally from a residential/office IP.
+
+
+
 # tags
 @ui @smoke         → Quick sanity suite
 @api @smoke        → API sanity
