@@ -1,4 +1,3 @@
-// src/fixtures/ui.fixtures.ts
 import { expect } from "@playwright/test";
 import { test as base, createBdd } from "playwright-bdd";
 import { SignupPage } from "../pages/signup.page";
