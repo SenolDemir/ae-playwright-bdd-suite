@@ -1,9 +1,8 @@
-import { BasePage } from "./base.page.js";
+import { BasePage } from "./base.page";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
 export class HomePage extends BasePage {
-
   // ---------------------- Locators --------------------------
 
   // Visible only after deleting an authenticated account.
@@ -27,6 +26,4 @@ export class HomePage extends BasePage {
     await expect(this.page).toHaveURL(/delete_account/);
     await expect(this.accountDeletedHeading).toBeVisible();
   }
-
- 
 }

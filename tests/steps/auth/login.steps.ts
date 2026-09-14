@@ -1,6 +1,5 @@
-import { sign } from "node:crypto";
-import { Given, When, Then, expect } from "../../../src/fixtures/ui.fixtures.ts";
-import { LoginPage } from "../../../src/pages/login.page.ts";
+import { Given, When, Then, expect } from "../../../src/fixtures/ui.fixtures";
+
 
 Then("I should be on the login page", async ({ loginPage }) => {
   await loginPage.expectLoginPageVisible();
@@ -36,7 +35,7 @@ When("I click the logout button", async ({ loginPage }) => {
 });
 
 Then("I should not be logged in", async ({ loginPage }) => {
-  await loginPage.nav.expectNotLoggedIn();
+  await loginPage.nav.expectNotLoggedInLoginPage();
 });
 
 Then("I should see an error message {string}", async ({ loginPage }, errorMessage: string) => {

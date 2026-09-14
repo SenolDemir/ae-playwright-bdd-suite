@@ -88,3 +88,10 @@ at ../pages/ProductDetailPage.ts:84
 84 >    expect(actual).toBe(value);
 85 |  }
 </source_code>
+
+<!-------------------------------------------------------->
+
+
+
+`types` - domain or test-data structures used across the suite
+`api-models` - API boundary contracts, endpoint-specific payloads,

@@ -1,4 +1,4 @@
-import { Given, When, Then, expect } from "../../../src/fixtures/ui.fixtures.ts";
+import { Given, When, Then, expect } from "../../../src/fixtures/ui.fixtures";
 import { faker } from "@faker-js/faker";
 import { SignupDataGenerator } from "../../../src/data/signup.generator.js";
 
@@ -51,11 +51,10 @@ Then("I should see the account deleted confirmation", async ({ homePage }) => {
 });
 
 When("I should be not logged in on the home page", async ({ homePage }) => {
-  await homePage.nav.expectNotLoggedIn();
+  await homePage.nav.expectNotLoggedInHomePage();
 });
 
 // ---------------- Signup Entry Form --------------------------------------------------
-
 
 When("I enter name {string}", async ({ signupPage }, rawName: string) => {
   // Replace token with pre-defined value if it exists
@@ -100,10 +99,7 @@ When("I leave the email field empty", async ({ signupPage }) => {
   await signupPage.newUserEmailInput.clear();
 });
 
-
 // ----------------- Account Setup Information Form ----------------------------------------
-
-
 
 Then("I should be on the account information setup page", async ({ page }) => {
   await expect(page).toHaveURL(/\/signup/);

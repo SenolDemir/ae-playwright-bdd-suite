@@ -1,9 +1,8 @@
 import type { Page } from "@playwright/test";
-import { BasePage } from "./base.page.js";
+import { BasePage } from "./base.page";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
-import type { SignupData } from "../types/signup.types.js";
-
+import type { SignupData } from "../types/signup.types";
 
 export class SignupPage extends BasePage {
   private readonly signupData: SignupData;

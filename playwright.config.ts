@@ -7,35 +7,9 @@ const parseBoolean = (value: string | undefined, defaultValue: boolean): boolean
   return value.toLowerCase() === "true";
 };
 
-const browserType = (process.env.BROWSER_TYPE ?? "chromium").toLowerCase();
 const headlessMode = parseBoolean(process.env.HEADLESS_MODE, true);
 const maximizedWindow = parseBoolean(process.env.MAXIMIZED_WINDOW, false);
 const baseUrl = process.env.BASE_URL;
-
-const allProjects = [
-  {
-    name: "chrome",
-    use: { browserName: "chromium" as const },
-  },
-  {
-    name: "firefox",
-    use: { browserName: "firefox" as const },
-  },
-  {
-    name: "webkit",
-    use: { browserName: "webkit" as const },
-  },
-  {
-    name: "mobile-chrome",
-    use: { ...devices["Pixel 5"] },
-  },
-  {
-    name: "mobile-safari",
-    use: { ...devices["iPhone 12"] },
-  },
-];
-
-const uiBrowsers = browserType === "all" ? allProjects : allProjects.filter(({ name }) => name === browserType);
 
 const bddTestDir = defineBddConfig({
   features: "tests/features/**/*.feature",
@@ -46,10 +20,11 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : parseInt(process.env.WORKERS ?? "4"),
+  workers: process.env.CI ? 1 : 3,
 
   reporter: process.env.CI
     ? [
+        ["github"],
         ["blob", { outputDir: "blob-report" }],
         ["line"],
         [
@@ -97,10 +72,11 @@ export default defineConfig({
       testDir: "tests/api",
     },
 
-    // ── UI projects (BDD) ─────────────────────────────────────
-    ...uiBrowsers.map((browser) => ({
-      ...browser,
-      testDir: bddTestDir,
-    })),
+    // ── UI projects (BDD) — select via --project ───────────────
+    { name: "chromium", use: { browserName: "chromium" }, testDir: bddTestDir },
+    { name: "firefox", use: { browserName: "firefox" }, testDir: bddTestDir },
+    { name: "webkit", use: { browserName: "webkit" }, testDir: bddTestDir },
+    // { name: "mobile-chrome", use: { ...devices["Pixel 5"] }, testDir: bddTestDir },
+    // { name: "mobile-safari", use: { ...devices["iPhone 12"] }, testDir: bddTestDir },
   ],
 });

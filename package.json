@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean:mcp": "rm -rf .playwright-mcp",
     "bdd": "npx bddgen",
     "tests": "npx bddgen && npx playwright test",
-    "test:specific": "npx bddgen && npx playwright test login.feature",
-    "test:ui-all": "npx bddgen && npx playwright test features-gen/",
-    "test:ui-tag": "npx bddgen test --tags '@ui01' && npx playwright test features-gen/",
-    "test:api-all": "npx playwright test api",
+    "test:specific": "npx bddgen && npx playwright test login.feature --project=chromium",
+    "test:ui-all": "npx bddgen && npx playwright test --project=chromium",
+    "test:ui-tag": "npx bddgen test --tags '@ui03' && npx playwright test --project=chromium",
+    "test:api-all": "npx playwright test --project=api",
     "test:api-tag": "npx playwright test --grep @api-test",
     "test:api-specific": "npx playwright test -g 'Signup API'",
     "test:json": "npx playwright test features-gen/ --reporter=json > reports/playwright-results.json",
@@ -25,14 +26,15 @@
   "type": "module",
   "devDependencies": {
     "@faker-js/faker": "^10.4.0",
-    "@playwright/test": "^1.62.0",
-    "@types/node": "^25.5.0",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.20.1",
     "allure-commandline": "^2.43.0",
     "allure-playwright": "^3.9.0",
-    "playwright-bdd": "^9.2.0"
+    "playwright-bdd": "^9.2.0",
+    "typescript": "^6.0.2"
   },
   "dependencies": {
-    "dotenv": "^17.3.1",
-    "typescript": "^6.0.2"
+    "dotenv": "^17.3.1"
+    
   }
 }

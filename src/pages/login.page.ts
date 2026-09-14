@@ -1,4 +1,4 @@
-import { BasePage } from "./base.page.js";
+import { BasePage } from "./base.page";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
 
@@ -16,7 +16,7 @@ export class LoginPage extends BasePage {
     await expect(this.page).toHaveURL(/login/);
     await expect(this.loginForm).toBeVisible();
   }
-  
+
   async loginWithValidCredentials(): Promise<void> {
     const email = process.env.TEST_USER_EMAIL || "";
     const password = process.env.TEST_USER_PASSWORD || "";
@@ -28,7 +28,6 @@ export class LoginPage extends BasePage {
   async getLoginEmailValidationMessage(): Promise<string> {
     return this.getValidationMessage(this.loginEmailInput);
   }
-
 
   async getLoginPasswordValidationMessage(): Promise<string> {
     return this.getValidationMessage(this.loginPasswordInput);

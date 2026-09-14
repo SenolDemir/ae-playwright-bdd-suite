@@ -37,7 +37,7 @@ jobs:
         run: cp .env.example .env || true
 
       - name: Run API tests only
-        run: npx playwright test api --project=api
+        run: npx playwright test --project=api
 
       - name: Upload Playwright HTML report
         uses: actions/upload-artifact@v4

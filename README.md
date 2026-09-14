@@ -1,20 +1,21 @@
-# 🎭 AE Playwright AI-Augmented BDD Suite
+# 🎭 AI-Augmented Playwright BDD Test Suite
 
-![Playwright](https://img.shields.io/badge/Playwright-1.62.0-45ba4b?logo=playwright&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript&logoColor=white)
-![playwright-bdd](https://img.shields.io/badge/playwright--bdd-9.2.0-brightgreen?logo=cucumber&logoColor=white)
-![Faker.js](https://img.shields.io/badge/%40faker--js%2Ffaker-10.4.0-F7DF1E?logo=javascript&logoColor=black)
-![Allure Reports](https://img.shields.io/badge/Allure_Reports-3.9.0-E85A2B?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgMjJoMjBMMTIgMnoiLz48L3N2Zz4=&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-22.22.3-339933?logo=nodedotjs&logoColor=white)
+![Playwright](https://img.shields.io/badge/Playwright-1.63.0-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![playwright-bdd](https://img.shields.io/badge/playwright--bdd-9.2.0-23D18B?style=for-the-badge&logo=cucumber&logoColor=white)
+![Faker.js](https://img.shields.io/badge/%40faker--js%2Ffaker-10.4.0-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Allure Reports](https://img.shields.io/badge/Allure_Reports-3.9.0-FF5722?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgMjJoMjBMMTIgMnoiLz48L3N2Zz4=&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-22.22.3-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![dotenv](https://img.shields.io/badge/dotenv-17.3.1-ECD53F?style=for-the-badge&logo=dotenv&logoColor=black)
 
 
-> A production-grade test automation portfolio project targeting [AutomationExercise.com](https://www.automationexercise.com/) — combining Playwright, TypeScript, BDD, AI Agents and other AI-assisted tooling into a modern, resilient testing framework.
+> A production-grade test automation portfolio project targeting [automationexercise.com](https://www.automationexercise.com/) — combining Playwright, TypeScript, BDD, AI Agents and other AI-assisted tooling into a modern, resilient testing framework.
 
 ---
 
 ## Table of Contents
 
-- [🎭 AE Playwright AI-Augmented BDD Suite](#-ae-playwright-ai-augmented-bdd-suite)
+- [🎭 AI-Augmented Playwright BDD Test Suite](#-ai-augmented-playwright-bdd-test-suite)
 	- [Table of Contents](#table-of-contents)
 	- [Project Overview](#project-overview)
 	- [Tech Stack](#tech-stack)
@@ -37,6 +38,8 @@
 		- [Self-Healing Strategy](#self-healing-strategy)
 	- [Environment Management](#environment-management)
 	- [Test Data Strategy](#test-data-strategy)
+	- [CI/CD](#cicd)
+		- [Local Parity](#local-parity)
 	- [Getting Started](#getting-started)
 		- [Prerequisites](#prerequisites)
 		- [Recommended VS Code Extensions](#recommended-vs-code-extensions)
@@ -44,17 +47,18 @@
 		- [Installation](#installation)
 		- [Environment Setup](#environment-setup)
 	- [Running Tests](#running-tests)
-	- [Reporting](#reporting)
-		- [Playwright HTML Report](#playwright-html-report)
-		- [Allure Report](#allure-report)
 	- [Parallel Execution](#parallel-execution)
 		- [Current Setup](#current-setup)
-		- [How to Control It](#how-to-control-it)
+		- [To run in a custom configuration:](#to-run-in-a-custom-configuration)
 		- [Cross-Browser Parallel](#cross-browser-parallel)
 		- [API Tests](#api-tests)
 	- [Retries](#retries)
 		- [Current Setup](#current-setup-1)
 		- [Enabling Retries Locally](#enabling-retries-locally)
+	- [Reporting](#reporting)
+		- [Playwright HTML Report](#playwright-html-report)
+		- [Allure Report](#allure-report)
+	- [Visual Regression (with Playwright)](#visual-regression-with-playwright)
 	- [References](#references)
 
 ---
@@ -224,7 +228,8 @@ root/
 │   ├── data/                  # Faker factories & data interfaces
 │   │   └── signup.generator.ts
 │   ├── types/                 # Shared TypeScript type definitions
-│   │   ├── login.types.ts
+│   ├── api-models/
+│   │   ├── login.api-model.ts
 │   │   └── signup.types.ts
 │   └── utils/                 # Utility functions and helpers
 │       └── page.context.ts
@@ -372,6 +377,27 @@ It is designed with a **centralized data strategy** to ensure consistency across
 
 ---
 
+## CI/CD 
+
+Continuous integration is implemented with **GitHub Actions**, mirroring the same npm scripts used locally (`bddgen`, `playwright test`)
+
+| Workflow                      | File                 | Purpose                                                                                         |
+| ----------------------------- | -------------------- | ----------------------------------------------------------------------------------------------- |
+| Playwright E2E Test           | `ci-e2e-test.yml`    | Runs the full UI + API suite in a single job and publishes Playwright + Allure reports          |
+| Playwright E2E Test (Sharded) | `ci-e2e-sharded.yml` | Splits the UI/API suite across 5 parallel shards, then merges blob reports into one HTML report |
+| Run API Tests                 | `ci-api-tests.yml`   | Runs only the `api` project for fast, isolated API regression feedback                          |
+
+
+> [!Note]
+> All workflows currently trigger on `workflow_dispatch` (manual run) only. `pull_request` and scheduled `cron` triggers are ready to be enabled, and also `repository_dispatch` can be added to integrate CI pipeline.
+
+
+### Local Parity
+
+Every CI job calls the same npm scripts documented in [Running Tests](#running-tests) (`tests`, `test:api-all`, `test:sharded`), so a workflow failure can always be reproduced locally with the identical command.
+
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -448,33 +474,6 @@ npx playwright show-report
 
 ---
 
-## Reporting
-
-This project supports two complementary reporting mechanisms: quick local feedback and rich analytical reporting.
-
-### Playwright HTML Report
-
-Built into Playwright. Generated automatically after each test run.
-
-```bash
-# Open the report after running tests
-npx playwright show-report
-```
-
-### Allure Report
-
-Provides advanced analytics including historical trends, test categorization, environment info, and custom widgets.
-
-```bash
-# Generate the Allure report from collected results
-npx allure generate reports/allure-results --clean -o reports/allure-report
-
-# Open the report in a browser
-npx allure open reports/allure-report
-```
-
----
-
 ## Parallel Execution
 
 ### Current Setup
@@ -482,26 +481,37 @@ npx allure open reports/allure-report
 | Setting         | Local  | CI     |
 | --------------- | ------ | ------ |
 | `fullyParallel` | `true` | `true` |
-| `workers`       | `4`    | `1`    |
+| `workers`       | `3`    | `1`    |
 
-### How to Control It
+`workers` is derived directly from `process.env.CI` in [playwright.config.ts](playwright.config.ts)
 
-**1. Via environment variable (easiest)**
-```bash
-WORKERS=8 
-#then
-npx bddgen && npx playwright test
-```
+### To run in a custom configuration:
 
-**2. Via CLI flag**
+**1. Via CLI flag (recommended)**
 ```bash
 npx playwright test --workers=8
 ```
 
+**2. Via config change**
+```ts
+// playwright.config.ts
+workers: process.env.CI ? 1 : 3,
+```
+Edit the local branch (`3`) directly if you want a different default worker count.
+
 ### Cross-Browser Parallel
 
-When `BROWSER_TYPE=all`, 7 browser projects × N workers multiply fast. Set `WORKERS` to a lower number (1–2) in that case to avoid resource exhaustion.
+Three browser projects (`chromium`, `firefox`, `webkit`) are set up. Tests are run alongside these browsers.
 
+To run specific browser:
+
+```bash
+npx playwright test --project=chromium
+```
+To run multiple browsers explicitly:
+```bash
+npx playwright test --project=chromium --project=firefox
+```
 ### API Tests
 
 The `api` project has no worker override, so it inherits the global `workers` value and runs in parallel already.
@@ -536,22 +546,58 @@ npx playwright test --retries=2 api/user.spec.ts
 
 ---
 
-## References
 
-- **[Gojko Adzic — Specification by Example (Manning, 2011)](https://gojko.net/books/specification-by-example/)** — The book that defined "living documentation" as the primary value of BDD.
+## Reporting
+
+This project supports two complementary reporting mechanisms: quick local feedback and rich analytical reporting.
+
+### Playwright HTML Report
+
+Built into Playwright. Generated automatically after each test run.
+
+```bash
+# Open the report after running tests
+npx playwright show-report
+```
+
+### Allure Report
+
+Provides advanced analytics including historical trends, test categorization, environment info, and custom widgets.
+
+```bash
+# Generate the Allure report from collected results
+npx allure generate reports/allure-results --clean -o reports/allure-report
+
+# Open the report in a browser
+npx allure open reports/allure-report
+```
+
+---
+
+## Visual Regression (with Playwright)
+
+**[ae-visual-regression-suite](https://github.com/SenolDemir/ae-visual-regression-suite)** — 
+A visual regression testing suite built for the same [automationexercise.com](https://www.automationexercise.com/) target. It covers pixel-diff snapshot comparisons, responsive-layout screenshots across mobile/tablet/desktop breakpoints, cross-browser rendering comparisons, and automated horizontal-overflow detection. It is kept separate from this repo to isolate OS/browser-specific baseline snapshots from the BDD/API suite.
+
+---
+
+## References
 
 - **[Playwright × BDD: Cucumber.js vs Playwright-bdd](https://www.arrangility.com/blog/playwright-cucumber-vs-playwright-bdd)** — A practical comparison of the two BDD integration approaches for Playwright, covering fixture compatibility, runner behaviour, and boilerplate trade-offs.
 
 - **[Test Design Techniques — ISTQB Foundation Syllabus](https://istqb-main-web-prod.s3.amazonaws.com/media/documents/ISTQB-CTFL_Syllabus_2023_v4.0.1.pdf)** — The Authoritative reference for equivalence partitioning, boundary value analysis, and decision table testing techniques that applied by the `playwright-bdd-planner` agent during scenario generation.
 
-- **[How to Handle Playwright Page Objects - Nawaz Dhandalag](https://oneuptime.com/blog/post/2026-02-02-playwright-page-objects/view)** — Covers how to decompose Page Objects into smaller component abstractions to the Component Object Model applied in this project's `/components` layer.
-
 - **[Playwright Test Agents in 2026: what works, what breaks, and what's next](https://bug0.com/blog/playwright-test-agents)** — A realistic evaluation of Playwright's agent capabilities including generation, healing, and the boundaries of current AI assistance. Referenced in the [Playwright Agents](#playwright-agents) section.
+
+- **[How to Handle Playwright Page Objects - Nawaz Dhandalag](https://oneuptime.com/blog/post/2026-02-02-playwright-page-objects/view)** — Covers how to decompose Page Objects into smaller component abstractions to the Component Object Model applied in this project's `/components` layer.
+  
+- **[Gojko Adzic — Specification by Example (Manning, 2011)](https://gojko.net/books/specification-by-example/)** — The book that defined "living documentation" as the primary value of BDD.
+
 
 ---
 
 <div align="center">
 
-Built with ☕ and precision by a QA engineer who believes good tests should have good documentation.
+Crafted with ☕ and precision by a QA engineer who believes good test requires continuous evolution.
 
 </div>
