@@ -17,44 +17,44 @@
 ## Table of Contents
 
 - [🎭 AI-Augmented Playwright BDD Test Suite](#-ai-augmented-playwright-bdd-test-suite)
-	- [Table of Contents](#table-of-contents)
-	- [Project Overview](#project-overview)
-	- [Tech Stack](#tech-stack)
-	- [Project Structure](#project-structure)
-	- [Architecture Overview](#architecture-overview)
-		- [Playwright BDD over Cucumber.js?](#playwright-bdd-over-cucumberjs)
-		- [Hybrid Test Style: BDD for UI, Native Spec for API](#hybrid-test-style-bdd-for-ui-native-spec-for-api)
-		- [Resilient Locator Strategy](#resilient-locator-strategy)
-		- [Page Object Model](#page-object-model)
-	- [AI Augmentation](#ai-augmentation)
-		- [GitHub Copilot](#github-copilot)
-		- [Playwright MCP (Model Context Protocol)](#playwright-mcp-model-context-protocol)
-		- [Playwright Agents](#playwright-agents)
-		- [Test Generation with Playwright Agents](#test-generation-with-playwright-agents)
-		- [Self-Healing Strategy](#self-healing-strategy)
-	- [Environment Management](#environment-management)
-	- [Test Data Strategy](#test-data-strategy)
-	- [CI/CD](#cicd)
-		- [Local Parity](#local-parity)
-	- [Visual Regression (with Playwright)](#visual-regression-with-playwright)
-	- [Getting Started](#getting-started)
-		- [Prerequisites](#prerequisites)
-		- [Recommended VS Code Extensions](#recommended-vs-code-extensions)
-		- [Installation](#installation)
-		- [Environment Setup](#environment-setup)
-	- [Running Tests](#running-tests)
-	- [Parallel Execution](#parallel-execution)
-		- [Current Setup](#current-setup)
-		- [To run in a custom configuration:](#to-run-in-a-custom-configuration)
-		- [Cross-Browser Parallel](#cross-browser-parallel)
-		- [API Tests](#api-tests)
-	- [Retries](#retries)
-		- [Current Setup](#current-setup-1)
-		- [Enabling Retries Locally](#enabling-retries-locally)
-	- [Reporting](#reporting)
-		- [Playwright HTML Report](#playwright-html-report)
-		- [Allure Report](#allure-report)
-	- [References](#references)
+  - [Table of Contents](#table-of-contents)
+  - [Project Overview](#project-overview)
+  - [Tech Stack](#tech-stack)
+  - [Project Structure](#project-structure)
+  - [Architecture Overview](#architecture-overview)
+    - [Playwright BDD over Cucumber.js?](#playwright-bdd-over-cucumberjs)
+    - [Hybrid Test Style: BDD for UI, Native Spec for API](#hybrid-test-style-bdd-for-ui-native-spec-for-api)
+    - [Resilient Locator Strategy](#resilient-locator-strategy)
+    - [Page Object Model](#page-object-model)
+  - [AI Augmentation](#ai-augmentation)
+    - [GitHub Copilot](#github-copilot)
+    - [Playwright MCP (Model Context Protocol)](#playwright-mcp-model-context-protocol)
+    - [Playwright Agents](#playwright-agents)
+    - [Test Generation with Playwright Agents](#test-generation-with-playwright-agents)
+    - [Self-Healing Strategy](#self-healing-strategy)
+  - [Environment Management](#environment-management)
+  - [Test Data Strategy](#test-data-strategy)
+  - [CI/CD](#cicd)
+    - [Local Parity](#local-parity)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Recommended VS Code Extensions](#recommended-vs-code-extensions)
+    - [Installation](#installation)
+    - [Environment Setup](#environment-setup)
+  - [Running Tests](#running-tests)
+  - [Parallel Execution](#parallel-execution)
+    - [Current Setup](#current-setup)
+    - [To run in a custom configuration:](#to-run-in-a-custom-configuration)
+    - [Cross-Browser Parallel](#cross-browser-parallel)
+    - [API Tests](#api-tests)
+  - [Retries](#retries)
+    - [Current Setup](#current-setup-1)
+    - [Enabling Retries Locally](#enabling-retries-locally)
+  - [Reporting](#reporting)
+    - [Playwright HTML Report](#playwright-html-report)
+    - [Allure Report](#allure-report)
+  - [Visual Regression (with Playwright)](#visual-regression-with-playwright)
+  - [References](#references)
 
 ---
 
@@ -198,16 +198,15 @@ This approach aligns with how assistive technologies interact with the DOM, maki
 
 ### Page Object Model
 
-**Page Objects**  
 Each significant page of the application has a corresponding Page Object class. Responsibilities include:
 - Encapsulating locators (using semantic/role-based selectors)
 - Exposing high-level action methods (e.g., `login(email, password)`)
 - Keeping assertions out of the POM layer (separation of concerns)
 
-**Component Objects**   
+**Component Objects** 
 Reusable UI fragments that appear across multiple pages are extracted into Component Object classes. This avoids duplicating locator definitions and interaction logic across multiple Page Objects. 
 
-**API Object Model (AOM)**  
+**API Object Model (AOM)**
 Mirrors the POM philosophy applied to API interactions. Each domain (Users, Products, Cart, etc.) has a dedicated client class with strongly typed request/response methods, reused across both API spec tests and UI test setup hooks.
 
 ## AI Augmentation
@@ -297,10 +296,6 @@ Every CI job calls the same npm scripts documented in [Running Tests](#running-t
 > [!Note]
 > All workflows currently trigger on `workflow_dispatch` (manual run) only. `pull_request` and scheduled `cron` triggers are ready to be enabled, and also `repository_dispatch` can be added to integrate CI pipeline.
 
-## Visual Regression (with Playwright)
-
-A visual regression testing suite built for the target application. It covers pixel-diff snapshot comparisons, responsive-layout screenshots breakpoints, cross-browser rendering comparisons, and automated horizontal-overflow detection. It is kept separate from this repo to isolate OS/browser-specific baseline snapshots from the BDD/API suite. To check it
-**[ae-visual-regression-suite](https://github.com/SenolDemir/ae-visual-regression-suite)**
 
 ---
 
@@ -493,6 +488,13 @@ npx allure generate reports/allure-results --clean -o reports/allure-report
 # Open the report in a browser
 npx allure open reports/allure-report
 ```
+
+---
+
+## Visual Regression (with Playwright)
+
+**[ae-visual-regression-suite](https://github.com/SenolDemir/ae-visual-regression-suite)** — 
+A visual regression testing suite built for the same [automationexercise.com](https://www.automationexercise.com/) target. It covers pixel-diff snapshot comparisons, responsive-layout screenshots across mobile/tablet/desktop breakpoints, cross-browser rendering comparisons, and automated horizontal-overflow detection. It is kept separate from this repo to isolate OS/browser-specific baseline snapshots from the BDD/API suite.
 
 ---
 

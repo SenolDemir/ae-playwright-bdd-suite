@@ -126,15 +126,15 @@ Feature: Signup and Account Information Setup
                   Then I should see the "password" field error message "<error_message>"
 
                   Examples:
-                        | password       | error_message              | description                                                 |
-                        |                | Please fill in this field. | passord should not be empty                                 |
-                        # | Short1!        | error message              | password should be at least 8 characters                    |
-                        # | alowercase1!   | error message              | password should contain at least one uppercase letter       |
-                        # | ALLUPPERCASE1! | error message              | password should contain at least one lowercase letter       |
-                        # | NoNumbers!     | error message              | password should contain at least one number                 |
-                        # | NoSpecial1     | error message              | password should contain at least one special character      |
-                        # | [too_long]     | error message              | password should not exceed maximum length  of 64 characters |
-                        # | no space       | error message              | password should not contain spaces                          |
+                        | password | error_message              | description                 |
+                        |          | Please fill in this field. | passord should not be empty |
+            # | Short1!        | error message              | password should be at least 8 characters                    |
+            # | alowercase1!   | error message              | password should contain at least one uppercase letter       |
+            # | ALLUPPERCASE1! | error message              | password should contain at least one lowercase letter       |
+            # | NoNumbers!     | error message              | password should contain at least one number                 |
+            # | NoSpecial1     | error message              | password should contain at least one special character      |
+            # | [too_long]     | error message              | password should not exceed maximum length  of 64 characters |
+            # | no space       | error message              | password should not contain spaces                          |
 
 
             @ui01-09 @negative
@@ -167,10 +167,10 @@ Feature: Signup and Account Information Setup
                         | name       |
                         | first name |
                         | last name  |
-                        # | address    |
-                        # | state      |
-                        # | city       |
-                        # | zipcode    |
+            # | address    |
+            # | state      |
+            # | city       |
+            # | zipcode    |
 
             @ui01-11 @negative
             Scenario Outline: Registration should be rejected when mobile number is not in valid format
@@ -180,40 +180,8 @@ Feature: Signup and Account Information Setup
                   Then I should see the "mobile_number" field error message "<expected_error>"
 
                   Examples:
-                        | mobile_input   | expected_error                | description                      |
-                        | ABCDEFGH       | error message to be confirmed | alphabetic characters only       |
-                        | 123-456-789    | error message to be confirmed | dashes in phone number           |
-                        # | +1 800 000 000 | error message to be confirmed | international format with spaces |
-                        # | 123 456 789    | error message to be confirmed | spaces in phone number           |
-
-
-
-      #==================================================================================
-      # Signup Entry Form validations
-      # =================================================================================
-      # NOTE: Based on observed behavior during exploration:
-      # - Special characters in NAME field are ACCEPTED
-      # - Very long names are ACCEPTED
-      # - Client-side validation appears minimal; server-side validation handles most cases
-      # - Form submission failure is indicated by staying on current page
-      # - Only duplicate email shows explicit error message
-      #==================================================================================
-      # Password field validation
-      #==================================================================================
-      # The core 5 rules (NIST SP 800-63B + OWASP):
-      # Minimum length: typically 8 characters
-      # Maximum length: typically 64–128 characters
-      # Complexity: at least one uppercase, lowercase, number, and special character
-      # No spaces
-      # Required / not empty: basic presence check
-      #==================================================================================
-      # Password field has only not empty vadilation so far, other rules are not implemented
-      # Title field has no 'required' attributed and is optional
-      # Date of birth field is optional and has no validation rules
-      # Name field has only not empty validation and no other validation rules
-      #==================================================================================
-      # Mobile number validation
-      # ==================================================================================
-      # Mobile Number field must accept only numeric input
-      # Observed: type=text, no pattern attribute , does not enforce numeric format.
-      # ==================================================================================
+                        | mobile_input | expected_error                | description                |
+                        | ABCDEFGH     | error message to be confirmed | alphabetic characters only |
+                        | 123-456-789  | error message to be confirmed | dashes in phone number     |
+      # | +1 800 000 000 | error message to be confirmed | international format with spaces |
+      # | 123 456 789    | error message to be confirmed | spaces in phone number           |

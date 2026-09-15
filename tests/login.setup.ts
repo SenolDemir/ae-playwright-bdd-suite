@@ -1,6 +1,6 @@
 import { test as setup } from "@playwright/test";
-import { HomePage } from "../../src/pages/home.page";
-import { LoginPage } from "../../src/pages/login.page";
+import { HomePage } from "../src/pages/home.page";
+import { LoginPage } from "../src/pages/login.page";
 
 export const authFile = "playwright/.auth/user.json";
 

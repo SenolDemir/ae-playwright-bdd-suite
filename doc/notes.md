@@ -8,6 +8,22 @@
   blocks known datacenter/cloud IP ranges (including GitHub-hosted runners), serving an HTML challenge/block page instead of the API response. This is IP-reputation based, not transient, so retries don't help.
 - Not a regression in test code or app behavior — the same tests pas locally from a residential/office IP.
 
+### Signup entry form validation (name/email)
+- Special characters and very long values in the NAME field are accepted (no validation).
+- Client-side validation is minimal; most validation is enforced server-side.
+- A failed submission is only indicated by remaining on the current page — only the duplicate-email case has an explicit error message.
+
+### Signup account information form validation
+- Password field only enforces "not empty" — none of the standard NIST SP 800-63B / OWASP password rules are implemented server-side:
+  - minimum length (typically 8 characters)
+  - maximum length (typically 64–128 characters)
+  - complexity (uppercase, lowercase, number, special character)
+  - no spaces
+- Title field is optional (no `required` attribute).
+- Date of birth field is optional with no validation rules.
+- Name field only enforces "not empty"; no other validation rules.
+- Mobile number field accepts non-numeric input — it's a plain `type=text` input with no `pattern` attribute, so numeric format isn't enforced.
+
 
 
 # tags
