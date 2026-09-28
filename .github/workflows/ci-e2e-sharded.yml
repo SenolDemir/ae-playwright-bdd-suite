@@ -38,9 +38,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Prepare .env
-        run: cp .env.example .env || true
-
       - name: Cache Playwright browsers
         id: playwright-cache
         uses: actions/cache@v4
