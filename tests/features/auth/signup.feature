@@ -73,7 +73,7 @@ Feature: Signup and Account Information Setup
             # behaviour. They are expected to fail against the current implementation and should
             # be treated as known failures.
 
-            @ui01-06 @high @negative
+            @ui01-06 @high @negative @fail @bug-name-field
             Scenario Outline: Reject registration with invalid name formats
                   When I enter name "<invalid_name>"
                   And I enter email "valid_email"
@@ -154,7 +154,7 @@ Feature: Signup and Account Information Setup
                         | zipcode       |
                         | mobile_number |
 
-            @ui01-10 @negative
+            @ui01-10 @negative @fail @bug-name-field-2
             # app has no whitespace validation
             Scenario Outline: Registration should be rejected when a required text field contains only spaces
                   When I complete the account information form with valid data
@@ -172,7 +172,7 @@ Feature: Signup and Account Information Setup
             # | city       |
             # | zipcode    |
 
-            @ui01-11 @negative
+            @ui01-11 @negative @fail @bug-name-field-2
             Scenario Outline: Registration should be rejected when mobile number is not in valid format
                   When I complete the account information form with valid data
                   And I enter "<mobile_input>" in the mobile_number field

@@ -22,7 +22,7 @@
 	- [Tech Stack](#tech-stack)
 	- [Project Structure](#project-structure)
 	- [Architecture Overview](#architecture-overview)
-		- [Playwright BDD over Cucumber.js?](#playwright-bdd-over-cucumberjs)
+		- [Playwright BDD over Cucumber.js](#playwright-bdd-over-cucumberjs)
 		- [Hybrid Test Style: BDD for UI, Native Spec for API](#hybrid-test-style-bdd-for-ui-native-spec-for-api)
 		- [Resilient Locator Strategy](#resilient-locator-strategy)
 		- [Page Object Model](#page-object-model)
@@ -55,6 +55,8 @@
 		- [Playwright HTML Report](#playwright-html-report)
 		- [Allure Report](#allure-report)
 	- [References](#references)
+	- [Contributing](#contributing)
+	- [License](#license)
 
 ---
 
@@ -174,7 +176,7 @@ root/
 
 The project is built over the following key design decisions:
 
-### Playwright BDD over Cucumber.js?
+### Playwright BDD over Cucumber.js
 `playwright-bdd` bridges Playwright's fixture system directly with Gherkin step definitions. This means:
 - BDD steps have full access to Playwright fixtures (`page`, `context`, custom fixtures like `signup.page`)
 - No separate test runner: Playwright **is** the runner; reports, retries, and parallelism all come from Playwright natively
@@ -511,7 +513,21 @@ npx allure open reports/allure-report
 
 ---
 
+## Contributing
+
+This is primarily a personal portfolio project, but suggestions and PRs demonstrating alternative testing approaches are welcome.
+
+- Follow the coding standards in [.github/copilot-instructions.md](.github/copilot-instructions.md)
+- Use the [locator strategy](.github/prompts/locator.prompt.md) for any new selectors
+- Make sure to update or add tests as appropriate
+
+## License
+
+[MIT License](LICENSE)
+
 <div align="center">
+
+----
 
 Crafted with ☕ and precision by a QA engineer who believes good test requires continuous evolution.
 

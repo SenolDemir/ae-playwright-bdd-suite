@@ -1,5 +1,5 @@
 
-# known limitations
+## Known limitations
 
 ### API tests fail in GitHub Actions with "Unexpected token '<' ... is not valid JSON"
 - Symptom: `response.json()` throws because the body is an HTML page
@@ -25,35 +25,42 @@
 - Mobile number field accepts non-numeric input — it's a plain `type=text` input with no `pattern` attribute, so numeric format isn't enforced.
 
 
+## Structural
 
-# tags
-@ui @smoke         → Quick sanity suite
-@api @smoke        → API sanity
-@ui @regression    → Full UI regression
-@api @regression   → Full API regression
-@auth              → Auth-specific runs		
-@positive
-@negative          → Negative test suite
-@wip               → Work in progress (excluded from CI)
+### tags
+@ui @smoke         → Quick sanity suite  
+@api @smoke        → API sanity  
+@ui @regression    → Full UI regression.  
+@api @regression   → Full API regression.  
+@auth              → Auth-specific runs	  	
+@positive  
+@negative          → Negative test suite. 
+@wip               → Work in progress (excluded from CI).  
 
 
-# branch naming
+### branch naming
 feature/ui01-signup-form
 
+### folders
+`types` - domain or test-data structures used across the suite.  
+`api-models` - API boundary contracts, endpoint-specific payloads.   
 
-# bdd-planner-agent prompt template
 
-## Feature
+## AI
+
+## bdd-planner-agent runtime prompt template
+
+Feature:
 Product Catalog
 
-## Entry Point
+Entry Point:
 <!-- Navigation path relative to the base URL -->
 /product
 
-## Scenario Type
+Scenario Type:
 BOTH
 
-## Charter
+Charter:
 In scope:
 - All products are displayed on the products page
 - When a product is chosen, product details can be displayed
@@ -64,13 +71,13 @@ Out of scope:
 - Search and filter behavior
 - Any flow that requires authentication
 
-## Specific Cases to Cover
+Specific Cases to Cover:
 - Verify that each product card shows name, price, and image
 - Verify that clicking a product navigates to its detail page
 - Verify that the detail page displays the correct product name, price, category, and availability
 - Check behavior when navigating back to the product listing from a detail page
 
-## Output Filename
+Output Filename:
 products-catalog-raw.feature
 
 
@@ -120,5 +127,3 @@ at ../pages/ProductDetailPage.ts:84
 
 
 
-`types` - domain or test-data structures used across the suite
-`api-models` - API boundary contracts, endpoint-specific payloads,
