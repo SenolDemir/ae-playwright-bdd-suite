@@ -128,7 +128,10 @@ When("I leave the {string} field empty", async ({ accountSetupPage }, fieldName:
 
 Then(
   "I should see the {string} field error message {string}",
-  async ({ accountSetupPage }, fieldName: string, errorMessage: string) => {
+  async ({ accountSetupPage, page }, fieldName: string, errorMessage: string) => {
+    await expect(page, "Form should stay on account setup page when input is invalid")
+    .not.toHaveURL(/account_created/);
+    await expect(accountSetupPage.passwordInput).toBeVisible({ timeout: 5_000 });
     await accountSetupPage.expectFieldErrorMessage(fieldName, errorMessage);
   },
 );

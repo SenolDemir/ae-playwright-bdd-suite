@@ -73,7 +73,7 @@ Feature: Signup and Account Information Setup
             # behaviour. They are expected to fail against the current implementation and should
             # be treated as known failures.
 
-            @ui01-06 @high @negative @fail @bug-name-field
+            @ui01-06 @high @negative
             Scenario Outline: Reject registration with invalid name formats
                   When I enter name "<invalid_name>"
                   And I enter email "valid_email"
@@ -81,13 +81,17 @@ Feature: Signup and Account Information Setup
                   Then I should remain on the Login/Signup page
                   And I should see the name field error message "<error_message>"
 
+                  Examples: Correctly rejected
+                        | invalid_name | description | error_message              |
+                        |              | empty       | Please fill in this field. |
+
+                  @fail @bug-name-field
                   Examples:
-                        | invalid_name | description  | error_message              |
-                        | 123456       | numbers only | Please enter a valid name  |
-                        | !@#$%^       | symbols only | Please enter a valid name  |
-                        |              | spaces only  | Please fill in this field. |
-                        | [too_long]   | too long     | Please enter a valid name  |
-                        | a            | too short    | Please enter a valid name  |
+                        | invalid_name | description  | error_message             |
+                        | 123456       | numbers only | Please enter a valid name |
+                        | !@#$%^       | symbols only | Please enter a valid name |
+                        | [too_long]   | too long     | Please enter a valid name |
+                        | a            | too short    | Please enter a valid name |
 
             # NOTE: Placeholder tokens in square brackets are resolved dynamically at the
             # step definition level — they are NOT literal strings typed into the field
@@ -125,16 +129,19 @@ Feature: Signup and Account Information Setup
                   And I submit the registration
                   Then I should see the "password" field error message "<error_message>"
 
-                  Examples:
+                  Examples: Reject Invalid Password
                         | password | error_message              | description                 |
                         |          | Please fill in this field. | passord should not be empty |
-            # | Short1!        | error message              | password should be at least 8 characters                    |
-            # | alowercase1!   | error message              | password should contain at least one uppercase letter       |
-            # | ALLUPPERCASE1! | error message              | password should contain at least one lowercase letter       |
-            # | NoNumbers!     | error message              | password should contain at least one number                 |
-            # | NoSpecial1     | error message              | password should contain at least one special character      |
-            # | [too_long]     | error message              | password should not exceed maximum length  of 64 characters |
-            # | no space       | error message              | password should not contain spaces                          |
+
+                  @fail @bug-password-validation
+                  Examples:
+                        | Short1!        | error message | password should be at least 8 characters                    |
+                        | alowercase1!   | error message | password should contain at least one uppercase letter       |
+                        | ALLUPPERCASE1! | error message | password should contain at least one lowercase letter       |
+                        | NoNumbers!     | error message | password should contain at least one number                 |
+                        | NoSpecial1     | error message | password should contain at least one special character      |
+                        | [too_long]     | error message | password should not exceed maximum length  of 64 characters |
+                        |                | error message | password should not contain spaces                          |
 
 
             @ui01-09 @negative
@@ -167,10 +174,10 @@ Feature: Signup and Account Information Setup
                         | name       |
                         | first name |
                         | last name  |
-            # | address    |
-            # | state      |
-            # | city       |
-            # | zipcode    |
+                        | address    |
+                        | state      |
+                        | city       |
+                        | zipcode    |
 
             @ui01-11 @negative @fail @bug-name-field-2
             Scenario Outline: Registration should be rejected when mobile number is not in valid format
@@ -183,5 +190,4 @@ Feature: Signup and Account Information Setup
                         | mobile_input | expected_error                | description                |
                         | ABCDEFGH     | error message to be confirmed | alphabetic characters only |
                         | 123-456-789  | error message to be confirmed | dashes in phone number     |
-      # | +1 800 000 000 | error message to be confirmed | international format with spaces |
-      # | 123 456 789    | error message to be confirmed | spaces in phone number           |
+                        | 123 456 789  | error message to be confirmed | spaces in phone number     |

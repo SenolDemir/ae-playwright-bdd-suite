@@ -54,6 +54,7 @@
 	- [Reporting](#reporting)
 		- [Playwright HTML Report](#playwright-html-report)
 		- [Allure Report](#allure-report)
+		- [Reporting in CI](#reporting-in-ci)
 	- [References](#references)
 	- [Contributing](#contributing)
 	- [License](#license)
@@ -495,6 +496,19 @@ npx allure generate reports/allure-results --clean -o reports/allure-report
 # Open the report in a browser
 npx allure open reports/allure-report
 ```
+
+### Reporting in CI
+
+Both E2E workflows (`ci-e2e-test.yml` and `ci-e2e-sharded.yml`) generate a GitHub Actions job summary and a Playwright HTML report, which is uploaded as a downloadable workflow artifact. In addition, `ci-e2e-test.yml` generates an Allure report and publishes it to GitHub Pages.
+
+| Workflow             | GitHub job summary | Playwright HTML report                       | Allure report    |
+| -------------------- | ------------------ | -------------------------------------------- | ---------------- |
+| `ci-e2e-test.yml`    | ✅                  | ✅ (artifact)                                 | ✅ (GitHub Pages) |
+| `ci-e2e-sharded.yml` | ✅                  | ✅ (artifact, merged from shard blob reports) | ❌                |
+
+The latest Allure report from `ci-e2e-test.yml` is available here:
+👉 [Latest Allure Report](https://senoldemir.github.io/ae-playwright-bdd-suite/)
+
 
 ---
 
