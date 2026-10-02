@@ -13,7 +13,7 @@ const baseUrl = process.env.BASE_URL;
 
 const bddTestDir = defineBddConfig({
   features: "tests/features/**/*.feature",
-  steps: ["tests/steps/**/*.ts", "tests/hooks/**/*.ts", "src/fixtures/ui.fixtures.ts"],
+  steps: ["tests/steps/**/*.ts", "tests/hooks/**/*.ts", "fixtures/ui.fixtures.ts"],
 });
 
 export default defineConfig({

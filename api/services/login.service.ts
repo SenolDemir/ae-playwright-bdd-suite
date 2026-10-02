@@ -1,16 +1,11 @@
-import type { APIRequestContext, APIResponse } from "@playwright/test";
-import { expect } from "@playwright/test";
-import type { LoginRequest } from "../models/login.api-model";
+import type { APIResponse } from "@playwright/test";
+import { BaseClient } from "../base.client";
+import { API_ENDPOINTS } from "../endpoints";
+import type { LoginRequest } from "../models/login.model";
 
-export class LoginClient {
-  private readonly request: APIRequestContext;
-
-  constructor(request: APIRequestContext) {
-    this.request = request;
-  }
-
+export class LoginService extends BaseClient {
   /**
-   * Builds the login payload for POST /api/verifyLogin.
+   * Builds the login payload for POST verifyLogin.
    * Defaults to env-configured credentials but supports overrides
    * for negative/boundary scenarios (invalid email, empty password, etc.)
    */
@@ -25,7 +20,7 @@ export class LoginClient {
   async login(overrides?: Partial<LoginRequest>): Promise<APIResponse> {
     const payload = this.buildLoginPayload(overrides);
 
-    return this.request.post("/api/verifyLogin", {
+    return this.request.post(API_ENDPOINTS.login.VERIFY, {
       form: payload,
     });
   }

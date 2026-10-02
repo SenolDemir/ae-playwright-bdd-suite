@@ -135,7 +135,7 @@ root/
 │   └── hooks/                 # Global and test-specific hooks
 │       └── Hook.ts
 │
-├── src/
+├── ui/
 │   ├── pages/                 # Page Object Model classes
 │   │   ├── base.page.ts
 │   │   ├── home.page.ts
@@ -144,22 +144,32 @@ root/
 │   │   ├── account-setup.page.ts
 │   │   ├── product.page.ts
 │   │   └── product-detail.page.ts
-│   ├── components/            # Component Object classes
-│   │   └── navbar.component.ts
-│   ├── clients/               # API Object Model — one client per domain
-│   │   ├── base.client.ts
-│   │   ├── login.client.ts
-│   │   ├── signup.client.ts
-│   │   └── product.client.ts
-│   ├── fixtures/              # Playwright fixture definitions
-│   │   ├── ui.fixtures.ts
-│   │   └── api.fixtures.ts
-│   ├── data/                  # Faker factories & data interfaces
-│   │   └── signup.generator.ts
-│   ├── types/                 # Shared TypeScript type definitions
-│   │   └── signup.types.ts
-│   └── api-models/
-│       └── login.api-model.ts
+│   └── components/            # Component Object classes
+│       └── navbar.component.ts
+│
+├── fixtures/                   # Playwright fixture definitions
+│   ├── ui.fixtures.ts
+│   └── api.fixtures.ts
+│
+├── testdata/                   # Faker factories (test data generators)
+│   └── signup.generator.ts
+│
+├── types/                      # Shared domain TypeScript type definitions
+│   └── signup.types.ts
+│
+├── api/                        # API Object Model — endpoints, wire models, mappers, services
+│   ├── endpoints.ts            # Central registry of endpoint path constants
+│   ├── base.client.ts          # Thin shared HTTP client (JSON parsing, WAF detection)
+│   ├── models/                 # Wire-format request/response types
+│   │   ├── login.model.ts
+│   │   └── signup.model.ts
+│   ├── mappers/                # Domain data → wire payload transforms
+│   │   └── signup.mapper.ts
+│   ├── schemas/                # Response schema validation (scaffolded, not yet in use)
+│   └── services/                # One service per domain, each extends base.client.ts
+│       ├── login.service.ts
+│       ├── signup.service.ts
+│       └── product.service.ts
 │
 ├── reports/                   # Generated test reports (git-ignored)
 │   ├── playwright-html/
@@ -211,7 +221,7 @@ Each significant page of the application has a corresponding Page Object class. 
 Reusable UI fragments that appear across multiple pages are extracted into Component Object classes. This avoids duplicating locator definitions and interaction logic across multiple Page Objects. 
 
 **API Object Model (AOM)**  
-Mirrors the POM philosophy applied to API interactions. Each domain (Users, Products, Cart, etc.) has a dedicated client class with strongly typed request/response methods, reused across both API spec tests and UI test setup hooks.
+Mirrors the POM philosophy applied to API interactions. Each domain (Users, Products, Cart, etc.) has a dedicated service class extending the shared `api/base.client.ts`, with wire-format types, payload mappers, and endpoint paths centralized in `api/models/`, `api/mappers/`, and `api/endpoints.ts` respectively — reused across both API spec tests and UI test setup hooks.
 
 ## AI Augmentation
 

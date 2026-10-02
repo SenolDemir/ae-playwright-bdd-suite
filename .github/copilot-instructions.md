@@ -44,11 +44,13 @@ This project is an AI-augmented test suite using Playwright for end-to-end testi
 ### Architecture
 
 - Always follow Page Object Model (POM) design pattern
-- Page classes live in `pages/` — one file per page/component
-- Step definitions live in `steps/`
-- Tests (feature files) live in `features/`
+- Page classes live in `ui/pages/` — one file per page/component
+- Component classes live in `ui/components/`
+- Step definitions live in `tests/steps/`
+- Tests (feature files) live in `tests/features/`
 - Shared fixtures live in `fixtures/`
-- Test data factories and interfaces live in `data/`
+- Test data factories live in `testdata/`
+- Shared domain types live in `types/`
 - Utility functions live in `utils/`
 
 ### Page Object Rules

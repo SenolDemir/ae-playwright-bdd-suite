@@ -1,6 +1,6 @@
-import { Given, When, Then, expect } from "../../../src/fixtures/ui.fixtures";
+import { Given, When, Then, expect } from "../../../fixtures/ui.fixtures";
 import { faker } from "@faker-js/faker";
-import { SignupDataGenerator } from "../../../src/data/signup.generator.js";
+import { SignupDataGenerator } from "../../../testdata/signup.generator.js";
 
 const NAME_TOKENS: Record<string, () => string> = {
   "[too_long]": () => faker.string.alpha({ length: 100 }),
@@ -71,16 +71,22 @@ When("I click the {string} button on the Login\\/Signup page", async ({ signupPa
   await signupPage.clickSignupButton();
 });
 
-Then("I should see the name field error message {string}", async ({ signupPage }, expectedMessage: string) => {
-  const actualMessage = await signupPage.getNameValidationMessage();
-  // normalize Linux Chromium vs macOS Chrome native message wording
-  expect(actualMessage.replace("fill out", "fill in")).toBe(expectedMessage);
-});
+Then(
+  "I should see the name field error message {string}",
+  async ({ signupPage }, expectedMessage: string) => {
+    const actualMessage = await signupPage.getNameValidationMessage();
+    // normalize Linux Chromium vs macOS Chrome native message wording
+    expect(actualMessage.replace("fill out", "fill in")).toBe(expectedMessage);
+  },
+);
 
-Then("I should see the email field error message {string}", async ({ signupPage }, expectedMessage: string) => {
-  const actualMessage = await signupPage.getEmailValidationMessage();
-  expect(actualMessage.replace("fill out", "fill in")).toBe(expectedMessage);
-});
+Then(
+  "I should see the email field error message {string}",
+  async ({ signupPage }, expectedMessage: string) => {
+    const actualMessage = await signupPage.getEmailValidationMessage();
+    expect(actualMessage.replace("fill out", "fill in")).toBe(expectedMessage);
+  },
+);
 
 Then("I leave the name field empty", async ({ signupPage }) => {
   await signupPage.enterNewUserName("");
@@ -129,8 +135,9 @@ When("I leave the {string} field empty", async ({ accountSetupPage }, fieldName:
 Then(
   "I should see the {string} field error message {string}",
   async ({ accountSetupPage, page }, fieldName: string, errorMessage: string) => {
-    await expect(page, "Form should stay on account setup page when input is invalid")
-    .not.toHaveURL(/account_created/);
+    await expect(page, "Form should stay on account setup page when input is invalid").not.toHaveURL(
+      /account_created/,
+    );
     await expect(accountSetupPage.passwordInput).toBeVisible({ timeout: 5_000 });
     await accountSetupPage.expectFieldErrorMessage(fieldName, errorMessage);
   },
