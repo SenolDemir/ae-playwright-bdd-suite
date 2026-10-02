@@ -1,8 +1,7 @@
-// src/clients/base.client.ts
+// api/base.client.ts
 import type { APIRequestContext, APIResponse } from "@playwright/test";
 
 export class WafBlockedError extends Error {}
-
 
 // to capture Cloudflare issues in CI
 export abstract class BaseClient {
@@ -24,8 +23,4 @@ export abstract class BaseClient {
         : new Error(`Non-JSON response: ${details}`);
     }
   }
-
-
-
-
 }

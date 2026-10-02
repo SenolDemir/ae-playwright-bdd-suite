@@ -1,4 +1,3 @@
-// src/pages/base.page.ts
 import type { Locator, Page } from "@playwright/test";
 import { NavBar } from "../components/navbar.component";
 

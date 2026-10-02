@@ -1,12 +1,12 @@
 import { expect } from "@playwright/test";
 import { test as base, createBdd } from "playwright-bdd";
-import { SignupPage } from "../pages/signup.page";
-import { HomePage } from "../pages/home.page";
-import { ProductPage } from "../pages/product.page";
-import { ProductDetailPage } from "../pages/product-detail.page";
-import { LoginPage } from "../pages/login.page";
-import { AccountSetupPage } from "../pages/account-setup.page";
-import { SignupDataGenerator } from "../data/signup.generator";
+import { SignupPage } from "../ui/pages/signup.page";
+import { HomePage } from "../ui/pages/home.page";
+import { ProductPage } from "../ui/pages/product.page";
+import { ProductDetailPage } from "../ui/pages/product-detail.page";
+import { LoginPage } from "../ui/pages/login.page";
+import { AccountSetupPage } from "../ui/pages/account-setup.page";
+import { SignupDataGenerator } from "../testdata/signup.generator";
 import type { SignupData } from "../types/signup.types";
 
 type Fixtures = {

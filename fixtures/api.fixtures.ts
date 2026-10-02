@@ -1,17 +1,19 @@
-// src/fixtures/api.fixtures.ts
 import { test as base, expect, request as playwrightRequest, type APIRequestContext } from "@playwright/test";
-import { SignupClient } from "../clients/signup.client";
-import { ProductClient } from "../clients/product.client";
-import { LoginClient } from "../clients/login.client";
-import { SignupDataGenerator } from "../data/signup.generator";
+import { SignupService } from "../api/services/signup.service";
+import { ProductService } from "../api/services/product.service";
+import { LoginService } from "../api/services/login.service";
+import { SignupMapper } from "../api/mappers/signup.mapper";
+import type { SignupPayload } from "../api/models/signup.model";
+import { SignupDataGenerator } from "../testdata/signup.generator";
 import type { SignupData } from "../types/signup.types";
 
 type ApiFixtures = {
   apiContext: APIRequestContext;
   signupData: SignupData;
-  signupClient: SignupClient;
-  loginClient: LoginClient;
-  productClient: ProductClient;
+  signupPayloadFactory: (overrides?: Partial<SignupPayload>) => SignupPayload;
+  signupService: SignupService;
+  loginService: LoginService;
+  productService: ProductService;
 };
 
 export const test = base.extend<ApiFixtures>({
@@ -28,16 +30,24 @@ export const test = base.extend<ApiFixtures>({
     await use(SignupDataGenerator.generateSignupData());
   },
 
-  signupClient: async ({ apiContext }, use) => {
-    await use(new SignupClient(apiContext));
+  // Composes generator + mapper so services/tests never need direct generator access.
+  signupPayloadFactory: async ({}, use) => {
+    await use((overrides?: Partial<SignupPayload>) => {
+      const data = SignupDataGenerator.generateSignupData();
+      return SignupMapper.toSignupPayload(data, overrides);
+    });
   },
 
-  productClient: async ({ apiContext }, use) => {
-    await use(new ProductClient(apiContext));
+  signupService: async ({ apiContext }, use) => {
+    await use(new SignupService(apiContext));
   },
 
-  loginClient: async ({ apiContext }, use) => {
-    await use(new LoginClient(apiContext));
+  productService: async ({ apiContext }, use) => {
+    await use(new ProductService(apiContext));
+  },
+
+  loginService: async ({ apiContext }, use) => {
+    await use(new LoginService(apiContext));
   },
 });
 

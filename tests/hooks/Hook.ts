@@ -1,4 +1,4 @@
-import { After, Before } from "../../src/fixtures/ui.fixtures.js";
+import { After, Before } from "../../fixtures/ui.fixtures.js";
 
 Before(async ({ page }) => {
   // Register the overlay handler BEFORE navigating
@@ -13,5 +13,4 @@ Before(async ({ page }) => {
   );
 
   await page.goto("/", { waitUntil: "domcontentloaded" });
-
 });

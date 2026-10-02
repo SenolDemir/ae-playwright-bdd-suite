@@ -1,8 +1,6 @@
 {
-  "cucumberautocomplete.steps": ["tests/steps/**/*.ts", "tests/hooks/**/*.ts", "src/fixtures/ui.fixtures.ts"],
+  "cucumberautocomplete.steps": ["tests/steps/**/*.ts", "tests/hooks/**/*.ts", "fixtures/ui.fixtures.ts"],
 
   "cucumberautocomplete.syncfeatures": "tests/features/**/*.feature",
-  "cucumberautocomplete.strictGherkinCompletion": false,
-
-  
+  "cucumberautocomplete.strictGherkinCompletion": false
 }
