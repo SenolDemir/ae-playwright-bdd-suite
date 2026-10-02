@@ -1,7 +1,10 @@
 import { test, expect } from "../../../fixtures/api.fixtures";
 import { API_ENDPOINTS } from "../../../api/endpoints";
+import { skipLiveApi, SKIP_REASON } from "../../../api/api.guard";
 
 test.describe("Login API", () => {
+  test.skip(skipLiveApi, SKIP_REASON);
+
   test("login with valid payload", async ({ apiContext, loginService }) => {
     const response = await apiContext.post(API_ENDPOINTS.login.VERIFY, {
       form: {

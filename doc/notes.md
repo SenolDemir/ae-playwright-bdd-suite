@@ -2,11 +2,7 @@
 ## Known limitations
 
 ### API tests fail in GitHub Actions with "Unexpected token '<' ... is not valid JSON"
-- Symptom: `response.json()` throws because the body is an HTML page
-  (`<!DOCTYPE ...`) instead of the expected JSON, on every test/retry in a run.
-- Root cause: `automationexercise.com` sits behind bot/WAF protection that
-  blocks known datacenter/cloud IP ranges (including GitHub-hosted runners), serving an HTML challenge/block page instead of the API response. This is IP-reputation based, not transient, so retries don't help.
-- Not a regression in test code or app behavior — the same tests pas locally from a residential/office IP.
+API tests are failed in CI due to the website treating GitHub's shared runners as suspicious traffic and blocking them, so instead of the real data it sends back a block page, and the tests break because they were expecting normal data, not a block page. It's not something wrong with our tests or the app itself, since everything works fine when run on a personal computer or another trusted network. To deal with it, these tests are now automatically skipped when running in CI, with a clear message explaining why, while they continue to run as normal locally, on our own dedicated runner, or whenever someone chooses to force them on.
 
 ### Signup entry form validation (name/email)
 - Special characters and very long values in the NAME field are accepted (no validation).

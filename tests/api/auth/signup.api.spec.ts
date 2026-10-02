@@ -1,6 +1,9 @@
 import { test, expect } from "../../../fixtures/api.fixtures";
+import { skipLiveApi, SKIP_REASON } from "../../../api/api.guard";
 
 test.describe("Signup API CRUD Test", () => {
+  test.skip(skipLiveApi, SKIP_REASON);
+
   test("CRUD Lifecycle", async ({ signupService, signupPayloadFactory }) => {
     const payload = signupPayloadFactory();
     let responseBody;
