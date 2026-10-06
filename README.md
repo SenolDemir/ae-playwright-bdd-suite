@@ -84,6 +84,7 @@ The project was built without a formal requirements document. All user stories a
 | BDD Layer       | [playwright-bdd](https://vitalets.github.io/playwright-bdd/) |
 | UI Pattern      | Page Object Model (POM)                                      |
 | API Testing     | Playwright built-in `APIRequestContext` + API Object Model   |
+| API Validation  | [Zod](https://zod.dev/) request and response schemas          |
 | Test Data       | [@faker-js/faker](https://fakerjs.dev/)                      |
 | Env Management  | [dotenv](https://github.com/motdotla/dotenv)                 |
 | AI Augmentation | GitHub Copilot + Playwright Agents + Playwright MCP          |
@@ -160,12 +161,11 @@ root/
 ├── api/                        # API Object Model — endpoints, wire models, mappers, services
 │   ├── endpoints.ts            # Central registry of endpoint path constants
 │   ├── base.client.ts          # Thin shared HTTP client (JSON parsing, WAF detection)
-│   ├── models/                 # Wire-format request/response types
+│   ├── models/                 # API types not inferred from Zod schemas
 │   │   ├── login.model.ts
-│   │   └── signup.model.ts
 │   ├── mappers/                # Domain data → wire payload transforms
 │   │   └── signup.mapper.ts
-│   ├── schemas/                # Response schema validation (scaffolded, not yet in use)
+│   ├── schemas/                # Zod request/response schemas and inferred types
 │   └── services/                # One service per domain, each extends base.client.ts
 │       ├── login.service.ts
 │       ├── signup.service.ts

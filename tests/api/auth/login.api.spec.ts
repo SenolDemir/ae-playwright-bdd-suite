@@ -1,6 +1,6 @@
 import { test, expect } from "../../../fixtures/api.fixtures";
 import { API_ENDPOINTS } from "../../../api/endpoints";
-import { skipLiveApi, SKIP_REASON } from "../../../api/api.guard";
+import { skipLiveApi, SKIP_REASON } from "../../../api/utils/api.guard";
 
 test.describe("Login API", () => {
   test.skip(skipLiveApi, SKIP_REASON);

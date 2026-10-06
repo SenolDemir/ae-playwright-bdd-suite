@@ -1,5 +1,5 @@
 import { test, expect } from "../../../fixtures/api.fixtures";
-import { skipLiveApi, SKIP_REASON } from "../../../api/api.guard";
+import { skipLiveApi, SKIP_REASON } from "../../../api/utils/api.guard";
 
 test.describe("Product Catalog", () => {
   test.skip(skipLiveApi, SKIP_REASON);

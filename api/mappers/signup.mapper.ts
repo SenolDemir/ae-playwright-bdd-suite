@@ -1,10 +1,10 @@
 import type { SignupData } from "../../types/signup.types";
-import type { SignupPayload } from "../models/signup.model";
+import { signupPayloadSchema, type SignupPayload } from "../schemas/signup.schema";
 
 export class SignupMapper {
   // transforms SignupData to the API's expected shape (payload) by mapping its fields to the expected API keys.
   static toSignupPayload(user: SignupData, overrides?: Partial<SignupPayload>): SignupPayload {
-    return {
+    return signupPayloadSchema.parse({
       name: user.fullName,
       email: user.email,
       password: user.password,
@@ -23,6 +23,6 @@ export class SignupMapper {
       city: user.city,
       mobile_number: user.mobileNumber,
       ...overrides,
-    };
+    });
   }
 }
