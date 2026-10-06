@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GetUserDetailByEmail error response",
+  "type": "object",
+  "properties": {
+    "responseCode": {
+      "type": "number",
+      "const": 404
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": ["responseCode", "message"]
+}

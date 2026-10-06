@@ -1,4 +1,6 @@
 import { test, expect } from "../../../fixtures/api.fixtures";
+import { validateSchema } from "../../../api/utils/schema.validator";
+import { signupResponseSchema } from "../../../api/schemas/signup.response.schema";
 import { skipLiveApi, SKIP_REASON } from "../../../api/api.guard";
 
 test.describe("Signup API CRUD Test", () => {
@@ -10,16 +12,15 @@ test.describe("Signup API CRUD Test", () => {
 
     await test.step("Create: new user account", async () => {
       const response = await signupService.createAccount(payload);
-      // console.log(await response.json());
       // response message is 201 but the API returns 200
       expect(response.status()).toBe(200);
       responseBody = await response.json();
       expect(responseBody.responseCode).toBe(201);
+      validateSchema(signupResponseSchema(201, "User created!"), responseBody);
     });
 
     await test.step("Read: verify user account", async () => {
       const response = await signupService.getUserDetailsByEmail(payload.email);
-      // console.log(await response.json());
       expect(response.status()).toBe(200);
       responseBody = await response.json();
       expect(responseBody.responseCode).toBe(200);
@@ -33,7 +34,7 @@ test.describe("Signup API CRUD Test", () => {
       });
 
       const response = await signupService.updateAccount(updatedPayload);
-      // console.log(await response.json());
+      console.log(await response.json());
       expect(response.status()).toBe(200);
       responseBody = await response.json();
       expect(responseBody.responseCode).toBe(200);

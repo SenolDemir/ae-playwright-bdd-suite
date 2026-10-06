@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SignupRequest",
+  "type": "object",
+  "required": [
+    "name", "email", "password", "title",
+    "birth_date", "birth_month", "birth_year",
+    "firstname", "lastname", "company",
+    "address1", "address2", "country",
+    "zipcode", "state", "city", "mobile_number"
+  ],
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "email": { "type": "string", "format": "email" },
+    "password": { "type": "string", "minLength": 6 },
+    "title": { "type": "string", "enum": ["Mr.", "Mrs."] },
+    "birth_date": { "type": "string", "pattern": "^([1-9]|[12][0-9]|3[01])$" },
+    "birth_month": {
+      "type": "string",
+      "enum": ["January", "February", "March", "April", "May", "June",
+               "July", "August", "September", "October", "November", "December"]
+    },
+    "birth_year": { "type": "string", "pattern": "^(19|20)\\d{2}$" },
+    "firstname": { "type": "string", "minLength": 1 },
+    "lastname": { "type": "string", "minLength": 1 },
+    "company": { "type": "string" },
+    "address1": { "type": "string", "minLength": 1 },
+    "address2": { "type": "string" },
+    "country": { "type": "string", "minLength": 1 },
+    "zipcode": { "type": "string", "minLength": 1 },
+    "state": { "type": "string", "minLength": 1 },
+    "city": { "type": "string", "minLength": 1 },
+    "mobile_number": { "type": "string", "pattern": "^\\d{7,15}$" }
+  },
+  "additionalProperties": false
+}
