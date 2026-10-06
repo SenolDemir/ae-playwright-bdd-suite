@@ -11,7 +11,7 @@ I'm building an API test automation portfolio project using **Playwright + TypeS
 My project architecture:
 - **API Object Model**: each domain has a client class in `src/clients/` with typed request/response methods.
 - **API testing** uses Playwright's native `test()` spec structure with the built-in `request` fixture (NOT `pw-api-plugin`). BDD/Gherkin is used for UI tests only, so do not generate Gherkin.
-- **Schema validation** uses the `playwright-ajv-schema-validator` npm package.
+- **Schema validation** uses the `zod` npm package.
 - **Schemas** are plain JSON Schema files in `src/schemas/`, one file per response shape (success, error), each a standalone schema with no wrapper object.
 - **Test data** is generated with `@faker-js/faker`.
 - Do not modify files in `src/clients/`, `src/fixtures/` or `tests/`. Only create files in `src/schemas/`.

@@ -30,11 +30,11 @@
     "@types/node": "^22.20.1",
     "allure-commandline": "^2.43.0",
     "allure-playwright": "^3.9.0",
-    "playwright-ajv-schema-validator": "^1.0.2",
     "playwright-bdd": "^9.2.0",
     "typescript": "^6.0.2"
   },
   "dependencies": {
-    "dotenv": "^17.3.1"
+    "dotenv": "^17.3.1",
+    "zod": "^4.6.5"
   }
 }

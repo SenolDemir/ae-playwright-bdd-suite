@@ -14,7 +14,7 @@ test.describe("Login API", () => {
     });
     expect(response.status()).toBe(200);
 
-    const body = await response.json();
+    const body = await loginService.parseJson(response);
     expect(body.responseCode).toBe(200);
     expect(body.message).toBe("User exists!");
   });
@@ -26,7 +26,7 @@ test.describe("Login API", () => {
 
   test("verify login without email parameter", async ({ loginService }) => {
     const response = await loginService.login({ email: "" });
-    const body = await response.json();
+    const body = await loginService.parseJson(response);
 
     expect(response.status()).toBe(200);
     expect(response.statusText()).toBe("OK");
@@ -36,8 +36,7 @@ test.describe("Login API", () => {
 
   test("verify login with invlaid email parameter", async ({ loginService }) => {
     const response = await loginService.login({ email: "not-an-email" });
-    const body = await response.json();
-    // console.log(await response.json());
+    const body = await loginService.parseJson(response);
 
     expect(response.status()).toBe(200);
     expect(response.statusText()).toBe("OK");
@@ -47,8 +46,7 @@ test.describe("Login API", () => {
 
   test("verify login with invlaid password parameter", async ({ loginService }) => {
     const response = await loginService.login({ password: "not-a-password" });
-    const body = await response.json();
-    // console.log(await response.json());
+    const body = await loginService.parseJson(response);
 
     expect(response.status()).toBe(200);
     expect(response.statusText()).toBe("OK");

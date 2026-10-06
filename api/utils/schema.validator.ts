@@ -1,12 +1,17 @@
-import Ajv from "ajv";
-import addFormats from "ajv-formats";
+import { z } from "zod";
 
-const ajv = new Ajv({ allErrors: true, strict: false });
-addFormats(ajv);
+export function validateSchema<T extends z.ZodType>(
+  schema: T,
+  data: unknown,
+  label = "Response",
+): z.infer<T> {
+  const result = schema.safeParse(data);
 
-export function validateSchema(schema: object, data: unknown): void {
-  const validate = ajv.compile(schema);
-  if (!validate(data)) {
-    throw new Error(`Schema validation failed:\n${JSON.stringify(validate.errors, null, 2)}`);
+  if (!result.success) {
+    throw new Error(`${label} schema validation failed:\n${z.prettifyError(result.error)}`);
   }
+
+  return result.data;
 }
+
+
