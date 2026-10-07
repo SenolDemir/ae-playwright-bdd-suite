@@ -78,15 +78,15 @@ by the user in chat. Base every scenario strictly on observed behavior — never
 
 - Before any interaction on every navigation — initial load and all subsequent page
   transitions — follow the consent and overlay handling procedure defined in
-  `.github/prompts/consent-overlay.prompt.md`
+  `.github/skills/consent-overlay/SKILL.md`
 - This step is mandatory. Do not interact with any element before overlays are resolved
 
 ---
 
 ## 3. Authentication (if required)
 
-- If the feature requires a logged-in state, `read_file` →
-  `.github/prompts/auth-login.prompt.md` and follow every step in that procedure
+- If the feature requires a logged-in state, follow
+  `.github/skills/auth-login/SKILL.md` and every step in that procedure
 - Complete authentication fully before continuing to any DOM inspection or interaction
 
 ---

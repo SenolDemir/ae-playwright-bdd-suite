@@ -90,7 +90,7 @@ products-catalog-raw.feature
 Read the feature file at the path below and generate or extend Playwright page object classes (locators and methods) accordingly.
 
 Feature file: features/...
-Follow all rules in copilot-instructions.md and .github/prompts/auth-login.prompt.md.
+Follow all rules in copilot-instructions.md and .github/skills/auth-login/SKILL.md.
 Inventory existing page objects, fixtures, and test data factories before generating code. Extend existing files if possible, do not duplicate.
 Only update files in pages/, fixtures/ui-fixtures.ts, and data/ as needed. Do not generate step definitions or feature files.
 Provide a summary report of changes and locator confidence.
@@ -126,6 +126,5 @@ at ../pages/ProductDetailPage.ts:84
 </source_code>
 
 <!-------------------------------------------------------->
-
 
 

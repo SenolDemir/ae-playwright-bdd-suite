@@ -184,7 +184,7 @@ For each page or view referenced in the feature file:
 
 ### Authentication Procedure
 
-If authentication is required, `read_file` → `.github/prompts/auth-login.prompt.md`
+If authentication is required, follow `.github/skills/auth-login/SKILL.md`
 and follow every step in that procedure before continuing DOM inspection.
 
 ## Page Object Method Rules
@@ -248,5 +248,5 @@ After generation, provide a brief summary:
 
 # Consent Overlay Handling
 
-- This agent references the shared consent/overlay dialog handling instructions in `.github/prompts/consent-overlay.prompt.md`.
-- All overlay handling logic and best practices are defined there. This agent must follow those steps before any UI interaction that could be blocked by overlays.
+- Consent/overlay dialog handling instructions are maintained in `.github/skills/consent-overlay/SKILL.md`.
+- Follow the skill's detection, handling, confirmation, fallback, and scenario-design steps before any UI interaction that could be blocked by overlays.

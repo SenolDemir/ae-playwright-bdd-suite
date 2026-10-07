@@ -104,10 +104,13 @@ root/
 │   │   ├── playwright-test-healer.agent.md
 │   │   └── playwright-test-planner.agent.md
 │   ├── prompts/               # Reusable Copilot prompt files
-│   │   ├── auth-login.prompt.md
-│   │   ├── consent-overlay.prompt.md
 │   │   ├── debugger.prompt.md
 │   │   └── locator.prompt.md
+│   ├── skills/                # On-demand Copilot skills
+│   │   ├── auth-login/
+│   │   │   └── SKILL.md
+│   │   └── consent-overlay/
+│   │       └── SKILL.md
 │   ├── workflows/             # GitHub Actions CI workflows
 │   │   ├── ci-e2e-test.yml
 │   │   ├── ci-e2e-sharded.yml
