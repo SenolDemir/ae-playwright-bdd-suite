@@ -1,4 +1,10 @@
 
+## TODOS
+### api tests
+- schema validation for signup negtaive tests
+- schema validation for login all tests
+
+
 ## Known limitations
 
 ### API tests fail in GitHub Actions with "Unexpected token '<' ... is not valid JSON"

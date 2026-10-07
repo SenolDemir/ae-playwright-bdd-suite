@@ -25,4 +25,21 @@ export class SignupMapper {
       ...overrides,
     });
   }
+
+  static toExpectedUserProfile(payload: SignupPayload) {
+    return {
+      email: payload.email,
+      name: payload.name,
+      title: payload.title,
+      first_name: payload.firstname,
+      last_name: payload.lastname,
+      company: payload.company,
+      address1: payload.address1,
+      address2: payload.address2,
+      country: payload.country,
+      state: payload.state,
+      city: payload.city,
+      zipcode: payload.zipcode,
+    };
+  }
 }

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { messageResponseSchema } from "./common.schema";
 
-
+// signup request payload schema
 export const signupPayloadSchema = z.strictObject({
   name: z.string(),
   email: z.email(),
@@ -24,11 +24,14 @@ export const signupPayloadSchema = z.strictObject({
 
 export type SignupPayload = z.infer<typeof signupPayloadSchema>;
 
-
 // signup response schemas (positive)
 export const signupCreatedSchema = messageResponseSchema(201, "User created!");
 export const signupUpdatedSchema = messageResponseSchema(200, "User updated!");
 export const signupDeletedSchema = messageResponseSchema(200, "Account deleted!");
+export const signupNotFoundSchema = messageResponseSchema(
+  404,
+  "Account not found with this email, try another email!",
+);
 export const signupEmailExistsSchema = messageResponseSchema(400, "Email already exists!");
 
 export const verifySignupByEmailSchema = z.strictObject({
