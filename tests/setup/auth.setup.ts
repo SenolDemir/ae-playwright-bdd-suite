@@ -1,10 +1,10 @@
 import { test as setup } from "@playwright/test";
-import { HomePage } from "../ui/pages/home.page";
-import { LoginPage } from "../ui/pages/login.page";
+import { HomePage } from "../../ui/pages/home.page";
+import { LoginPage } from "../../ui/pages/login.page";
 
-export const authFile = "playwright/.auth/user.json";
+export const AUTH_FILE = ".auth/user.json";
 
-setup("authenticate", async ({ page }) => {
+setup("authenticate via UI login", async ({ page }) => {
   const homePage = new HomePage(page);
   const loginPage = new LoginPage(page);
 
@@ -14,5 +14,6 @@ setup("authenticate", async ({ page }) => {
   await loginPage.loginWithValidCredentials();
   await homePage.nav.expectLoggedIn();
 
-  await page.context().storageState({ path: authFile });
+  await page.context().storageState({ path: AUTH_FILE });
+  
 });

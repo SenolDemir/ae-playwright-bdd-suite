@@ -7,6 +7,7 @@ import type { SignupPayload } from "../api/schemas/signup.schema";
 import { SignupDataGenerator } from "../testdata/signup.generator";
 import type { SignupData } from "../types/signup.types";
 
+
 type ApiFixtures = {
   apiContext: APIRequestContext;
   signupData: SignupData;
