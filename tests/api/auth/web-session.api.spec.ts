@@ -55,4 +55,5 @@ test.describe("Web session behavior @web-http", () => {
     expect(await isLoggedIn(replay)).toBe(false);
     await replay.dispose();
   });
+  
 });

@@ -1,11 +1,12 @@
 
 # 🎭 AI-Augmented Playwright BDD Test Suite
 
-![Playwright](https://img.shields.io/badge/Playwright-1.63.0-45ba4b?logo=playwright&logoColor=white)
+![Playwright](https://img.shields.io/badge/Playwright-1.64.0-45ba4b?logo=playwright&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript&logoColor=white)
 ![playwright-bdd](https://img.shields.io/badge/playwright--bdd-9.2.0-brightgreen?logo=cucumber&logoColor=white)
 ![Faker.js](https://img.shields.io/badge/%40faker--js%2Ffaker-10.4.0-F7DF1E?logo=javascript&logoColor=black)
 ![Allure Reports](https://img.shields.io/badge/Allure_Reports-3.9.0-E85A2B?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyTDIgMjJoMjBMMTIgMnoiLz48L3N2Zz4=&logoColor=white)
+![Zod](https://img.shields.io/badge/Zod-4.6.5-3E67B1?logo=zod&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-22.22.3-339933?logo=nodedotjs&logoColor=white)
 ![dotenv](https://img.shields.io/badge/dotenv-17.3.1-ECD53F?logo=dotenv&logoColor=black)
 
@@ -22,21 +23,26 @@
 	- [Tech Stack](#tech-stack)
 	- [Project Structure](#project-structure)
 	- [Architecture Overview](#architecture-overview)
-		- [Playwright BDD over Cucumber.js](#playwright-bdd-over-cucumberjs)
+		- [Playwright BDD](#playwright-bdd)
 		- [Hybrid Test Style: BDD for UI, Native Spec for API](#hybrid-test-style-bdd-for-ui-native-spec-for-api)
 		- [Resilient Locator Strategy](#resilient-locator-strategy)
-		- [Page Object Model](#page-object-model)
+		- [Page Object Model (POM)](#page-object-model-pom)
+		- [API Testing](#api-testing)
+		- [Visual Regression (with Playwright)](#visual-regression-with-playwright)
+		- [Environment Management](#environment-management)
+		- [Test Data Strategy](#test-data-strategy)
 	- [AI Augmentation](#ai-augmentation)
 		- [GitHub Copilot](#github-copilot)
-		- [Playwright MCP (Model Context Protocol)](#playwright-mcp-model-context-protocol)
+		- [Playwright MCP](#playwright-mcp)
 		- [Playwright Agents](#playwright-agents)
-		- [Test Generation with Playwright Agents](#test-generation-with-playwright-agents)
+			- [`playwright-bdd-planner`](#playwright-bdd-planner)
+			- [`playwright-bdd-generator`](#playwright-bdd-generator)
 		- [Self-Healing Strategy](#self-healing-strategy)
-	- [Environment Management](#environment-management)
-	- [Test Data Strategy](#test-data-strategy)
-	- [CI/CD](#cicd)
-		- [Local Parity](#local-parity)
-	- [Visual Regression (with Playwright)](#visual-regression-with-playwright)
+	- [CI/CD Integration](#cicd-integration)
+	- [Limitations](#limitations)
+		- [Login and logout behavior in API tests](#login-and-logout-behavior-in-api-tests)
+		- [Cloudflare blocking in CI](#cloudflare-blocking-in-ci)
+		- [Weak input validation in the signup flow](#weak-input-validation-in-the-signup-flow)
 	- [Getting Started](#getting-started)
 		- [Prerequisites](#prerequisites)
 		- [Recommended VS Code Extensions](#recommended-vs-code-extensions)
@@ -98,81 +104,49 @@ The project was built without a formal requirements document. All user stories a
 root/
 ├── .github/
 │   ├── agents/                # Custom Copilot agent definitions
-│   │   ├── playwright-bdd-planner.agent.md
-│   │   ├── playwright-bdd-generator.agent.md
-│   │   ├── playwright-test-generator.agent.md
-│   │   ├── playwright-test-healer.agent.md
-│   │   └── playwright-test-planner.agent.md
 │   ├── prompts/               # Reusable Copilot prompt files
-│   │   ├── debugger.prompt.md
-│   │   └── locator.prompt.md
-│   ├── skills/                # On-demand Copilot skills
-│   │   ├── auth-login/
-│   │   │   └── SKILL.md
-│   │   └── consent-overlay/
-│   │       └── SKILL.md
-│   ├── workflows/             # GitHub Actions CI workflows
-│   │   ├── ci-e2e-test.yml
-│   │   ├── ci-e2e-sharded.yml
-│   │   └── copilot-setup-steps.yml
+│   ├── skills/
+│   │   ├── auth-login/        # On-demand Copilot skill: authenticated login
+│   │   └── consent-overlay/   # On-demand Copilot skill: consent overlay handling
+│   ├── workflows/             # GitHub Actions CI workflows (API, E2E, sharded E2E, Copilot setup)
 │   └── copilot-instructions.md
 │
+├── .vscode/                   # Workspace settings and MCP server config
+│
 ├── tests/
-│   ├── features/              # Gherkin feature files (BDD / UI tests)
-│   │   ├── auth/
-│   │   │   ├── login.feature
-│   │   │   └── signup.feature
-│   │   └── product/
-│   │       └── product-catalog.feature
-│   ├── steps/                 # Step definitions (BDD / UI tests)
-│   │   ├── auth/
-│   │   │   ├── login.steps.ts
-│   │   │   └── signup.step.ts
-│   │   └── product/
-│   │       └── product-catalog.ts
-│   ├── api/                   # Playwright native API spec tests
-│   │   ├── auth/
-│   │   │   ├── login.api.spec.ts
-│   │   │   └── signup.api.spec.ts
-│   │   └── product/
-│   │       └── product.api.spec.ts
+│   ├── features/
+│   │   ├── auth/              # Gherkin feature files: login, signup
+│   │   └── product/           # Gherkin feature files: product catalog
+│   ├── steps/
+│   │   ├── auth/              # Step definitions: login, signup
+│   │   └── product/           # Step definitions: product catalog
+│   ├── api/
+│   │   ├── auth/              # Playwright native API specs: login, signup
+│   │   └── product/           # Playwright native API specs: product
+│   ├── setup/                 # Setup projects (e.g. authentication state)
 │   └── hooks/                 # Global and test-specific hooks
-│       └── Hook.ts
 │
 ├── ui/
 │   ├── pages/                 # Page Object Model classes
-│   │   ├── base.page.ts
-│   │   ├── home.page.ts
-│   │   ├── login.page.ts
-│   │   ├── signup.page.ts
-│   │   ├── account-setup.page.ts
-│   │   ├── product.page.ts
-│   │   └── product-detail.page.ts
 │   └── components/            # Component Object classes
-│       └── navbar.component.ts
 │
-├── fixtures/                   # Playwright fixture definitions
-│   ├── ui.fixtures.ts
-│   └── api.fixtures.ts
+├── fixtures/                  # Playwright fixture definitions (UI and API)
 │
-├── testdata/                   # Faker factories (test data generators)
-│   └── signup.generator.ts
+├── testdata/                  # Faker-based test data generators
 │
-├── types/                      # Shared domain TypeScript type definitions
-│   └── signup.types.ts
+├── types/                     # Shared domain TypeScript type definitions
 │
-├── api/                        # API Object Model — endpoints, wire models, mappers, services
-│   ├── endpoints.ts            # Central registry of endpoint path constants
-│   ├── base.client.ts          # Thin shared HTTP client (JSON parsing, WAF detection)
-│   ├── models/                 # API types not inferred from Zod schemas
-│   │   ├── login.model.ts
-│   ├── mappers/                # Domain data → wire payload transforms
-│   │   └── signup.mapper.ts
-│   ├── schemas/                # Zod request/response schemas and inferred types
-│   └── services/                # One service per domain, each extends base.client.ts
-│       ├── login.service.ts
-│       ├── signup.service.ts
-│       └── product.service.ts
+├── api/                       # API Object Model
+│   ├── endpoints.ts           # Central registry of endpoint path constants
+│   ├── base.client.ts         # Thin shared client base (JSON parsing, WAF detection)
+│   ├── mappers/               # Domain data → wire payload transforms
+│   ├── schemas/               # Zod request/response schemas and inferred types
+│   ├── services/              # One service per domain, each extends base.client.ts
+│   └── utils/                 # Schema validator and live-API CI guard
+│
+├── docs/
+│   ├── notes.md               # Project notes and known limitations
+│   └── signup/                # Sample signup request/response payloads
 │
 ├── reports/                   # Generated test reports (git-ignored)
 │   ├── playwright-html/
@@ -180,6 +154,7 @@ root/
 │   └── allure-report/         # Generated Allure HTML report
 │
 ├── .env                       # Local environment variables (git-ignored)
+├── .mcp.json                  # MCP server configuration
 ├── playwright.config.ts
 ├── tsconfig.json
 └── package.json
@@ -190,12 +165,14 @@ root/
 
 The project is built over the following key design decisions:
 
-### Playwright BDD over Cucumber.js
-`playwright-bdd` bridges Playwright's fixture system directly with Gherkin step definitions. This means:
-- BDD steps have full access to Playwright fixtures (`page`, `context`, custom fixtures like `signup.page`)
-- No separate test runner: Playwright **is** the runner; reports, retries, and parallelism all come from Playwright natively
-- `bddgen` generates the glue code automatically, zero boilerplate per feature file
-- Read this article to explore more: [Playwright × BDD: Cucumber.js vs Playwright-bdd](https://www.arrangility.com/blog/playwright-cucumber-vs-playwright-bdd)
+### Playwright BDD
+
+The project uses **Playwright BDD** to create reusable, business-readable UI tests. Gherkin scenarios describe application behavior from a product perspective, making the tests easier to understand and maintain.
+
+`playwright-bdd` is preferred because it bridges Playwright’s fixture system directly with Gherkin step definitions. As a result:
+- BDD steps have full access to Playwright fixtures, including `page`, `context`, and custom fixtures such as `signup.page`
+- Playwright remains the native test runner, so reports, retries, and parallel execution are handled by Playwright
+- `bddgen` automatically generates the step-definition glue code, reducing boilerplate for each feature file
 
 ### Hybrid Test Style: BDD for UI, Native Spec for API
 UI tests use Gherkin feature files via `playwright-bdd`. They document user-facing journeys in a language accessible to all stakeholders. API tests use Playwright's native `test()` spec structure, which is more concise and better suited to HTTP-level assertions without the overhead of mapping Gherkin steps to request/response logic.
@@ -212,79 +189,57 @@ Locators are selected in this priority order to maximize resilience against UI c
 
 This approach aligns with how assistive technologies interact with the DOM, making tests inherently more accessible and less brittle than XPath or class-based selectors.
 
-### Page Object Model
+### Page Object Model (POM)
 
-**Page Objects**  
-Each significant page of the application has a corresponding Page Object class. Responsibilities include:
-- Encapsulating locators (using semantic/role-based selectors)
-- Exposing high-level action methods (e.g., `login(email, password)`)
-- Keeping assertions out of the POM layer (separation of concerns)
+The framework applies the **Page Object Model (POM)** for UI automation and follows a similar service-object approach for API automation. 
 
-**Component Objects**   
-Reusable UI fragments that appear across multiple pages are extracted into Component Object classes. This avoids duplicating locator definitions and interaction logic across multiple Page Objects. 
+**Page Objects**
+Each significant page of the application has a corresponding Page Object class. Page Objects encapsulate locators and expose high-level action methods, keeping these implementation details outside the test layer. This improves reusability, maintainability, and readability while keeping test assertions clean.
 
-**API Object Model (AOM)**  
-Mirrors the POM philosophy applied to API interactions. Each domain (Users, Products, Cart, etc.) has a dedicated service class extending the shared `api/base.client.ts`, with wire-format types, payload mappers, and endpoint paths centralized in `api/models/`, `api/mappers/`, and `api/endpoints.ts` respectively — reused across both API spec tests and UI test setup hooks.
+**Component Objects**
+Reusable UI fragments that appear across multiple pages are extracted into Component Object classes. This avoids duplicating locator definitions and interaction logic across multiple Page Objects.
 
-## AI Augmentation
+**API Service Objects**
+The API layer mirrors the POM philosophy for API interactions. Each domain, such as Users, Products, and Cart, has a dedicated service class that extends the shared `api/base.client.ts`.
 
-The project showcases AI-augmented testing approach where AI tools enhance every layer of the test automation stack with human review ensuring correctness and quality.  The key point  human expertise + AI capability working together. It's distinct from fully automated testing with AI which gives less control. By this way it helps minimizing manual effort while maximizing coverage and maintainability.
+### API Testing
 
-AI Augmentation layers are:
+API tests use Playwright's native `test()` spec structure, as described in [Hybrid Test Style](#hybrid-test-style-bdd-for-ui-native-spec-for-api).  The target is a demo app that publishes no OpenAPI/Swagger specification, so the [Zod](https://zod.dev/) schemas in `api/schemas/` are derived from observed endpoint responses and act as the de facto contract. Zod provides both runtime validation and inferred TypeScript types for requests and responses.
 
-### GitHub Copilot
-Used throughout the authoring workflow for:
-- Suggesting step definition implementations from Gherkin text
-- Auto-completing TypeScript types and interface definitions
-- Refactoring repetitive locator patterns
-- Debugging error, fails.
+```text
+types/signup.types.ts        shared domain: SignupData
+    ↓
+testdata/signup.generator.ts Faker → SignupData
+    ↓
+api/schemas/                 Zod: SignupPayload (wire format), response schemas
+    ↓
+api/mappers/                 SignupData → SignupPayload (parsed by the schema)
+    ↓
+fixtures/api.fixtures.ts     composes generator + mapper, builds services
+    ↓                      		
+api/services/                send payloads to api/endpoints.ts paths via
+    ↓                      
+tests					     playwright tests
+```
 
-### Playwright MCP (Model Context Protocol)
-
-To be able to AI models to interact with external tools/platforms the project enhanced with Playwright MCP. 
-
-
-### Playwright Agents
-Playwright Agents extend AI assistance beyond code generation into the full test lifecycle, covering test case development and locator self-healing. 
-
-### Test Generation with Playwright Agents
-
-Playwright provides a built-in planner agent, however it is not designed to generate bdd (Gherkin) feature files with scenarios and scenario steps. To use agents for this workflow two custom agents are built based on Playwright's agents structure.
-- playwright-bdd-planner
-- playwright-bdd-generator
-
-**playwright-bdd-planner**
-
-This agent:
-- Receives a test basis scope (feature charter) via chat prompt
-- Produces a raw feature file including scenarios and step definitions
-- Applies standard test design techniques: equivalence partitioning, boundary value analysis, happy path, edge case, and negative scenarios
-
-Rather than scoping the agent to an entire feature at once, feature charters are preferred. Validating one focused slice of behavior at a time builds more confidence than evaluating a large batch at once. It also prevents the AI from mixing primary flows, edge cases, and unrelated page behaviors together.
+> [!Note]
+> Some limitations were encountered during API test development. These are described in the [Limitations](#limitations) section.
 
 
-**playwright-bdd-generator**
+### Visual Regression (with Playwright)
 
-Takes a reviewed .feature file from the `_review/` folder as input and handles the implementation phase. It inspects the live DOM via Playwright MCP, then decides whether to create a new Page Object class or extend an existing one. Alongside page objects, it wires new fixtures and generates any missing test data factories. 
-
-It follow locator strategy to implement resilient locator structure.
-
-### Self-Healing Strategy
-
-Test resilience is maintained through two layers:
-- **Resilient Locator Strategy (preventive)** — semantic and role-based locators are preferred at authoring time to minimize the chance of locator breakage across UI changes (see Resilient Locator Strategy above)
-  
-- **Playwright Healer Agent** — implemented via playwright-test-healer. By this agent a semi-automated healing loop on failure is provided. It replays the failing steps to reproduce the failure, inspect the current UI to locate equivalent elements or flows,  suggest a pacth to heal root cause, finally re-run the tests until passes.
+A visual regression testing suite built for the target application. It covers pixel-diff snapshot comparisons, responsive-layout screenshots breakpoints, cross-browser rendering comparisons, and automated horizontal-overflow detection. It is kept separate from this repo to isolate OS/browser-specific baseline snapshots from the BDD/API suite. To check it
+**[ae-visual-regression-suite](https://github.com/SenolDemir/ae-visual-regression-suite)**
 
 
-## Environment Management
+### Environment Management
 
 Environmental configurations and data is managed via `dotenv`. By this way:
 - Keep secrets out of source code like API keys, passwords, and URLs live in .env. 
 - Environment specific config: easily swap values between local, staging, and production without changing code
 - Separates configuration from code, a widely accepted best practice and it is simple to use.
 
-## Test Data Strategy
+### Test Data Strategy
 
 Dynamic test data is generated at runtime using `@faker-js/faker`. By help of this tool:
 
@@ -295,9 +250,57 @@ Dynamic test data is generated at runtime using `@faker-js/faker`. By help of th
 It is designed with a **centralized data strategy** to ensure consistency across the testing lifecycle. This approach ensures that test data is generated once and shared across all layers—from UI form entries to API payloads.
 
 
+## AI Augmentation
+
+The project follows an **AI-augmented testing approach**: AI tools accelerate test design, implementation, and maintenance, while human review ensures correctness, quality, and alignment with the intended test strategy.
+
+The key principle is combining **human expertise with AI capability**. Unlike fully autonomous AI testing, this approach keeps the tester in control while reducing manual effort and improving coverage and maintainability. AI augmentation is implemented through the following tools and actors:
+
+### GitHub Copilot
+
+GitHub Copilot provides AI assistance throughout the authoring workflow, including:
+
+- Suggesting step-definition implementations from Gherkin text
+- Auto-completing TypeScript types and interfaces
+- Refactoring repetitive locator patterns
+- Supporting debugging and error analysis
+
+### Playwright MCP
+
+Playwright MCP enables GitHub Copilot and Playwright Agents to interact with the application under test. It provides the live browser context needed to inspect the DOM, validate locators, and support context-aware test generation.
+
+### Playwright Agents
+
+Playwright Agents extend AI assistance beyond code generation into the full test lifecycle, including test-case development and locator self-healing. Playwright provides a built-in planner agent, but it is not designed to generate BDD/Gherkin feature files containing scenarios and scenario steps. Therefore, two custom agents were created based on Playwright’s agent structure:
+
+- `playwright-bdd-planner`
+- `playwright-bdd-generator`
+
+#### `playwright-bdd-planner`
+
+- Receives a focused test basis, called a **feature charter**, through a chat prompt
+- Produces a draft `.feature` file containing scenarios and scenario steps
+- Applies standard test-design techniques, including equivalence partitioning, boundary value analysis, happy-path, edge-case, and negative scenarios
+
+Using focused feature charters instead of generating an entire feature at once keeps each AI-assisted output reviewable and prevents unrelated behaviors from being mixed into one scenario set.
+
+#### `playwright-bdd-generator`
+
+This agent takes a reviewed `.feature` file from the `_review/` folder and handles the implementation phase. It inspects the live DOM through Playwright MCP, then decides whether to create a new Page Object class or extend an existing one.
+
+In addition to Page Objects, it wires the required fixtures and generates missing test-data factories. It follows the project’s resilient locator strategy to create maintainable and robust locator implementations.
+
+### Self-Healing Strategy
+
+Test resilience is maintained through two layers:
+- **Resilient Locator Strategy (preventive)** — semantic and role-based locators are preferred at authoring time to minimize the chance of locator breakage across UI changes (see Resilient Locator Strategy above)
+  
+- **Playwright Healer Agent** — implemented via playwright-test-healer. By this agent a semi-automated healing loop on failure is provided. It replays the failing steps to reproduce the failure, inspect the current UI to locate equivalent elements or flows,  suggest a pacth to heal root cause, finally re-run the tests until passes.
+
+
 ---
 
-## CI/CD 
+## CI/CD Integration
 
 Continuous integration is implemented with **GitHub Actions**, mirroring the same npm scripts used locally (`bddgen`, `playwright test`)
 
@@ -306,17 +309,36 @@ Continuous integration is implemented with **GitHub Actions**, mirroring the sam
 | Playwright E2E Test           | `ci-e2e-test.yml`    | Runs the full UI + API suite in a single job and publishes Playwright + Allure reports          |
 | Playwright E2E Test (Sharded) | `ci-e2e-sharded.yml` | Splits the UI/API suite across 5 parallel shards, then merges blob reports into one HTML report |  |
 
-### Local Parity
+All workflows currently trigger on `workflow_dispatch` (manual run) only. `pull_request` and scheduled `cron` triggers are ready to be enabled, and also `repository_dispatch` can be added to integrate CI pipeline.
 
+**Local Parity**
 Every CI job calls the same npm scripts documented in [Running Tests](#running-tests) (`tests`, `test:sharded`), so a workflow failure can always be reproduced locally with the identical command.
 
 > [!Note]
-> All workflows currently trigger on `workflow_dispatch` (manual run) only. `pull_request` and scheduled `cron` triggers are ready to be enabled, and also `repository_dispatch` can be added to integrate CI pipeline.
+> Some limitations were encountered during API test development. These are described in the [Limitations](#limitations) section.
 
-## Visual Regression (with Playwright)
 
-A visual regression testing suite built for the target application. It covers pixel-diff snapshot comparisons, responsive-layout screenshots breakpoints, cross-browser rendering comparisons, and automated horizontal-overflow detection. It is kept separate from this repo to isolate OS/browser-specific baseline snapshots from the BDD/API suite. To check it
-**[ae-visual-regression-suite](https://github.com/SenolDemir/ae-visual-regression-suite)**
+## Limitations
+
+Because the target is a public demo site, a few constraints shaped the test design. Each is documented below along with how the project handles it.
+
+### Login and logout behavior in API tests
+
+The `verifyLogin` endpoint only validates an email and password pair; it does not create a session. The `sessionid` cookie is issued only by the site's own login form at `/login`. Logging out invalidates the session on the server but does not remove the cookie from the client, so the cookie remains present while the server no longer accepts it.
+
+To demonstrate this, `web-session.api.spec.ts` performs login and logout over plain HTTP without a browser. These tests are **not part of the main API suite**. They exist purely as a showcase of how the application behaves.
+
+### Cloudflare blocking in CI
+
+API tests fail on GitHub-hosted runners because requests are blocked, most likely because Cloudflare flags the runners' shared IP ranges as suspicious traffic. The tests and the application are not at fault: the same tests pass on a local machine or any trusted network.
+
+To keep the pipeline meaningful, API tests are **automatically skipped when `CI` is set**, with a message explaining why. They run normally locally, on a self-hosted runner, or when the skip is explicitly overridden (see `<your override variable>`).
+
+### Weak input validation in the signup flow
+
+The signup form accepts clearly invalid input, for example a name made up only of digits or special characters. These scenarios are tagged `@fail` in the feature files so they stay visible as known defects, rather than being removed or having their assertions weakened to match the app's behavior. 
+
+>Note: These constraints reflect situations real projects run into, like bot protection and known defects, and each one is handled with an explicit, documented decision.
 
 ---
 

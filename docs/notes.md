@@ -1,14 +1,7 @@
 
-## TODOS
-### api tests
-- schema validation for signup negtaive tests
-- schema validation for login all tests
 
 
 ## Known limitations
-
-### API tests fail in GitHub Actions with "Unexpected token '<' ... is not valid JSON"
-API tests are failed in CI due to the website treating GitHub's shared runners as suspicious traffic and blocking them, so instead of the real data it sends back a block page, and the tests break because they were expecting normal data, not a block page. It's not something wrong with our tests or the app itself, since everything works fine when run on a personal computer or another trusted network. To deal with it, these tests are now automatically skipped when running in CI, with a clear message explaining why, while they continue to run as normal locally, on our own dedicated runner, or whenever someone chooses to force them on.
 
 ### Signup entry form validation (name/email)
 - Special characters and very long values in the NAME field are accepted (no validation).
@@ -42,11 +35,7 @@ API tests are failed in CI due to the website treating GitHub's shared runners a
 
 ### branch naming
 feature/ui01-signup-form
-
-### folders
-`types` - domain or test-data structures used across the suite.  
-`api-models` - API boundary contracts, endpoint-specific payloads.   
-
+ 
 
 ## AI
 

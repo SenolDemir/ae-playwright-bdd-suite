@@ -26,7 +26,7 @@
   "type": "module",
   "devDependencies": {
     "@faker-js/faker": "^10.4.0",
-    "@playwright/test": "^1.63.0",
+    "@playwright/test": "^1.64.0",
     "@types/node": "^22.20.1",
     "allure-commandline": "^2.43.0",
     "allure-playwright": "^3.9.0",
