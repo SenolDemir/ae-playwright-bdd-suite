@@ -32,7 +32,7 @@ export default defineConfig({
           {
             detail: true,
             resultsDir: "reports/allure-results",
-            suiteTitle: false,
+            suiteTitle: true,
           },
         ],
       ]
@@ -74,8 +74,8 @@ export default defineConfig({
 
     // ── UI projects (BDD) — select via --project ───────────────
     { name: "chromium", use: { browserName: "chromium" }, testDir: bddTestDir },
-    // { name: "firefox", use: { browserName: "firefox" }, testDir: bddTestDir },
-    // { name: "webkit", use: { browserName: "webkit" }, testDir: bddTestDir },
+    { name: "firefox", use: { browserName: "firefox" }, testDir: bddTestDir, default: false },
+    { name: "webkit", use: { browserName: "webkit" }, testDir: bddTestDir, default: false },
     // { name: "mobile-chrome", use: { ...devices["Pixel 5"] }, testDir: bddTestDir },
     // { name: "mobile-safari", use: { ...devices["iPhone 12"] }, testDir: bddTestDir },
   ],

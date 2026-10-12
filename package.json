@@ -15,6 +15,7 @@
     "test:api-specific": "npx playwright test -g 'Signup API'",
     "test:json": "npx playwright test features-gen/ --reporter=json > reports/playwright-results.json",
     "report": "npx playwright show-report reports/playwright-html",
+    "allure:clean": "rimraf reports/allure-results",
     "allure:generate": "allure generate reports/allure-results --output reports/allure-report --clean",
     "allure:open": "allure open reports/allure-report",
     "allure:serve": "npx allure serve reports/allure-results",

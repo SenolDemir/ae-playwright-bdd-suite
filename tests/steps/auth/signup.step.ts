@@ -21,12 +21,12 @@ Given("I navigate to {string} page", async ({ homePage }, pageName: string) => {
   await homePage.nav.navigateTo(pageName);
 });
 
-Then("I should see the signup form", async ({ signupPage }) => {
-  await signupPage.expectSignupFormVisible();
+Then("I should see the signup form", async ({ loginSignupPage }) => {
+  await loginSignupPage.expectSignupFormVisible();
 });
 
-When("I submit valid signup credentials", async ({ signupPage, page }) => {
-  await signupPage.submitSignupCredentials();
+When("I submit valid signup credentials", async ({ loginSignupPage, signupData, page }) => {
+  await loginSignupPage.submitSignupCredentials(signupData);
   await expect(page).toHaveURL(/\/signup/);
 });
 
@@ -38,8 +38,8 @@ When("I click continue", async ({ page, accountSetupPage }) => {
   await accountSetupPage.clickContinue();
 });
 
-Then("I should be logged in as a registered user on the home page", async ({ loginPage, signupData }) => {
-  await loginPage.nav.expectLoggedIn(signupData.fullName);
+Then("I should be logged in as a registered user on the home page", async ({ loginSignupPage, signupData }) => {
+  await loginSignupPage.nav.expectLoggedIn(signupData.fullName);
 });
 
 When("I submit to delete the account", async ({ homePage }) => {
@@ -56,25 +56,25 @@ When("I should be not logged in on the home page", async ({ homePage }) => {
 
 // ---------------- Signup Entry Form --------------------------------------------------
 
-When("I enter name {string}", async ({ signupPage }, rawName: string) => {
+When("I enter name {string}", async ({ loginSignupPage }, rawName: string) => {
   // Replace token with pre-defined value if it exists
   const name = NAME_TOKENS[rawName]?.() ?? rawName;
-  await signupPage.enterNewUserName(name);
+  await loginSignupPage.enterNewUserName(name);
 });
 
-When("I enter email {string}", async ({ signupPage }, rawEmail: string) => {
+When("I enter email {string}", async ({ loginSignupPage }, rawEmail: string) => {
   const email = EMAIL_TOKENS[rawEmail]?.() ?? rawEmail;
-  await signupPage.enterNewUserEmail(email);
+  await loginSignupPage.enterNewUserEmail(email);
 });
 
-When("I click the {string} button on the Login\\/Signup page", async ({ signupPage }, buttonName: string) => {
-  await signupPage.clickSignupButton();
+When("I click the {string} button on the Login\\/Signup page", async ({ loginSignupPage }, buttonName: string) => {
+  await loginSignupPage.clickSignupButton();
 });
 
 Then(
   "I should see the name field error message {string}",
-  async ({ signupPage }, expectedMessage: string) => {
-    const actualMessage = await signupPage.getNameValidationMessage();
+  async ({ loginSignupPage }, expectedMessage: string) => {
+    const actualMessage = await loginSignupPage.getNameValidationMessage();
     // normalize Linux Chromium vs macOS Chrome native message wording
     expect(actualMessage.replace("fill out", "fill in")).toBe(expectedMessage);
   },
@@ -82,27 +82,27 @@ Then(
 
 Then(
   "I should see the email field error message {string}",
-  async ({ signupPage }, expectedMessage: string) => {
-    const actualMessage = await signupPage.getEmailValidationMessage();
+  async ({ loginSignupPage }, expectedMessage: string) => {
+    const actualMessage = await loginSignupPage.getEmailValidationMessage();
     expect(actualMessage.replace("fill out", "fill in")).toBe(expectedMessage);
   },
 );
 
-Then("I leave the name field empty", async ({ signupPage }) => {
-  await signupPage.enterNewUserName("");
+Then("I leave the name field empty", async ({ loginSignupPage }) => {
+  await loginSignupPage.enterNewUserName("");
 });
 
-Then("I should remain on the Login\\/Signup page", async ({ signupPage }) => {
-  await signupPage.expectSignupFormVisible();
+Then("I should remain on the Login\\/Signup page", async ({ loginSignupPage }) => {
+  await loginSignupPage.expectSignupFormVisible();
 });
 
-Then("I should see the existing email message {string}", async ({ signupPage }, expectedMessage: string) => {
-  const actualMessage = await signupPage.getExistingEmailMessage();
+Then("I should see the existing email message {string}", async ({ loginSignupPage }, expectedMessage: string) => {
+  const actualMessage = await loginSignupPage.getExistingEmailMessage();
   expect(actualMessage).toBe(expectedMessage);
 });
 
-When("I leave the email field empty", async ({ signupPage }) => {
-  await signupPage.newUserEmailInput.clear();
+When("I leave the email field empty", async ({ loginSignupPage }) => {
+  await loginSignupPage.newUserEmailInput.clear();
 });
 
 // ----------------- Account Setup Information Form ----------------------------------------

@@ -412,6 +412,8 @@ npm run test:api-all
 
 # Run API tests filtered by tag
 npm run test:api-tag
+#or by specifying the tag as
+npx playwright test --grep @tagname
 
 # Run tests in headed mode (visible browser)
 npx bddgen && npx playwright test --headed --project=chromium
@@ -423,9 +425,6 @@ npx bddgen && npx playwright test login.feature --project=chromium
 
 # Run a specific API spec
 npx playwright test tests/api/auth/login.api.spec.ts
-
-# Filter tests by name or tag
-npx playwright test --grep "login" -i
 
 # Open the Playwright HTML report after a run
 npm run report
