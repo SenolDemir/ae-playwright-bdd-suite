@@ -1,5 +1,5 @@
 ---
-name: auth-login
+name: login
 description: Shared login procedure for agents that need to authenticate via browser before inspecting protected pages
 disable-model-invocation: true
 ---

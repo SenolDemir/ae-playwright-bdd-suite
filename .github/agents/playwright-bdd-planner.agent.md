@@ -86,7 +86,7 @@ by the user in chat. Base every scenario strictly on observed behavior — never
 ## 3. Authentication (if required)
 
 - If the feature requires a logged-in state, follow
-  `.github/skills/auth-login/SKILL.md` and every step in that procedure
+  `.github/skills/login/SKILL.md` and every step in that procedure
 - Complete authentication fully before continuing to any DOM inspection or interaction
 
 ---

@@ -6,14 +6,25 @@ ae-playwright-bdd-suite
 
 This project is an AI-augmented test suite using Playwright for end-to-end testing. The suite is designed to leverage AI capabilities to enhance test generation, maintenance, and execution efficiency.
 
-# Stack
+# Stack and Architecture
 
-- **Framework**: Playwright BDD
-- **Language**: TypeScript
-- **Design Pattern**: Page Object Model (POM)
-- **Test Data Generation**: @faker-js/faker
-- **AI Augmentation**: GitHub Copilot + Playwright MCP for code suggestions and test generation
-- **Reporting**: Playwright built-in reports + Allure Reports
+- **Runtime and package manager**: Node.js, npm
+- **Language**: TypeScript (strict mode)
+- **Test runner**: Playwright Test
+- **BDD for UI tests**: `playwright-bdd` with Gherkin feature files and step definitions
+- **UI feature files**: `tests/features/`.
+- **UI step definitions**: `tests/steps/`.
+- **API testing**: Playwright native `test()` specs with `APIRequestContext`
+- **UI architecture**: Page Object Model; page classes live in `ui/pages/`, and reusable Component Objects live in `ui/components/`.
+- **API architecture**: API Object Model using domain-specific service/client classes in `api/` and `api/services`
+- **API related utilities** live in `api/utils/`
+- **Fixtures**: Separate UI and API fixtures in `fixtures/`
+- **Test data**: `@faker-js/faker` and centralized data factories in `testdata/`
+- **Types**: Shared domain types live in `types/`
+- **Configuration**: `dotenv` for environment variables in `.env` files
+- **AI tooling**: GitHub Copilot, Playwright MCP, and Playwright Agents.
+- **CI/CD**: GitHub Actions
+- **Reporting**: Playwright HTML Reporter and Allure Report
 
 # Project general coding standards
 
@@ -28,30 +39,15 @@ This project is an AI-augmented test suite using Playwright for end-to-end testi
 
 ## TypeScript Guidelines
 
-- Use strict mode in tsconfig.json
-- Always define return types for functions and methods
-- Use interfaces for object shapes and page object models
-- Avoid using `any` type; use `unknown` if type is uncertain
-- Use `async/await` for all asynchronous operations, avoid `.then()` chains
-- Use optional chaining (`?.`) and nullish coalescing (`??`) where appropriate
-- Use `enum` for fixed sets of values (e.g. test environments, user roles)
-- Use `readonly` for properties that should not be reassigned
-- Destructure objects and arrays where it improves readability
-- Use type imports where possible: `import type { Page } from 'playwright'`
+- Always declare explicit return types on functions and methods.
+- Never use `any`; use `unknown` and narrow it.
+- Use `async/await`; no `.then()` chains.
+- Use interfaces for data shapes (test data, API models). Page objects, components, and clients are classes.
+- Mark locators and injected dependencies in classes as `readonly`.
+- Use type-only imports: `import type { Page, Locator } from '@playwright/test'`.
+
 
 # Playwright + BDD Rules
-
-### Architecture
-
-- Always follow Page Object Model (POM) design pattern
-- Page classes live in `ui/pages/` — one file per page/component
-- Component classes live in `ui/components/`
-- Step definitions live in `tests/steps/`
-- Tests (feature files) live in `tests/features/`
-- Shared fixtures live in `fixtures/`
-- Test data factories live in `testdata/`
-- Shared domain types live in `types/`
-- Utility functions live in `utils/`
 
 ### Page Object Rules
 
@@ -62,28 +58,17 @@ This project is an AI-augmented test suite using Playwright for end-to-end testi
   - ✅ `loginPage.submitCredentials(user, pass)`
   - ❌ `page.locator('#btn').click()`
 
-### Locator Strategy
 
-**Priority Order (Accessibility-First):**
+### Locators
 
-1. `getByRole(role, { name })`
-2. `getByLabel('...')`
-3. `getByPlaceholder('...')`
-4. `getByTestId('...')` for data-testid attributes only
-5. `locator('[data-qa="..."]')` for stable data-qa attributes
-   6–8. `getByText('...')`, `getByAltText('...')`, `getByTitle('...')`
-   9–11. `locator('[name="..."]')`, `locator('#id')`, CSS selectors (last resort)
-
-Never use: XPath, hashed class names, `.nth()`, `.first()`, `.last()`, `.or()` chains
-
-**Container Scoping:** Use `private readonly` for container locators, `public readonly` for child elements.
-
-> **Full rules, code examples, and scoping patterns: [.github/prompts/locator.prompt.md](.github/prompts/locator.prompt.md)**
+Use accessibility-first Playwright locators and avoid brittle selectors.
+Before writing or changing any locator, follow the `locator` skill
+(.github/skills/locator-strategy/SKILL.md). Do not restate its rules here.
 
 ## Test Data Generation
 
 - Use `@faker-js/faker` library for generating realistic test data
-- Create factory functions in `data/` directory for domain-specific data
+- Create factory functions in `testdata/` directory for domain-specific data
 - Factory functions should return typed objects matching domain interfaces
 - Prefer factories over inline faker calls in step definitions
   - ✅ `const user = UserFactory.createValidUser()`

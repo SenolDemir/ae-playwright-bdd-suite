@@ -20,8 +20,6 @@
 - Mobile number field accepts non-numeric input — it's a plain `type=text` input with no `pattern` attribute, so numeric format isn't enforced.
 
 
-## Structural
-
 ### tags
 @ui @smoke         → Quick sanity suite  
 @api @smoke        → API sanity  
@@ -36,8 +34,6 @@
 ### branch naming
 feature/ui01-signup-form
  
-
-## AI
 
 ## bdd-planner-agent runtime prompt template
 
