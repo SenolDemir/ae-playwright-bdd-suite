@@ -46,23 +46,16 @@ You generate or extend page objects (locators and action methods) from a feature
 
 ## Source of truth
 
-- `.github/copilot-instructions.md`: TypeScript, naming, POM, test-data and architecture rules
-- `.github/skills/locator/SKILL.md`: locator priority and confidence levels
+- `.github/copilot-instructions.md`: stack, project map, naming and TypeScript rules
+- `.github/instructions/page-objects.instructions.md`: page and component object rules
+- `.github/instructions/locator.instructions.md`: locator priority, banned patterns, scoping
+- `.github/instructions/testdata.instructions.md`: generators and domain types
+- `.github/skills/locator/SKILL.md`: locator discovery workflow and confidence levels
 - `.github/skills/login/SKILL.md`: required only when inspecting or testing a page that requires an authenticated browser session.
 - `.github/skills/consent-overlay/SKILL.md`: whenever an overlay can block interaction
 
 Before generating anything, read and follow all of these. If they conflict with this file, they win.
-
-
-## Project map
-
-| Artifact | Path |
-|---|---|
-| Page objects | `ui/pages/` (base class: `base.page.ts`) |
-| Component objects | `ui/components/` |
-| UI fixtures | `fixtures/ui.fixtures.ts`|
-| Test-data factories | `testdata/` |
-| Shared domain types | `types/` |
+Do not restate their rules here; this file only defines the generator workflow.
 
 ## Constraints
 
@@ -99,8 +92,8 @@ Before generating anything, read and follow all of these. If they conflict with 
 
 ## Creating a new page object
 
-1. Extend `BasePage`, match its constructor, and call `super(...)` as it requires. No custom constructor unless extra parameters are needed.
-2. Do not re-implement functionality that `BasePage` provides (for example, shared helpers).
+1. Follow the page-objects instructions (extend `BasePage`, match its constructor, no custom constructor unless extra parameters are needed).
+2. Do not re-implement functionality that `BasePage` provides.
 3. If a UI fragment appears on several pages, create or reuse a component object in `ui/components/` instead of duplicating locators.
 4. Layout (match the import style of existing page objects):
 
@@ -141,19 +134,18 @@ For each page or view:
 
 ## Page object method rules
 
-Follow `.github/copilot-instructions.md`. Additionally:
+Follow the page-objects instructions. Mapping from the feature file:
 
-- `Given`/`When` steps map to action methods (e.g. `submitCredentials()`)
-- `Then` steps map to assertion methods prefixed `expect` (e.g. `expectFormVisible()`)
-- `@faker-js/faker` inside page objects only for random selection from on-screen options; all other data comes from factories
+- `Given`/`When` steps → action methods; `Then` steps → `expect*` assertion methods
+- `@faker-js/faker` inside page objects only for random selection from on-screen options; all other data comes from generators
 
 ## Fixture and test-data integration
 
 Apply the relevant steps from this checklist after deciding which page objects to create or extend:
 
 1. **Page fixtures:** When creating a page class, add its import, type it in the `Fixtures` type, and add a fixture in `base.extend`, following the existing pattern in `fixtures/ui.fixtures.ts`.
-2. **Domain test data:** If the feature needs data not covered by an existing factory, add its shape in `types/` and a generator in `testdata/`, following the existing patterns and using `@faker-js/faker`.
-3. **Reuse data:** Obtain data from the relevant fixture or factory and pass it to page-object methods or the constructor as needed. `BasePage` does not provide shared test data.
+2. **Domain test data:** If the feature needs data not covered by an existing generator, add its shape in `types/` and a generator in `testdata/`, following the testdata instructions.
+3. **Reuse data:** Obtain data from the relevant fixture or generator and pass it to page-object methods. `BasePage` does not provide shared test data.
 
 ## Verification
 

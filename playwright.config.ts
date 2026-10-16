@@ -1,15 +1,16 @@
 import "dotenv/config";
 import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig } from "playwright-bdd";
+import { env } from "./utils/env";
 
 const parseBoolean = (value: string | undefined, defaultValue: boolean): boolean => {
   if (value === undefined) return defaultValue;
   return value.toLowerCase() === "true";
 };
 
-const headlessMode = parseBoolean(process.env.HEADLESS_MODE, true);
-const maximizedWindow = parseBoolean(process.env.MAXIMIZED_WINDOW, false);
-const baseUrl = process.env.BASE_URL;
+const headlessMode = env.HEADLESS_MODE === "true";
+const maximizedWindow = env.MAXIMIZED_WINDOW === "true";
+const baseUrl = env.BASE_URL;
 
 const bddTestDir = defineBddConfig({
   features: "tests/features/**/*.feature",
@@ -76,7 +77,7 @@ export default defineConfig({
     { name: "chromium", use: { browserName: "chromium" }, testDir: bddTestDir },
     { name: "firefox", use: { browserName: "firefox" }, testDir: bddTestDir, default: false },
     { name: "webkit", use: { browserName: "webkit" }, testDir: bddTestDir, default: false },
-    // { name: "mobile-chrome", use: { ...devices["Pixel 5"] }, testDir: bddTestDir },
-    // { name: "mobile-safari", use: { ...devices["iPhone 12"] }, testDir: bddTestDir },
+    // { name: "mobile-chrome", use: { ...devices["Pixel 5"] }, testDir: bddTestDir, default: false },
+    // { name: "mobile-safari", use: { ...devices["iPhone 12"] }, testDir: bddTestDir, default: false },
   ],
 });

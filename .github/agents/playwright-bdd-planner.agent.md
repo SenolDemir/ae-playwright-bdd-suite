@@ -163,26 +163,17 @@ For BOTH:
 
 ## 7. Generating Gherkin Output and Saving
 
-**Before writing any step**, use `list_directory` to scan the `features/` directory, then
-`read_file` to open existing feature files and identify reusable steps. Use exact wording
-of any existing step that covers the needed action — do not paraphrase or create a variant.
-Only create new step wording when no existing step applies.
+**Before writing any step**, use `list_directory` to scan `tests/features/`, then
+`read_file` to open existing feature files and identify reusable steps.
 
-Each scenario must follow these conventions:
-- Tagging pattern:
-  - Positive: `@{feature-id} @{domain} @positive`
-  - Negative: `@{feature-id} @{domain} @negative`
-  - Both: apply appropriate tag per scenario
-- Follow Background/Rule/Scenario structure
-- Use Scenario Outline + Examples table for data-driven cases
-- Scenario titles must reflect the exact case being tested
-- Then steps must use exact messages observed during exploration
-- Use Given/When/Then structure strictly
-- Include Background section if shared setup is needed
+Follow `.github/instructions/features.instructions.md` for structure, tagging, step wording and
+step reuse. Planner-specific requirements:
+- Base every `Then` step on exact messages observed during exploration
+- Apply the correct `@positive` / `@negative` tag per scenario for the chosen scenario type
 
 **Saving:**
-- Check if `features/_review/` exists with `list_directory`. If not, create it with `create_directory`
-- Save the file to `features/_review/` using the filename provided by the user, or follow
+- Check if `tests/features/_review/` exists with `list_directory`. If not, create it with `create_directory`
+- Save the file to `tests/features/_review/` using the filename provided by the user, or follow
   this convention if none given: `{domain}-{feature-name}-{scenario-type}.feature`
 - Prepend the feature file with an `# Exploration Map` comment block containing:
   - All interactive elements discovered
@@ -193,7 +184,7 @@ Each scenario must follow these conventions:
 ---
 
 **Output:**
-- A single `.feature` file saved to `features/_review/` with the `# Exploration Map` block at the top
+- A single `.feature` file saved to `tests/features/_review/` with the `# Exploration Map` block at the top
 - A brief summary of what was observed and what reasoning drove the scenario design
 - A mandatory `## Observations & Anomalies` section listing any behavior that was unexpected,
   inconsistent, ambiguous, or could not be fully verified — even if no scenario was written for it.
