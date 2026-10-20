@@ -75,14 +75,14 @@ Do not restate their rules here; this file only defines scope and workflow.
 - DO NOT create a second fixtures file
 - DO NOT change the behavior of existing step definitions; add new steps or reuse existing ones
 - No hardcoded credentials, URLs or test data. Use `.env` and generators. Never print credential values
-- Use targeted append-only edits; never rewrite an existing file
+- Use targeted, additive edits; never rewrite an existing file or remove existing code
 - Do not invent behavior the feature does not describe. Keep changes minimal and do not refactor unrelated files
 
 ## Inputs
 
 Required:
 
-- Path to a feature file that is reviewed: located in its domain folder under `tests/features/`, or explicitly confirmed by the user if it is still in `tests/features/_review/`
+- Path to a feature file that is reviewed: located in its domain folder under `tests/features/`
 - `BASE_URL` in `.env`
 
 If an input is missing or the feature is not confirmed as reviewed, **stop and ask**.
@@ -98,21 +98,22 @@ If an input is missing or the feature is not confirmed as reviewed, **stop and a
 
 ### 2. Inventory existing code (BLOCKING)
 
+
 1. **Page objects.** List `ui/pages/` and `ui/components/`; read each relevant file in full and record every locator and method. Apply the decision tree:
    - A page object exists for the exact page → **extend** it.
    - Partial match, same URL or same view → **extend** it.
    - Partial match, different URL or distinct section (modal, confirmation, sub-flow) → **create** a new scoped page object (e.g. `checkout-confirmation.page.ts`, class `CheckoutConfirmationPage`).
    - No match → **create** a new page class.
    - A UI fragment shared by 2+ pages → create or reuse a component object.
-2. **Fixtures and test data.** Read `fixtures/ui.fixtures.ts` and its `Fixtures` type; list `testdata/` and `types/` and read the relevant generators and types.
+2. **Fixtures and test data.** Read `fixtures/ui.fixtures.ts` and its `Fixtures` type; list `testdata/` and `types/` and read the relevant generators and types. For each step that needs data, note whether a generator exists and whether it accepts the override the step needs (for example `Partial<SignupData>`).
 3. **Steps.** Search all of `tests/steps/`. For each step text decide:
    - **already defined** → reuse as is
-   - **overlapping or ambiguous with an existing expression** → do not generalize; add a new step with distinct wording only if the feature wording allows, otherwise stop and ask
+   - **overlapping or ambiguous with an existing expression** → do not write it; stop and report both expressions and the files involved
    - **missing** → create, and note the target file `tests/steps/<domain>/<feature>.steps.ts`
 
 ### 3. Plan checkpoint
 
-Present a short plan: what is reused, extended and created (pages, components, fixtures, factories, steps and target files). **Wait for user confirmation before inspecting or writing anything.**
+Present a short plan: what is reused, extended and created (pages, components, fixtures, generators including any that need an override parameter, steps and target files). **Wait for user confirmation before inspecting or writing anything.**
 
 ### 4. Inspect the DOM
 
@@ -145,13 +146,12 @@ Follow the page-objects and locator instructions.
 **Methods:**
 
 - `Given`/`When` steps → action methods; `Then` steps → `expect*` assertion methods.
-- `@faker-js/faker` inside page objects only for random selection from on-screen options; all other data comes from generators.
 - Cover only what the feature needs.
 
 ### 6. Wire fixtures and test data
 
 1. **Page fixtures:** for each new page class, add its import, type it in `Fixtures`, and add a fixture in `base.extend`, following the existing pattern.
-2. **Test data:** if no generator covers the data a step needs, read `.github/instructions/testdata.instructions.md`, then add the shape and generator it describes.
+2. **Test data:** if no generator covers the data a step needs, or an existing generator does not accept the override a step needs, read `.github/instructions/testdata.instructions.md` first, then add or extend the generator as it describes.
 3. Pass data from fixtures or generators into page-object methods. `BasePage` provides no shared test data.
 
 ### 7. Generate step definitions
@@ -176,7 +176,7 @@ Follow the page-objects and locator instructions.
 | Consent or login skill fails | Stop and report the failing step |
 | Element has no resilient locator | Record as unresolved, continue with the rest |
 | Feature references behavior not present in the app | Report the mismatch; no workaround |
-| New step collides with or is ambiguous against an existing step | Stop, report both expressions, ask whether to reuse or reword |
+| New step collides with or is ambiguous against an existing step | Stop, report both expressions and the files involved |
 | Type-check or `bddgen` still fails after two fix attempts | Stop and report the remaining errors |
 
 ## Summary report

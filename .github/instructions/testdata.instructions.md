@@ -13,4 +13,4 @@ applyTo: "testdata/**/*.ts,types/**/*.ts"
 - Exception: page objects may use faker only to pick randomly among on-screen options (e.g. a dropdown). All other data comes from generators.
 - Never hardcode credentials. The existing test user comes from `TEST_USER_EMAIL` / `TEST_USER_PASSWORD`, read outside generators and passed in as parameters.
 - Fixed value sets (countries, titles, roles) are `as const` arrays or enums in `types/`, with the union type derived from them.
-- Use faker locale settings when region-specific data is needed.
+- For invalid-input scenarios, pass the value from the step parameter as an override to the `testdata/` generator (`generateSignupData({ name })`). Do not build the object by hand.
