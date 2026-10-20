@@ -66,6 +66,7 @@ Detailed rules load automatically from `.github/instructions/` by file path:
 
 - `tests/features/**` → `features.instructions.md`
 - `ui/**` → `page-objects.instructions.md`, `locator.instructions.md`
+- `tests/steps/**` → `steps.instructions.md`
 - `api/**` → `api-layer.instructions.md`
 - `testdata/**`, `types/**` → `testdata.instructions.md`
 

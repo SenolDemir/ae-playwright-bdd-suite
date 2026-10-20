@@ -8,7 +8,7 @@ description: Workflow for finding, generating, refactoring or healing Playwright
 The rules (priority order, banned patterns, container scoping, naming) live in
 `.github/instructions/locator.instructions.md`; page and component class rules live in
 `.github/instructions/page-objects.instructions.md`. Apply them; do not restate them here.
-This skill covers only the workflow, the pasted-DOM output mode and the confidence levels.
+This skill covers only the workflow and the pasted-DOM output mode. Confidence levels are defined in the locator instructions.
 Class and file locations are in the project map in `.github/copilot-instructions.md`.
 
 ## Find a locator for an element
@@ -34,10 +34,4 @@ public readonly emailInput: Locator =
     this.page.getByPlaceholder('Email Address');
 ```
 
-In any other task (generator agent, healer agent, refactoring), apply the rules but respond in the format that task requires.
-
-## Confidence levels (for generator reports)
-
-- 🟢 High: getByRole, getByLabel, getByPlaceholder, getByTestId
-- 🟡 Medium: getByText, getByAltText, getByTitle
-- 🔴 Low: locator('#id'), CSS/XPath (flag for review)
+In any other task (healer agent, refactoring), apply the rules but respond in the format that task requires.

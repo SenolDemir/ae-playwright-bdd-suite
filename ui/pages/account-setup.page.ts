@@ -2,7 +2,7 @@ import type { Page } from "@playwright/test";
 import { BasePage } from "./base.page";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
-import type { SignupData } from "../../types/signup.types";
+import type { DateOfBirth, SignupData } from "../../types/signup.types";
 
 export class AccountSetupPage extends BasePage {
   constructor(
@@ -94,6 +94,12 @@ export class AccountSetupPage extends BasePage {
       label: this.signupData.yearOfBirth,
     });
   }
+
+  // async selectDateOfBirth({ day, month, year }: DateOfBirth): Promise<void> {
+  //   await this.daysDropdown.selectOption({ label: day });
+  //   await this.monthsDropdown.selectOption({ label: month });
+  //   await this.yearsDropdown.selectOption({ label: year });
+  // }
 
   async selectCountry(): Promise<void> {
     const countryDropdown: Locator = this.page.getByRole("combobox", {

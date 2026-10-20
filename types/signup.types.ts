@@ -10,6 +10,12 @@ export const COUNTRIES = [
 
 export const TITLES = ["Mr.", "Mrs."] as const;
 
+export interface DateOfBirth {
+  day: string;
+  month: string;
+  year: string;
+}
+
 export type Country = (typeof COUNTRIES)[number];
 export type Title = (typeof TITLES)[number];
 

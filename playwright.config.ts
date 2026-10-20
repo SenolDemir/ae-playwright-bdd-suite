@@ -8,7 +8,6 @@ const parseBoolean = (value: string | undefined, defaultValue: boolean): boolean
   return value.toLowerCase() === "true";
 };
 
-const headlessMode = env.HEADLESS_MODE === "true";
 const maximizedWindow = env.MAXIMIZED_WINDOW === "true";
 const baseUrl = env.BASE_URL;
 
@@ -54,7 +53,7 @@ export default defineConfig({
   use: {
     trace: "on-first-retry",
     screenshot: "only-on-failure",
-    headless: headlessMode,
+    headless: process.env.CI ? true : false,
     actionTimeout: 15_000,
     navigationTimeout: 30_000,
     ...(baseUrl ? { baseURL: baseUrl } : {}),

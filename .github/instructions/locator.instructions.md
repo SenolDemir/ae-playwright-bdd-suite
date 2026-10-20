@@ -48,3 +48,9 @@ public readonly nameInput: Locator = this.signupForm.locator('[data-qa="signup-n
 - Regex for role names and visible text; exact strings for labels, placeholders and data attributes.
 - Never invent roles or attributes that are not in the inspected DOM.
 - Flag low-confidence locators (`#id`, CSS) for review.
+
+## Confidence levels (for reports)
+
+- 🟢 High: `getByRole`, `getByLabel`, `getByPlaceholder`, `getByTestId`
+- 🟡 Medium: `getByText`, `getByAltText`, `getByTitle`, `[data-qa]`, `[name]`
+- 🔴 Low: `locator('#id')`, CSS (flag for review)

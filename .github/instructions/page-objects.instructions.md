@@ -10,6 +10,7 @@ applyTo: "ui/**/*.ts"
 - Reusable UI parts (navbar, dialogs) are components composed into pages, not copied.
 - Use `import type { Page, Locator } from "@playwright/test"`.
 - Locators are `readonly` properties declared at the top of the class. Follow [locator.instructions.md](./locator.instructions.md).
+- Indicate the locators by adding a `// Locators` comment block above the locator fields
 - Public methods represent user actions in domain language (`submitCredentials`, `addProductToCart`), not low-level clicks.
   - ✅ `loginPage.submitCredentials(email, password)`
   - ❌ `page.locator('#btn').click()` in a step or test

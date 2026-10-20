@@ -378,11 +378,14 @@ npx playwright install
 
 ### Environment Setup
 
-There is no `.env.example` file — create a `.env` file manually at the project root with the following keys:
+The project includes a `.env.example` file listing every environment variable it uses. Create your local `.env` by copying it, then fill in your own values:
+
+```bash
+cp .env.example .env
+```
 
 ```bash
 # Playwright execution
-HEADLESS_MODE=true
 MAXIMIZED_WINDOW=false
 BASE_URL=https://www.automationexercise.com/
 
@@ -415,9 +418,9 @@ npm run test:api-tag
 #or by specifying the tag as
 npx playwright test --grep @tagname
 
-# Run tests in headed mode (visible browser)
-npx bddgen && npx playwright test --headed --project=chromium
-# or set HEADLESS_MODE=false in .env
+# Browser mode: headed locally, headless in CI (controlled by the CI env var in playwright.config.ts)
+# Force headless locally:
+CI=true npx bddgen && CI=true npx playwright test --project=chromium
 
 # Run a specific feature file
 npx bddgen && npx playwright test login.feature --project=chromium
