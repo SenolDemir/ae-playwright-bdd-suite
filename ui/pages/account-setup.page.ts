@@ -2,16 +2,9 @@ import type { Page } from "@playwright/test";
 import { BasePage } from "./base.page";
 import type { Locator } from "@playwright/test";
 import { expect } from "@playwright/test";
-import type { DateOfBirth, SignupData } from "../../types/signup.types";
+import type { AccountInformation, AddressInformation, DateOfBirth } from "../../types/signup.types";
 
 export class AccountSetupPage extends BasePage {
-  constructor(
-    page: Page,
-    private readonly signupData: SignupData,
-  ) {
-    super(page);
-  }
-
   // ----------- account information form elements -------------------------
 
   public readonly enterAccountInformationHeading: Locator = this.page.getByRole("heading", {
@@ -51,6 +44,9 @@ export class AccountSetupPage extends BasePage {
   });
   public readonly address1Input: Locator = this.accountInformationForm.locator('[data-qa="address"]');
   public readonly address2Input: Locator = this.accountInformationForm.getByLabel("Address 2");
+  public readonly countryDropdown: Locator = this.page.getByRole("combobox", {
+    name: "Country",
+  });
   public readonly stateInput: Locator = this.accountInformationForm.getByLabel("State");
   public readonly cityInput: Locator = this.accountInformationForm.getByLabel("City");
   public readonly zipcodeInput: Locator = this.page.locator('[data-qa="zipcode"]');
@@ -75,6 +71,31 @@ export class AccountSetupPage extends BasePage {
     await expect(this.page.getByRole("heading", { name: "Enter Account Information" })).toBeVisible();
   }
 
+  async fillAccountInformation({ title, password, dateOfBirth }: AccountInformation): Promise<void> {
+    await this.page.getByRole("radio", { name: title, exact: true }).check();
+    await this.passwordInput.fill(password);
+    await this.selectDateOfBirth(dateOfBirth);
+  }
+
+  async fillAddressInformation(address: AddressInformation): Promise<void> {
+    await this.firstNameInput.fill(address.firstName);
+    await this.lastNameInput.fill(address.lastName);
+    await this.companyInput.fill(address.company);
+    await this.address1Input.fill(address.address1);
+    await this.address2Input.fill(address.address2);
+    await this.countryDropdown.selectOption({ label: address.country });
+    await this.stateInput.fill(address.state);
+    await this.cityInput.fill(address.city);
+    await this.zipcodeInput.fill(address.zipcode);
+    await this.mobileNumberInput.fill(address.mobileNumber);
+  }
+
+  private async selectDateOfBirth({ day, month, year }: DateOfBirth): Promise<void> {
+    await this.daysDropdown.selectOption({ label: day });
+    await this.monthsDropdown.selectOption({ label: month });
+    await this.yearsDropdown.selectOption({ label: year });
+  }
+
   async selectTitle(title: string): Promise<void> {
     if (title === "Mr.") {
       await this.titleMrRadioButton.check();
@@ -83,49 +104,6 @@ export class AccountSetupPage extends BasePage {
     }
   }
 
-  async selectRandomDateOfBirth(): Promise<void> {
-    await this.daysDropdown.selectOption({
-      label: this.signupData.dayOfBirth,
-    });
-    await this.monthsDropdown.selectOption({
-      label: this.signupData.monthOfBirth,
-    });
-    await this.yearsDropdown.selectOption({
-      label: this.signupData.yearOfBirth,
-    });
-  }
-
-  // async selectDateOfBirth({ day, month, year }: DateOfBirth): Promise<void> {
-  //   await this.daysDropdown.selectOption({ label: day });
-  //   await this.monthsDropdown.selectOption({ label: month });
-  //   await this.yearsDropdown.selectOption({ label: year });
-  // }
-
-  async selectCountry(): Promise<void> {
-    const countryDropdown: Locator = this.page.getByRole("combobox", {
-      name: "Country",
-    });
-    await countryDropdown.click();
-    await countryDropdown.selectOption({ label: this.signupData.country });
-  }
-
-  async completeAccountSetupForm(): Promise<void> {
-    await this.selectTitle(this.signupData.title);
-    await this.passwordInput.fill(this.signupData.password);
-    await this.selectRandomDateOfBirth();
-    await this.newsletterCheckbox.check();
-    await this.offersCheckbox.check();
-    await this.firstNameInput.fill(this.signupData.firstName);
-    await this.lastNameInput.fill(this.signupData.lastName);
-    await this.companyInput.fill(this.signupData.company);
-    await this.address1Input.fill(this.signupData.address1);
-    await this.address2Input.fill(this.signupData.address2);
-    await this.selectCountry();
-    await this.stateInput.fill(this.signupData.state);
-    await this.cityInput.fill(this.signupData.city);
-    await this.zipcodeInput.fill(this.signupData.zipcode);
-    await this.mobileNumberInput.fill(this.signupData.mobileNumber);
-  }
 
   async submitAccountSetup(): Promise<void> {
     await this.createAccountButton.click();
