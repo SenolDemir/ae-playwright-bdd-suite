@@ -6,14 +6,38 @@ ae-playwright-bdd-suite
 
 This project is an AI-augmented test suite using Playwright for end-to-end testing. The suite is designed to leverage AI capabilities to enhance test generation, maintenance, and execution efficiency.
 
-# Stack
+# Stack and Architecture
 
-- **Framework**: Playwright BDD
-- **Language**: TypeScript
-- **Design Pattern**: Page Object Model (POM)
-- **Test Data Generation**: @faker-js/faker
-- **AI Augmentation**: GitHub Copilot + Playwright MCP for code suggestions and test generation
-- **Reporting**: Playwright built-in reports + Allure Reports
+- **Runtime and package manager**: Node.js, npm
+- **Language**: TypeScript (strict mode)
+- **Test runner**: Playwright Test
+- **BDD for UI tests**: `playwright-bdd` with Gherkin feature files and step definitions
+- **API testing**: Playwright native `test()` specs with `APIRequestContext`
+- **UI architecture**: Page Object Model with reusable Component Objects
+- **API architecture**: API Object Model using domain-specific service/client classes
+- **Fixtures**: Separate UI and API fixtures
+- **Test data**: `@faker-js/faker` and centralized data generators
+- **Configuration**: `dotenv` for environment variables in `.env` files
+- **AI tooling**: GitHub Copilot, Playwright MCP, and Playwright Agents.
+- **CI/CD**: GitHub Actions
+- **Reporting**: Playwright HTML Reporter and Allure Report
+
+## Project map
+
+| Artifact | Path |
+|---|---|
+| UI feature files | `tests/features/` |
+| UI step definitions | `tests/steps/` |
+| Hooks and auth setup | `tests/hooks/`, `tests/setup/` |
+| API specs | `tests/api/` |
+| Page objects (base class: `base.page.ts`) | `ui/pages/` |
+| Component objects | `ui/components/` |
+| UI fixtures | `fixtures/ui.fixtures.ts` |
+| API fixtures | `fixtures/api.fixtures.ts` |
+| API services (base class: `base.client.ts`) | `api/services/` |
+| API endpoints, schemas, mappers, utils | `api/endpoints.ts`, `api/schemas/`, `api/mappers/`, `api/utils/` |
+| Test-data generators | `testdata/` |
+| Shared domain types | `types/` |
 
 # Project general coding standards
 
@@ -23,73 +47,31 @@ This project is an AI-augmented test suite using Playwright for end-to-end testi
 - Use camelCase for variables, functions, and methods
 - Prefix private class members with underscore (\_)
 - Use ALL_CAPS for constants
-- Use kebab-case for folder and directory names (e.g. data, page-objects, step-definitions)
-- Use lowercase dot-notation for file names, scoped by type: `login.page.ts`, `user.type.ts`, `base.client.ts`, `auth.steps.ts`, `user.factory.ts`
+- Use kebab-case for folder and directory names (e.g. data, page-objects)
+- Use lowercase dot-notation for file names, scoped by type: `login.page.ts`, `user.type.ts`, `base.client.ts`, `user.factory.ts`
 
 ## TypeScript Guidelines
 
-- Use strict mode in tsconfig.json
-- Always define return types for functions and methods
-- Use interfaces for object shapes and page object models
-- Avoid using `any` type; use `unknown` if type is uncertain
-- Use `async/await` for all asynchronous operations, avoid `.then()` chains
-- Use optional chaining (`?.`) and nullish coalescing (`??`) where appropriate
-- Use `enum` for fixed sets of values (e.g. test environments, user roles)
-- Use `readonly` for properties that should not be reassigned
-- Destructure objects and arrays where it improves readability
-- Use type imports where possible: `import type { Page } from 'playwright'`
+- Always declare explicit return types on functions and methods.
+- Never use `any`; use `unknown` and narrow it.
+- Use `async/await`; no `.then()` chains.
+- Use interfaces for data shapes (test data, API models). Page objects, components, and clients are classes.
+- Mark locators and injected dependencies in classes as `readonly`.
+- Use type-only imports: `import type { Page, Locator } from '@playwright/test'`.
 
-# Playwright + BDD Rules
 
-### Architecture
+# Layer-specific rules
 
-- Always follow Page Object Model (POM) design pattern
-- Page classes live in `ui/pages/` — one file per page/component
-- Component classes live in `ui/components/`
-- Step definitions live in `tests/steps/`
-- Tests (feature files) live in `tests/features/`
-- Shared fixtures live in `fixtures/`
-- Test data factories live in `testdata/`
-- Shared domain types live in `types/`
-- Utility functions live in `utils/`
+Detailed rules load automatically from `.github/instructions/` by file path:
 
-### Page Object Rules
+- `tests/features/**` → `features.instructions.md`
+- `ui/**` → `page-objects.instructions.md`, `locator.instructions.md`
+- `tests/steps/**` → `steps.instructions.md`
+- `api/**` → `api-layer.instructions.md`
+- `testdata/**`, `types/**` → `testdata.instructions.md`
 
-- Each page class must extend a `BasePage` class
-- Locators are defined as readonly class properties at the top
-- No raw selectors allowed inside step definitions or test files
-- Methods on page objects should represent user actions, not low-level clicks
-  - ✅ `loginPage.submitCredentials(user, pass)`
-  - ❌ `page.locator('#btn').click()`
-
-### Locator Strategy
-
-**Priority Order (Accessibility-First):**
-
-1. `getByRole(role, { name })`
-2. `getByLabel('...')`
-3. `getByPlaceholder('...')`
-4. `getByTestId('...')` for data-testid attributes only
-5. `locator('[data-qa="..."]')` for stable data-qa attributes
-   6–8. `getByText('...')`, `getByAltText('...')`, `getByTitle('...')`
-   9–11. `locator('[name="..."]')`, `locator('#id')`, CSS selectors (last resort)
-
-Never use: XPath, hashed class names, `.nth()`, `.first()`, `.last()`, `.or()` chains
-
-**Container Scoping:** Use `private readonly` for container locators, `public readonly` for child elements.
-
-> **Full rules, code examples, and scoping patterns: [.github/prompts/locator.prompt.md](.github/prompts/locator.prompt.md)**
-
-## Test Data Generation
-
-- Use `@faker-js/faker` library for generating realistic test data
-- Create factory functions in `data/` directory for domain-specific data
-- Factory functions should return typed objects matching domain interfaces
-- Prefer factories over inline faker calls in step definitions
-  - ✅ `const user = UserFactory.createValidUser()`
-  - ❌ `const user = { name: faker.person.fullName(), email: faker.internet.email() }`
-- Document factory functions with JSDoc comments
-- Use faker locale settings for region-specific data when needed
+Cross-cutting rule: no raw selectors and no inline faker calls in step definitions or specs.
+For finding or fixing locators against a live page, use the `locator` skill (`.github/skills/locator/SKILL.md`).
 
 ## Playwright Test Generation Rules
 

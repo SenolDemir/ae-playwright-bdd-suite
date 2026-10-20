@@ -1,0 +1,36 @@
+{
+	"mcpServers": {
+		"filesystem": {
+			"type": "local",
+			"command": "npx",
+			"args": [
+				"@modelcontextprotocol/server-filesystem@latest",
+				"/Users/nuvanda/SDET/VSCProjects/ae-playwright-bdd-suite"
+			],
+			"tools": [
+				"*"
+			]
+		},
+		"playwright": {
+			"type": "local",
+			"command": "npx",
+			"args": [
+				"@playwright/mcp@latest"
+			],
+			"tools": [
+				"*"
+			]
+		},
+		"playwright-test": {
+			"type": "local",
+			"command": "npx",
+			"args": [
+				"playwright",
+				"run-test-mcp-server"
+			],
+			"tools": [
+				"*"
+			]
+		}
+	}
+}

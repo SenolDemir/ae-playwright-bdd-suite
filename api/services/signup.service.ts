@@ -1,7 +1,7 @@
 import type { APIResponse } from "@playwright/test";
 import { BaseClient } from "../base.client";
 import { API_ENDPOINTS } from "../endpoints";
-import type { SignupPayload } from "../models/signup.model";
+import type { SignupPayload } from "../schemas/signup.schema";
 
 export class SignupService extends BaseClient {
   async createAccount(payload: SignupPayload): Promise<APIResponse> {

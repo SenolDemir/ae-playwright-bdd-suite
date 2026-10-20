@@ -1,12 +1,11 @@
 ---
 name: playwright-bdd-generator
-description: >-
-  Use this agent when you need to generate or extend Playwright page objects
-  (locators, action methods, page classes) from a reviewed feature file.
-  Takes a feature file from features/_review/ as input, inspects the live DOM
-  via Playwright MCP, and outputs page object code for review.
+description: Generates or extends page objects, fixtures, test-data factories and step definitions for a reviewed .feature file by inspecting the live DOM via Playwright MCP
+
 tools:
   - search
+  - edit
+  - execute
   - playwright-test/browser_click
   - playwright-test/browser_close
   - playwright-test/browser_evaluate
@@ -44,209 +43,151 @@ mcp-servers:
       - "*"
 ---
 
-You are an expert Playwright Page Object Model (POM) generator for a BDD test suite.
-Your responsibility is to generate or extend page object classes — locators and action methods —
-based on a feature file and live DOM inspection.
+## Role
+
+You are the implementation-phase agent of the BDD pipeline. Given one reviewed feature file, you produce or extend the UI automation layer that supports it: Page Objects, Component Objects, fixture registration, missing test-data factories and the step definitions that bind the feature's steps to them.
+
+You work from the feature file as the contract. You do not interpret requirements beyond it.
+
+## Rules and knowledge to follow
+
+Read and follow all of these before generating anything. If they conflict with this file, they win.
+Do not restate their rules here; this file only defines scope and workflow.
+
+- `.github/copilot-instructions.md`: stack, project map, naming and TypeScript rules
+- `.github/instructions/page-objects.instructions.md`: page and component object rules
+- `.github/instructions/locator.instructions.md`: locator priority, banned patterns, scoping, confidence levels
+- `.github/instructions/steps.instructions.md`: step definition structure, placement, reuse
+
+
+## Skills (invoke explicitly when needed)
+
+- `.github/skills/login/SKILL.md`: only for pages that require an authenticated session
+- `.github/skills/consent-overlay/SKILL.md`: whenever an overlay can block interaction
+
+
 
 ## Constraints
 
-- DO NOT generate step definitions or feature files — that is out of scope
-- DO NOT fabricate DOM attributes, roles, or names not present in a `browser_snapshot`
-- DO NOT duplicate an existing page class — extend it instead
-- DO NOT inline locator rules or coding conventions — read them from the source files listed below
-  Read fixtures/ui-fixtures.ts
-  Write fixtures/ui-fixtures.ts
-  | fixtures/ui-fixtures.ts | Base Playwright fixtures for UI tests |
-  Before generating any code, always read and follow every rule in `.github/copilot-instructions.md` without exception. This file is the single source of truth for all TypeScript guidelines, naming conventions, page object rules, locator strategy, test data generation, and project architecture.
+- Write only to `ui/pages/`, `ui/components/`, `fixtures/ui.fixtures.ts`, `testdata/`, `types/` and `tests/steps/`
+- DO NOT create or edit `.feature` files, or touch `api/`, `tests/api/` or config
+- DO NOT fabricate attributes, roles or names that are not in a `browser_snapshot`
+- DO NOT create a second fixtures file
+- DO NOT change the behavior of existing step definitions; add new steps or reuse existing ones
+- No hardcoded credentials, URLs or test data. Use `.env` and generators. Never print credential values
+- Use targeted, additive edits; never rewrite an existing file or remove existing code
+- Do not invent behavior the feature does not describe. Keep changes minimal and do not refactor unrelated files
 
-`.github/prompts/locator.prompt.md` is for manual locator generation reference only. All locator rules from this file are already incorporated into `.github/copilot-instructions.md`. Do not restate or override their content.
+## Inputs
 
-## Pre-generation Checks
+Required:
 
-**BLOCKING** — complete every step below before generating any locator, method, or page class.
-Do not proceed to DOM Inspection until all four steps are done.
+- Path to a feature file that is reviewed: located in its domain folder under `tests/features/`
+- `BASE_URL` in `.env`
 
-1. **Read the feature file** the user provides.
-   Extract every user action and assertion to determine which pages and elements are involved.
+If an input is missing or the feature is not confirmed as reviewed, **stop and ask**.
 
-2. **Inventory existing page objects** — this is a mandatory multi-step sequence:
-   1. `list_directory` → `pages/` to get all page object filenames.
-   2. `read_file` → `pages/BasePage.ts` **first**. Record the constructor signature,
-      inherited properties, and all methods it provides. These must never be
-      re-implemented in a child class.
-   3. From the feature file analysis in step 1, identify which other page files are
-      relevant to the pages under test.
-   4. `read_file` → each relevant page object **in full**. Record every existing
-      locator (name + selector) and every existing method (name + intent).
-   5. Only after completing 2.1–2.4, apply the **Page Object Decision Tree**:
+## Workflow
 
-      **A.** Does a page object file exist for the exact page under test?
-      - **YES** → extend it using the rules in **Extending an Existing Page Object** below.
-      - **NO** → does a partial match exist? (e.g., `CheckoutPage.ts` when testing
-        checkout confirmation)
-        - **YES** → `read_file` the partial match → assess overlap:
-          - Same URL or same view → **extend** it.
-          - Different URL or clearly distinct UI section (modal, confirmation
-            screen, sub-flow) → **create a new page object** with a scoped name
-            (e.g., `CheckoutConfirmationPage.ts`).
-        - **NO** → **create a new page class** following the rules in
-          **Creating a New Page Object** below.
+### 1. Analyze the feature (BLOCKING)
 
-3. **Inventory existing fixtures** — `read_file` → `fixtures/ui-fixtures.ts` to understand
-   the current fixture wiring and `TestData` interface.
+- Read the feature file fully.
+- Extract pages and flows visited, user actions, data entered, outcomes verified.
+- List every unique step text (Given/When/Then, including parameters and tables).
+- Note which pages require authentication (Background or Given steps implying a logged-in user). Decide this per page.
 
-4. **Inventory test data factories** — `list_directory` → `data/`, then `read_file`
-   on relevant factories to check if a factory exists for the domain entity. If a factory
-   is needed and missing, note it for generation.
+### 2. Inventory existing code (BLOCKING)
 
-## Extending an Existing Page Object
 
-When the pre-generation check finds an existing page class for the target page
-(the file was already read in full during pre-generation step 2.4 — do not re-read it):
+1. **Page objects.** List `ui/pages/` and `ui/components/`; read each relevant file in full and record every locator and method. Apply the decision tree:
+   - A page object exists for the exact page → **extend** it.
+   - Partial match, same URL or same view → **extend** it.
+   - Partial match, different URL or distinct section (modal, confirmation, sub-flow) → **create** a new scoped page object (e.g. `checkout-confirmation.page.ts`, class `CheckoutConfirmationPage`).
+   - No match → **create** a new page class.
+   - A UI fragment shared by 2+ pages → create or reuse a component object.
+2. **Fixtures and test data.** Read `fixtures/ui.fixtures.ts` and its `Fixtures` type; list `testdata/` and `types/` and read the relevant generators and types. For each step that needs data, note whether a generator exists and whether it accepts the override the step needs (for example `Partial<SignupData>`).
+3. **Steps.** Search all of `tests/steps/`. For each step text decide:
+   - **already defined** → reuse as is
+   - **overlapping or ambiguous with an existing expression** → do not write it; stop and report both expressions and the files involved
+   - **missing** → create, and note the target file `tests/steps/<domain>/<feature>.steps.ts`
 
-1. **Check for locator collisions** — compare both the property name AND the selector
-   string of every new locator against all existing ones. If an existing locator already
-   targets the same element (same selector or same DOM target), do not add a duplicate
-   regardless of the property name.
-2. **Check for method collisions by intent** — two methods that perform the same user
-   action are duplicates even if named differently. For example, `submitForm()` and
-   `clickSubmitButton()` serve the same intent; do not add both.
-3. **Append new locators** after the last existing locator block, maintaining the
-   container-first then element order.
-4. **Append new methods** after the last existing method block.
-5. **Never modify or remove existing locators or methods** — only add new ones.
-   Fixing broken locators is out of scope.
+### 3. Plan checkpoint
 
-## Creating a New Page Object
+Present a short plan: what is reused, extended and created (pages, components, fixtures, generators including any that need an override parameter, steps and target files). **Wait for user confirmation before inspecting or writing anything.**
 
-When no existing page class covers the target page:
+### 4. Inspect the DOM
 
-1. You must have already read `pages/BasePage.ts` in pre-generation step 2.2.
-2. The new class **must** extend `BasePage`, match its constructor signature,
-   and call `super(page, testData)`. Do not define a custom constructor unless
-   additional parameters are required.
-3. Do not re-implement anything `BasePage` already provides — e.g., `dismissCookieConsent()`,
-   the `newUser` getter, or any shared helpers. Use `this.newUser`, `this.page`, etc.
-4. Follow this file layout template:
+For a feature spanning several pages, repeat per page or view:
 
-```typescript
-import { BasePage } from "./BasePage.js";
-import type { Locator } from "@playwright/test";
-import { expect } from "@playwright/test";
+1. Call `generator_setup_page` once per session, before other browser tools.
+2. Resolve the URL from `Background`/`Given` steps and existing page objects. If it cannot be inferred, stop and ask. Do not guess.
+3. Authenticate only for pages behind login, following the login skill completely. Skip for public pages (home, signup, login form).
+4. Handle overlays per the consent-overlay skill before any interaction that could be blocked, including after navigating to a page not yet visited.
+5. `browser_navigate`, then `browser_snapshot` for the relevant regions.
+6. For multi-step flows (form → confirmation), step through with `browser_click`/`browser_type` and snapshot every new view.
+7. Record evidence (role, name, label, placeholder, `data-*`) for every element that maps to a feature step.
+8. Check uniqueness: every new locator must resolve to exactly one element, scoped to its container where needed. If it cannot, report it as ambiguous; do not fall back to brittle CSS or XPath.
 
-export class ExamplePage extends BasePage {
-  // ── Container locators (private readonly) ─────────────────
-  private readonly exampleForm: Locator = this.page.locator("...");
+### 5. Generate or extend page objects
 
-  // ── Element locators (public readonly) ────────────────────
-  public readonly nameInput: Locator = this.exampleForm.getByPlaceholder("Name");
+Follow the page-objects and locator instructions.
 
-  // ── Methods ───────────────────────────────────────────────
+**Extending:**
 
-  async expectFormVisible(): Promise<void> {
-    await expect(this.nameInput).toBeVisible();
-  }
+1. Locator collisions: compare property name AND DOM target against all existing locators. Do not add a duplicate of an element already targeted.
+2. Method collisions by intent: `submitForm()` and `clickSubmitButton()` are duplicates. Add only one.
+3. Append new locators after the last locator block (container first, then elements) and new methods after the last method block, using targeted edits.
 
-  async submitForm(): Promise<void> {
-    // ...
-  }
-}
-```
+**Creating:**
 
-## DOM Inspection Workflow
+1. Extend `BasePage` and match its constructor; no custom constructor unless extra parameters are needed. Do not re-implement what `BasePage` provides.
+2. Match the import style of existing page objects.
 
-If the feature file spans multiple pages (e.g., HomePage → SignupPage → AccountSetupPage),
-process each page independently: apply the decision tree per page, and create or extend
-multiple page objects in a single run as needed.
+**Methods:**
 
-For each page or view referenced in the feature file:
+- `Given`/`When` steps → action methods; `Then` steps → `expect*` assertion methods.
+- Cover only what the feature needs.
 
-1. **Initialise the browser** — call `generator_setup_page` once before any other
-   browser tool in this session. Skip this step on subsequent pages.
-2. **Determine the target URL**:
-   - Parse `Background` and `Given` steps in the feature file for navigation hints
-     (e.g., "I am on the home page", "I navigate to the registration page").
-   - Cross-reference existing page objects for known URLs
-     (e.g., `HomePage` uses `https://www.automationexercise.com/`).
-   - If the URL cannot be inferred from the feature file or existing page objects,
-     **stop and ask the user** — do not guess.
-3. **Authenticate if required** — see **Authentication Procedure** below. Run this
-   step only when the feature file targets pages behind login (e.g., account dashboard,
-   order history, logged-in profile). Skip for public pages (home, signup, login form itself).
-4. **Navigate** — use `browser_navigate` to go to the resolved URL.
-5. **Snapshot** — use `browser_snapshot` to capture the full accessibility tree / DOM.
-6. If the page has multi-step flows (e.g. form → confirmation), navigate through
-   each step using `browser_click`, `browser_type`, etc., taking a `browser_snapshot`
-   at every new view.
-7. **Record elements** — note the exact DOM attributes, roles, names, labels,
-   placeholders, and `data-*` attributes for every element that maps to a feature
-   file step.
+### 6. Wire fixtures and test data
 
-### Authentication Procedure
+1. **Page fixtures:** for each new page class, add its import, type it in `Fixtures`, and add a fixture in `base.extend`, following the existing pattern.
+2. **Test data:** if no generator covers the data a step needs, or an existing generator does not accept the override a step needs, read `.github/instructions/testdata.instructions.md` first, then add or extend the generator as it describes.
+3. Pass data from fixtures or generators into page-object methods. `BasePage` provides no shared test data.
 
-If authentication is required, `read_file` → `.github/prompts/auth-login.prompt.md`
-and follow every step in that procedure before continuing DOM inspection.
+### 7. Generate step definitions
 
-## Page Object Method Rules
+- Implement only the steps marked **missing** in Step 2, following `steps.instructions.md`.
+- Bind each step to the page objects, fixtures and generators from Steps 5 and 6.
+- Do not create duplicate or ambiguous expressions. Do not edit existing steps.
+- Steps that depend on an unresolved locator are not stubbed; list them as blocked in the report.
 
-Follow all method and naming conventions from `.github/copilot-instructions.md`. Additionally:
+### 8. Verify
 
-- **Gherkin step → method type mapping:**
-  - `Given` / `When` steps → action methods (e.g., `submitCredentials()`, `navigateToSignup()`)
-  - `Then` steps → assertion methods prefixed with `expect` (e.g., `expectFormVisible()`)
-- Access shared test data via `this.newUser` (inherited from `BasePage`).
-- `@faker-js/faker` may be used inside page objects only for random selection from
-  on-screen options; all other test data must come from factory classes.
+- Run `npx tsc --noEmit` and fix errors you introduced.
+- Run `npx bddgen` and confirm there are no undefined or ambiguous steps for this feature. Ignore unrelated pre-existing failures, but report them.
+- Run the feature only if the user asked for it (`chromium` project).
+- Never change feature files or weaken assertions to make anything pass.
 
-## Fixture Wiring
+## Failure and escalation
 
-**Required** when a new page class is created. Never create a second fixtures file.
+| Situation | Behavior |
+| --- | --- |
+| Site unreachable, Cloudflare or bot challenge | Stop and report; do not retry in a loop |
+| Consent or login skill fails | Stop and report the failing step |
+| Element has no resilient locator | Record as unresolved, continue with the rest |
+| Feature references behavior not present in the app | Report the mismatch; no workaround |
+| New step collides with or is ambiguous against an existing step | Stop, report both expressions and the files involved |
+| Type-check or `bddgen` still fails after two fix attempts | Stop and report the remaining errors |
 
-1. `read_file` → `fixtures/ui-fixtures.ts` (already done in pre-generation step 3).
-2. Add an `import` for the new page class, following the existing import style.
-3. Add the new page type to the `Fixtures` type alias and a new fixture inside
-   `base.extend<Fixtures>({...})`, following the exact instantiation pattern of
-   existing fixtures in the file.
-4. Write the complete updated `fixtures/ui-fixtures.ts` back to the same path —
-   do not create a new file.
+## Summary report
 
-## Test Data Factory
-
-If the feature file requires domain data not covered by an existing factory:
-
-1. Create an interface in `data/` for the data shape.
-2. Create a factory class with a static `create*()` method using `@faker-js/faker`.
-3. Follow the existing `UserFactory` pattern.
-
-## Output Scope
-
-| Artifact              | Target path                                    | When                             |
-| --------------------- | ---------------------------------------------- | -------------------------------- |
-| New page object       | `pages/<PageName>.ts`                          | Decision tree → create new       |
-| Extended page object  | Same source path (e.g., `pages/SignupPage.ts`) | Decision tree → extend           |
-| Updated fixtures      | `fixtures/ui-fixtures.ts`                      | New page object was created      |
-| New test data factory | `data/<FactoryName>.ts`                        | Feature requires missing factory |
-
-Do NOT generate: step definitions (`steps/`), feature files (`features/`), test
-configuration files, or any file outside the paths listed above.
-
-Save all files using the filesystem `write_file` tool. When extending an existing file,
-read the full current content first, then write the complete updated file back to the same path.
-
-## Summary Report
-
-After generation, provide a brief summary:
-
-- Which pages were inspected (URLs visited)
-- Which page objects were created or extended
-- List of new locators with DOM evidence and **confidence level**:
-  - 🟢 **High** — `getByRole`, `getByLabel`, `getByTestId` (priority 1–4)
-  - 🟡 **Medium** — `getByText`, `getByAltText`, `getByTitle` (priority 6–8)
-  - 🔴 **Low** — `locator('#id')`, CSS selectors (priority 9–11) — flag for review
-- List of new methods and which feature steps they serve
-- Any elements that could not be reliably located (ambiguous DOM)
-
-# Consent Overlay Handling
-
-- This agent references the shared consent/overlay dialog handling instructions in `.github/prompts/consent-overlay.prompt.md`.
-- All overlay handling logic and best practices are defined there. This agent must follow those steps before any UI interaction that could be blocked by overlays.
+1. Pages inspected (URLs visited)
+2. Files created and modified (paths, one line of purpose each)
+3. Reuse decisions: what was extended instead of created, and why
+4. New locators with DOM evidence and confidence level (as defined in the locator instructions)
+5. New methods and the feature steps they serve
+6. Fixtures and generators added or changed
+7. Step definitions: reused, created (with file), and blocked
+8. Verification: `tsc` result, `bddgen` result (no undefined or ambiguous steps), run status if executed
+9. Unresolved or ambiguous locators, deviations from the locator rules with justification, and assumptions needing human review
+10. Suggested next step (for example: review the diff, then run the feature)

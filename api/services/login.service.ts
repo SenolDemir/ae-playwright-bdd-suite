@@ -1,7 +1,7 @@
 import type { APIResponse } from "@playwright/test";
 import { BaseClient } from "../base.client";
 import { API_ENDPOINTS } from "../endpoints";
-import type { LoginRequest } from "../models/login.model";
+import type { LoginRequest } from "../schemas/login.schema";
 
 export class LoginService extends BaseClient {
   /**
@@ -19,6 +19,16 @@ export class LoginService extends BaseClient {
 
   async login(overrides?: Partial<LoginRequest>): Promise<APIResponse> {
     const payload = this.buildLoginPayload(overrides);
+
+    return this.request.post(API_ENDPOINTS.login.VERIFY, {
+      form: payload,
+    });
+  }
+
+
+  async loginWithoutEmail(): Promise<APIResponse> {
+    // Omit the email field from the payload
+    const { email: _email, ...payload } = this.buildLoginPayload();
 
     return this.request.post(API_ENDPOINTS.login.VERIFY, {
       form: payload,

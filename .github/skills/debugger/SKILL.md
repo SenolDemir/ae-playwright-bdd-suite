@@ -1,4 +1,8 @@
-
+---
+name: debugger
+description: debugger
+disable-model-invocation: true
+---
 ---
 agent: agent
 description: Debug Playwright + Playwright BDD+ POM issues

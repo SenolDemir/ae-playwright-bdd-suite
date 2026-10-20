@@ -2,5 +2,6 @@
   "cucumberautocomplete.steps": ["tests/steps/**/*.ts", "tests/hooks/**/*.ts", "fixtures/ui.fixtures.ts"],
 
   "cucumberautocomplete.syncfeatures": "tests/features/**/*.feature",
-  "cucumberautocomplete.strictGherkinCompletion": false
+  "cucumberautocomplete.strictGherkinCompletion": false,
+  "chat.promptFiles": true
 }

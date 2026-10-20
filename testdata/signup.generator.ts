@@ -1,56 +1,113 @@
 import { faker } from "@faker-js/faker";
 import {
   COUNTRIES,
+  MONTHS,
   TITLES,
   type Country,
-  type Title,
+  type DateOfBirth,
   type SignupData,
   type SignupDataOverrides,
+  type Title,
 } from "../types/signup.types";
 
 export class SignupDataGenerator {
-  static randomCountry(): Country {
-    return faker.helpers.arrayElement([...COUNTRIES]);
-  }
-
-  static randomTitle(): Title {
+  static title(): Title {
     return faker.helpers.arrayElement([...TITLES]);
   }
 
-  static generatePassword(): string {
-    const lower = faker.string.alpha({ length: 1, casing: "lower" });
-    const upper = faker.string.alpha({ length: 1, casing: "upper" });
-    const digit = faker.string.numeric(1);
-    const special = faker.helpers.arrayElement(["@", "$", "!", "%", "*", "?", "&"]);
-    const filler = faker.string.alphanumeric(4);
-    return faker.helpers.shuffle([lower, upper, digit, special, ...filler.split("")]).join("");
+  static country(): Country {
+    return faker.helpers.arrayElement([...COUNTRIES]);
   }
 
-  static generateSignupData(overrides: SignupDataOverrides = {}): SignupData {
-    const uniqueToken = `${Date.now()}-${faker.string.alphanumeric(6)}`;
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.lastName();
+  static firstName(): string {
+    return faker.person.firstName();
+  }
 
-    const base: SignupData = {
-      title: this.randomTitle(),
+  static lastName(): string {
+    return faker.person.lastName();
+  }
+
+  static email(): string {
+    return `user.${faker.string.alphanumeric(12)}@example.com`.toLowerCase();
+  }
+
+  static password(): string {
+    const filler = faker.string.alphanumeric(4).split("");
+    return faker.helpers
+      .shuffle([
+        faker.string.alpha({ length: 1, casing: "lower" }),
+        faker.string.alpha({ length: 1, casing: "upper" }),
+        faker.string.numeric(1),
+        faker.helpers.arrayElement(["@", "$", "!", "%", "*", "?", "&"]),
+        ...filler,
+      ])
+      .join("");
+  }
+
+  static dateOfBirth(): DateOfBirth {
+    return {
+      day: String(faker.number.int({ min: 1, max: 28 })),
+      month: faker.helpers.arrayElement([...MONTHS]),
+      year: String(faker.number.int({ min: 1970, max: 2000 })),
+    };
+  }
+
+  static company(): string {
+    return faker.company.name();
+  }
+
+  static address1(): string {
+    return faker.location.streetAddress();
+  }
+
+  static address2(): string {
+    return faker.location.secondaryAddress();
+  }
+
+  static state(): string {
+    return faker.location.state();
+  }
+
+  static city(): string {
+    return faker.location.city();
+  }
+
+  static zipcode(): string {
+    return faker.location.zipCode();
+  }
+
+  static mobileNumber(): string {
+    return faker.string.numeric(10);
+  }
+
+ 
+  static generateSignupData(overrides: SignupDataOverrides = {}): SignupData {
+   
+    const firstName = overrides.firstName ?? this.firstName();
+    const lastName = overrides.lastName ?? this.lastName();
+
+    return {
+      title: this.title(),
       firstName,
       lastName,
       fullName: `${firstName} ${lastName}`,
-      email: `user.${uniqueToken}@example.com`.toLowerCase(),
-      password: this.generatePassword(),
-      dayOfBirth: String(faker.number.int({ min: 1, max: 28 })),
-      monthOfBirth: faker.date.month(),
-      yearOfBirth: String(faker.number.int({ min: 1970, max: 2000 })),
-      company: faker.company.name(),
-      address1: faker.location.streetAddress(),
-      address2: faker.location.secondaryAddress(),
-      country: this.randomCountry(),
-      state: faker.location.state(),
-      city: faker.location.city(),
-      zipcode: faker.location.zipCode(),
-      mobileNumber: faker.string.numeric(10),
+      email: this.email(),
+      password: this.password(),
+      dateOfBirth: this.dateOfBirth(),
+      company: this.company(),
+      address1: this.address1(),
+      address2: this.address2(),
+      country: this.country(),
+      state: this.state(),
+      city: this.city(),
+      zipcode: this.zipcode(),
+      mobileNumber: this.mobileNumber(),
+      ...overrides, // to be able to override any explicit value in tests
     };
+  }
 
-    return { ...base, ...overrides };
+  // to create intentionally invalid SignupData objects for negative testing
+  static withInvalid<K extends keyof SignupData>(field: K, value: unknown): SignupData {
+    return { ...this.generateSignupData(), [field]: value } as SignupData;
   }
 }

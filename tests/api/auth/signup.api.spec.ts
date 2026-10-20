@@ -1,28 +1,37 @@
 import { test, expect } from "../../../fixtures/api.fixtures";
-import { skipLiveApi, SKIP_REASON } from "../../../api/api.guard";
+import { validateSchema } from "../../../api/utils/schema.validator";
+import {
+  signupCreatedSchema,
+  verifySignupByEmailSchema,
+  signupUpdatedSchema,
+  signupDeletedSchema,
+  signupNotFoundSchema,
+} from "../../../api/schemas/signup.schema";
+import { skipLiveApi, SKIP_REASON } from "../../../api/utils/api.guard";
+import { SignupMapper } from "../../../api/mappers/signup.mapper";
 
 test.describe("Signup API CRUD Test", () => {
   test.skip(skipLiveApi, SKIP_REASON);
 
   test("CRUD Lifecycle", async ({ signupService, signupPayloadFactory }) => {
     const payload = signupPayloadFactory();
-    let responseBody;
 
     await test.step("Create: new user account", async () => {
       const response = await signupService.createAccount(payload);
-      // console.log(await response.json());
       // response message is 201 but the API returns 200
       expect(response.status()).toBe(200);
-      responseBody = await response.json();
-      expect(responseBody.responseCode).toBe(201);
+      expect(response.headers()["content-type"]).toContain("text/html; charset=utf-8");
+      const responseBody = await signupService.parseJson(response);
+      validateSchema(signupCreatedSchema, responseBody);
     });
 
     await test.step("Read: verify user account", async () => {
       const response = await signupService.getUserDetailsByEmail(payload.email);
-      // console.log(await response.json());
       expect(response.status()).toBe(200);
-      responseBody = await response.json();
-      expect(responseBody.responseCode).toBe(200);
+      expect(response.headers()["content-type"]).toContain("text/html; charset=utf-8");
+      const responseBody = await signupService.parseJson(response);
+      const userAccount = validateSchema(verifySignupByEmailSchema, responseBody);
+      expect(userAccount.user).toMatchObject(SignupMapper.toExpectedUserProfile(payload));
     });
 
     await test.step("Update: Verify Update user account", async () => {
@@ -31,22 +40,31 @@ test.describe("Signup API CRUD Test", () => {
         email: payload.email,
         password: payload.password,
       });
-
       const response = await signupService.updateAccount(updatedPayload);
-      // console.log(await response.json());
       expect(response.status()).toBe(200);
-      responseBody = await response.json();
-      expect(responseBody.responseCode).toBe(200);
-      expect(responseBody.message).toBe("User updated!");
+      expect(response.headers()["content-type"]).toContain("text/html; charset=utf-8");
+      const responseBody = await signupService.parseJson(response);
+      validateSchema(signupUpdatedSchema, responseBody);
+
+      // verify the update persisted
+      const getResponse = await signupService.getUserDetailsByEmail(payload.email);
+      const body = await signupService.parseJson(getResponse);
+      const userAccount = validateSchema(verifySignupByEmailSchema, body);
+      expect(userAccount.user).toMatchObject(SignupMapper.toExpectedUserProfile(updatedPayload));
     });
 
     await test.step("Delete: Verify Delete user account", async () => {
       const response = await signupService.deleteAccount(payload.email, payload.password);
-      // console.log(await response.json());
       expect(response.status()).toBe(200);
-      responseBody = await response.json();
-      expect(responseBody.responseCode).toBe(200);
-      expect(responseBody.message).toBe("Account deleted!");
+      expect(response.headers()["content-type"]).toContain("text/html; charset=utf-8");
+      const responseBody = await signupService.parseJson(response);
+      validateSchema(signupDeletedSchema, responseBody);
+
+      // verify the account is gone
+      const getResponse = await signupService.getUserDetailsByEmail(payload.email);
+      const body = await signupService.parseJson(getResponse);
+      validateSchema(signupNotFoundSchema, body);
+      
     });
   });
 });

@@ -1,8 +1,8 @@
 ---
-agent: agent
+name: login
 description: Shared login procedure for agents that need to authenticate via browser before inspecting protected pages
+disable-model-invocation: true
 ---
-
 # Authentication Procedure
 
 Run this procedure when DOM inspection requires a logged-in session.

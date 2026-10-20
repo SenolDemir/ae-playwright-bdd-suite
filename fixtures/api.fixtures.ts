@@ -3,9 +3,10 @@ import { SignupService } from "../api/services/signup.service";
 import { ProductService } from "../api/services/product.service";
 import { LoginService } from "../api/services/login.service";
 import { SignupMapper } from "../api/mappers/signup.mapper";
-import type { SignupPayload } from "../api/models/signup.model";
+import type { SignupPayload } from "../api/schemas/signup.schema";
 import { SignupDataGenerator } from "../testdata/signup.generator";
 import type { SignupData } from "../types/signup.types";
+
 
 type ApiFixtures = {
   apiContext: APIRequestContext;

@@ -12,5 +12,10 @@ export const API_ENDPOINTS = {
   product: {
     LIST: "productsList",
     byId: (productId: string): string => `products/${productId}`,
+    SEARCH: "searchProduct",
+  },
+  brand: {
+    LIST: "brandsList",
   },
 } as const;
+

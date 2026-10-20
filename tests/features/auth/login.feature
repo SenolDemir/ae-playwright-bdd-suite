@@ -18,7 +18,7 @@ Feature: Login Functionality
                   And I enter my password as "test123456"
                   And I click the login button
                   Then I should be logged in successfully
-                  And I should see "Logged in as Test User" in the navigation
+                  And I should see "Logged in as John Doe" in the navigation
 
             @ui02-2 @positive
             Scenario: Successful logout after login

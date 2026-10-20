@@ -1,7 +1,8 @@
 ---
+name: consent-overlay
 description: Consent/overlay dialog handling for all agents and runtime prompts
+disable-model-invocation: true
 ---
-
 # Consent Overlay Handling (Runtime)
 
 Whenever a consent, cookie, or overlay dialog is present and blocks interaction with the page:
