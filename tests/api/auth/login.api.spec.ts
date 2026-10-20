@@ -5,10 +5,10 @@ import { loginSuccessSchema, loginNotFoundSchema, loginMissingEmailSchema } from
 import { skipLiveApi, SKIP_REASON } from "../../../api/utils/api.guard";
 
 
-test.describe("Login API", () => {
+test.describe("Login API @api", () => {
   test.skip(skipLiveApi, SKIP_REASON);
 
-  test("login with valid payload", async ({ apiContext, loginService }) => {
+  test("login with valid payload @smoke", async ({ apiContext, loginService }) => {
     const response = await apiContext.post(API_ENDPOINTS.login.VERIFY, {
       form: {
         email: process.env.TEST_USER_EMAIL || "",

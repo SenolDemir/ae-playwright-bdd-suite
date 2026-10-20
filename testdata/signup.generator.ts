@@ -106,6 +106,20 @@ export class SignupDataGenerator {
     };
   }
 
+  /**
+   * Resolves a placeholder token used in feature files (e.g. "[too_long]") to a generated value.
+   * Returns undefined when the input is not a known token, so callers can use it as a literal.
+   */
+  static resolveToken(token: string): string | undefined {
+    const values: Record<string, () => string> = {
+      "[too_long]": () => faker.string.alpha({ length: 100 }),
+      "[xss_email]": () => "<script>alert('xss')</script>@test.com",
+      "[html_injection_email]": () => '"><img src=x onerror=alert(1)>@test.com',
+      valid_email: () => this.email(),
+    };
+    return values[token]?.();
+  }
+
   // to create intentionally invalid SignupData objects for negative testing
   static withInvalid<K extends keyof SignupData>(field: K, value: unknown): SignupData {
     return { ...this.generateSignupData(), [field]: value } as SignupData;

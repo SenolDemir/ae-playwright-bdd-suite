@@ -16,10 +16,9 @@ applyTo: "ui/**/*.ts"
   - ❌ `page.locator('#btn').click()` in a step or test
 - Always declare return types (`Promise<void>`, `Promise<string>`, ...). Use `async/await` only.
 - Steps are thin: one call into a page object or fixture per step.
-- No selectors, no `page.locator`, and no direct `expect(locator)` in steps. Use the page object's `expect*` met
-- Test data comes from `testdata/` generators via fixtures, never inline.
-hods.
+- No selectors, no `page.locator`, and no direct `expect(locator)` in steps. Use the page object's `expect*` methods.
+- Test data comes from `testdata/` generators via fixtures, never inline. No faker or random data generation inside page objects.
 - Keep page objects focused on representing the UI and user interactions. Avoid embedding business logic or test assertions outside of `expect*` methods.
 - Prefer Playwright auto-waiting. No `waitForTimeout`; wait on a locator state or a response.
-- Private helpers use the `_` prefix or `private`/`protected` modifiers.
+- Private helper methods use the `private`/`protected` modifier. Private locators (containers) use `private readonly` with no `_` prefix.
 - Page navigation methods return `void` or the next page object, never a raw `Page`.

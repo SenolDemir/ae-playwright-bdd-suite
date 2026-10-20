@@ -44,7 +44,7 @@ Feature: Signup and Account Information Setup
                   And I should see the existing email message "Email Address already exist!"
 
 
-            @ui01-03 @high @negative @smoke
+            @ui01-03 @high @negative
             Scenario: Reject registration with empty name field
                   When I leave the name field empty
                   And I enter email "valid_email"

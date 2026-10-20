@@ -101,7 +101,6 @@ Then("I should be on the account information setup page", async ({ page }) => {
 When("I complete the account information form", async ({ accountSetupPage, signupData }) => {
   await accountSetupPage.fillAccountInformation(signupData);
   await accountSetupPage.fillAddressInformation(signupData);
-  console.log(signupData);
 
 });
 

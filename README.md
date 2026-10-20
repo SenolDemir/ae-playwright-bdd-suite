@@ -23,8 +23,8 @@
 	- [Tech Stack](#tech-stack)
 	- [Project Structure](#project-structure)
 	- [Architecture Overview](#architecture-overview)
-		- [Playwright BDD](#playwright-bdd)
 		- [Hybrid Test Style: BDD for UI, Native Spec for API](#hybrid-test-style-bdd-for-ui-native-spec-for-api)
+		- [UI Tests with Playwright BDD](#ui-tests-with-playwright-bdd)
 		- [Resilient Locator Strategy](#resilient-locator-strategy)
 		- [Page Object Model (POM)](#page-object-model-pom)
 		- [API Testing](#api-testing)
@@ -165,17 +165,17 @@ root/
 
 The project is built over the following key design decisions:
 
-### Playwright BDD
+### Hybrid Test Style: BDD for UI, Native Spec for API
 
-The project uses **Playwright BDD** to create reusable, business-readable UI tests. Gherkin scenarios describe application behavior from a product perspective, making the tests easier to understand and maintain.
+UI tests use Gherkin feature files via `playwright-bdd`. They document user-facing journeys in a language accessible to all stakeholders. API tests use Playwright's native `test()` spec structure, which is more concise and better suited to HTTP-level assertions without the overhead of mapping Gherkin steps to request/response logic.
 
-`playwright-bdd` is preferred because it bridges Playwright’s fixture system directly with Gherkin step definitions. As a result:
+### UI Tests with Playwright BDD
+
+The project uses **Playwright BDD** to create reusable, business-readable UI tests. Gherkin scenarios describe application behavior from a product perspective, making the tests easier to understand and maintain. It provides:
+ 
 - BDD steps have full access to Playwright fixtures, including `page`, `context`, and custom fixtures such as `signup.page`
 - Playwright remains the native test runner, so reports, retries, and parallel execution are handled by Playwright
 - `bddgen` automatically generates the step-definition glue code, reducing boilerplate for each feature file
-
-### Hybrid Test Style: BDD for UI, Native Spec for API
-UI tests use Gherkin feature files via `playwright-bdd`. They document user-facing journeys in a language accessible to all stakeholders. API tests use Playwright's native `test()` spec structure, which is more concise and better suited to HTTP-level assertions without the overhead of mapping Gherkin steps to request/response logic.
 
 ### Resilient Locator Strategy
 Locators are selected in this priority order to maximize resilience against UI changes:
@@ -399,39 +399,46 @@ TEST_USER_PASSWORD=your_test_user_password
 
 
 ## Running Tests
-
+Running tests (project level)
 ```bash
-# Run all tests (UI + API)
-npm run tests
-
-# Run UI tests only (chromium project)
-npm run test:ui-all
-
-# Run UI tests filtered by tag
-npm run test:ui-tag
-
-# Run API tests only
-npm run test:api-all
-
-# Run API tests filtered by tag
-npm run test:api-tag
-#or by specifying the tag as
-npx playwright test --grep @tagname
-
-# Browser mode: headed locally, headless in CI (controlled by the CI env var in playwright.config.ts)
-# Force headless locally:
-CI=true npx bddgen && CI=true npx playwright test --project=chromium
-
-# Run a specific feature file
-npx bddgen && npx playwright test login.feature --project=chromium
-# equivalent to: npm run test:specific
-
-# Run a specific API spec
-npx playwright test tests/api/auth/login.api.spec.ts
-
-# Open the Playwright HTML report after a run
-npm run report
+npm run tests      # Run all tests (UI + API)
+npm run test:ui    # Run UI tests only
+npm run test:api   # Run API tests only
 ```
+
+Running with tags
+```bash
+npm run test:smoke                       # to run all regerssion tagged tests (UI + API)
+npm run test:regression                  # to run all regerssion tagged tests (UI + API)
+npm run test:tag -- "@smoke"             # Both UI and API, single tag 
+npm run test:tag -- "@smoke|@regression" # with multiple tags
+```
+tags can be set via package.json scripts to make more specific
+
+Running a specific feature file
+```bash
+npx bddgen && npx playwright test login.feature --project=chromium
+```
+equivalent to: npm run test:feature
+
+Running a specific API spec:
+```bash
+npx playwright test tests/api/auth/login.api.spec.ts
+```
+equivalent to: npm run test:api-specific
+
+to simulate a CI run locally (retries=2, workers=1, forbidOnly, CI reporters, API tests skipped)
+```bash
+CI=true npx bddgen && CI=true npx playwright test --project=chromium
+```
+
+Open the Playwright HTML report:
+```bash
+npm run report
+#or
+npx playwright show-report reports/playwright-html
+```
+
 
 ---
 
@@ -551,11 +558,11 @@ The latest Allure report from `ci-e2e-test.yml` is available here:
 
 ## References
 
-- **[Playwright × BDD: Cucumber.js vs Playwright-bdd](https://www.arrangility.com/blog/playwright-cucumber-vs-playwright-bdd)** — A practical comparison of the two BDD integration approaches for Playwright, covering fixture compatibility, runner behaviour, and boilerplate trade-offs.
-
 - **[Test Design Techniques — ISTQB Foundation Syllabus](https://istqb-main-web-prod.s3.amazonaws.com/media/documents/ISTQB-CTFL_Syllabus_2023_v4.0.1.pdf)** — The Authoritative reference for equivalence partitioning, boundary value analysis, and decision table testing techniques that applied by the `playwright-bdd-planner` agent during scenario generation.
 
 - **[Playwright Test Agents in 2026: what works, what breaks, and what's next](https://bug0.com/blog/playwright-test-agents)** — A realistic evaluation of Playwright's agent capabilities including generation, healing, and the boundaries of current AI assistance. Referenced in the [Playwright Agents](#playwright-agents) section.
+
+- **[Playwright × BDD: Cucumber.js vs Playwright-bdd](https://www.arrangility.com/blog/playwright-cucumber-vs-playwright-bdd)** — A practical comparison of the two BDD integration approaches for Playwright, covering fixture compatibility, runner behaviour, and boilerplate trade-offs.
 
 - **[How to Handle Playwright Page Objects - Nawaz Dhandalag](https://oneuptime.com/blog/post/2026-02-02-playwright-page-objects/view)** — Covers how to decompose Page Objects into smaller component abstractions to the Component Object Model applied in this project's `/components` layer.
   

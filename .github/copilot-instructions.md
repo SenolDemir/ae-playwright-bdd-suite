@@ -45,10 +45,10 @@ This project is an AI-augmented test suite using Playwright for end-to-end testi
 
 - Use PascalCase for class names and interfaces
 - Use camelCase for variables, functions, and methods
-- Prefix private class members with underscore (\_)
+- Mark private class members with the `private` modifier; no underscore prefix (this applies to private locators and helper methods alike)
 - Use ALL_CAPS for constants
 - Use kebab-case for folder and directory names (e.g. data, page-objects)
-- Use lowercase dot-notation for file names, scoped by type: `login.page.ts`, `user.type.ts`, `base.client.ts`, `user.factory.ts`
+- Use lowercase dot-notation for file names, scoped by type: `login.page.ts`, `user.types.ts`, `base.client.ts`, `user.generator.ts`, `login.steps.ts`
 
 ## TypeScript Guidelines
 
@@ -77,9 +77,10 @@ For finding or fixing locators against a live page, use the `locator` skill (`.g
 
 ### Before generating any test
 
-1. Check if a page object already exists for the page under test
-2. If yes — reuse and extend it, do not create a duplicate
-3. If no — create the page class first, then the step definitions, then wire to the feature file
-4. Check if a test data factory exists for the domain entity
-5. If yes — use the factory to generate test data
-6. If no — create the factory first, then use it in step definitions
+1. Start from an approved feature file (drafts in `tests/features/_review/` must be reviewed first). Never edit a feature file to fit a step.
+2. Check if a page object already exists for the page under test
+3. If yes — reuse and extend it, do not create a duplicate
+4. If no — create the page class first, then the step definitions that wire to the feature file
+5. Check if a test data generator exists for the domain entity
+6. If yes — use the generator to generate test data
+7. If no — create the generator first, then use it in step definitions

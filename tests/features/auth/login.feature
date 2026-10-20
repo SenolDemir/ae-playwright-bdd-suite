@@ -12,7 +12,7 @@ Feature: Login Functionality
                   And I navigate to "Signup / Login" page
                   Then I should be on the login page
 
-            @ui02-1 @positive
+            @ui02-1 @positive 
             Scenario: Successful login with valid credentials
                   When I enter my email as "testuser_2026@example.com"
                   And I enter my password as "test123456"

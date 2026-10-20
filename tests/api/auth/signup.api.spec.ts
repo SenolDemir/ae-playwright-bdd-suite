@@ -10,7 +10,7 @@ import {
 import { skipLiveApi, SKIP_REASON } from "../../../api/utils/api.guard";
 import { SignupMapper } from "../../../api/mappers/signup.mapper";
 
-test.describe("Signup API CRUD Test", () => {
+test.describe("Signup API CRUD Test @api @regression", () => {
   test.skip(skipLiveApi, SKIP_REASON);
 
   test("CRUD Lifecycle", async ({ signupService, signupPayloadFactory }) => {
@@ -64,7 +64,6 @@ test.describe("Signup API CRUD Test", () => {
       const getResponse = await signupService.getUserDetailsByEmail(payload.email);
       const body = await signupService.parseJson(getResponse);
       validateSchema(signupNotFoundSchema, body);
-      
     });
   });
 });
